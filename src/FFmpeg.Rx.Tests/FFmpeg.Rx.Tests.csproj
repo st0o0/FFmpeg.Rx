@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectName\ProjectName.csproj" />
+    <ProjectReference Include="..\FFmpeg.Rx\FFmpeg.Rx.csproj" />
   </ItemGroup>
 
   <ItemGroup>

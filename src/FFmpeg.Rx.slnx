@@ -13,6 +13,6 @@
     <File Path="../LICENSE" />
     <File Path="../README.md" />
   </Folder>
-  <Project Path="ProjectName/ProjectName.csproj" />
-  <Project Path="ProjectName.Tests/ProjectName.Tests.csproj" />
+  <Project Path="FFmpeg.Rx/FFmpeg.Rx.csproj" />
+  <Project Path="FFmpeg.Rx.Tests/FFmpeg.Rx.Tests.csproj" />
 </Solution>
