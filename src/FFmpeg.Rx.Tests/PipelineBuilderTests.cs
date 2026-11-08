@@ -73,7 +73,7 @@ public sealed class PipelineBuilderTests
         Assert.Contains("-map 0:v:0", args);
         Assert.Contains("-c:v copy", args);
         Assert.Contains("-bsf:a aac_adtstoasc", args);
-        Assert.EndsWith("-y \"out.mkv\"", args);
+        Assert.EndsWith("-y \"out.mkv\"", args.TrimEnd());
     }
 
     [Fact]

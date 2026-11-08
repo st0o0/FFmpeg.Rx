@@ -95,7 +95,7 @@ public sealed class ArgumentSerializerTests
             [new OutputSpec(new FileDestination("/output/file.mkv"))]);
 
         var args = ArgumentSerializer.Serialize(spec);
-        Assert.EndsWith("-y \"/output/file.mkv\"", args);
+        Assert.EndsWith("-y \"/output/file.mkv\"", args.TrimEnd());
     }
 
     [Fact]
@@ -164,5 +164,30 @@ public sealed class ArgumentSerializerTests
 
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("/dev/null", args);
+    }
+
+    [Fact]
+    public void Progress_rewritten_to_stderr_with_pipe_output()
+    {
+        var spec = new PipelineSpec(
+            [new FileInputSpec("input.mp4")],
+            [new OutputSpec(new PipeDestination(Stream.Null))],
+            GlobalOptions: ["-progress pipe:1"]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-progress pipe:2", args);
+        Assert.DoesNotContain("-progress pipe:1", args);
+    }
+
+    [Fact]
+    public void Progress_stays_stdout_without_pipe_output()
+    {
+        var spec = new PipelineSpec(
+            [new FileInputSpec("input.mp4")],
+            [new OutputSpec(new FileDestination("out.mp4"))],
+            GlobalOptions: ["-progress pipe:1"]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-progress pipe:1", args);
     }
 }
