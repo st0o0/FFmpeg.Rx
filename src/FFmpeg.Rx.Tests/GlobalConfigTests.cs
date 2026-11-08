@@ -7,10 +7,7 @@ public sealed class GlobalConfigTests : IDisposable
         FfmpegOptions.Reset();
     }
 
-    public void Dispose()
-    {
-        FfmpegOptions.Reset();
-    }
+    public void Dispose() => FfmpegOptions.Reset();
 
     [Fact]
     public void Default_binary_is_ffmpeg()

@@ -5,16 +5,10 @@ namespace FFmpeg.Rx.Tests;
 public sealed class ValueObjectTests
 {
     [Fact]
-    public void VideoCodec_H264_name()
-    {
-        Assert.Equal("libx264", VideoCodec.H264.Name);
-    }
+    public void VideoCodec_H264_name() => Assert.Equal("libx264", VideoCodec.H264.Name);
 
     [Fact]
-    public void VideoCodec_Copy_name()
-    {
-        Assert.Equal("copy", VideoCodec.Copy.Name);
-    }
+    public void VideoCodec_Copy_name() => Assert.Equal("copy", VideoCodec.Copy.Name);
 
     [Fact]
     public void VideoCodec_Custom_factory()
@@ -31,16 +25,10 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void AudioCodec_Aac_name()
-    {
-        Assert.Equal("aac", AudioCodec.Aac.Name);
-    }
+    public void AudioCodec_Aac_name() => Assert.Equal("aac", AudioCodec.Aac.Name);
 
     [Fact]
-    public void AudioCodec_Copy_name()
-    {
-        Assert.Equal("copy", AudioCodec.Copy.Name);
-    }
+    public void AudioCodec_Copy_name() => Assert.Equal("copy", AudioCodec.Copy.Name);
 
     [Fact]
     public void AudioCodec_Custom_factory()
@@ -50,16 +38,10 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void SubtitleCodec_MovText_name()
-    {
-        Assert.Equal("mov_text", SubtitleCodec.MovText.Name);
-    }
+    public void SubtitleCodec_MovText_name() => Assert.Equal("mov_text", SubtitleCodec.MovText.Name);
 
     [Fact]
-    public void SubtitleCodec_equality()
-    {
-        Assert.Equal(SubtitleCodec.Srt, SubtitleCodec.Custom("srt"));
-    }
+    public void SubtitleCodec_equality() => Assert.Equal(SubtitleCodec.Srt, SubtitleCodec.Custom("srt"));
 
     [Fact]
     public void Bitrate_Kbps_value()
@@ -69,10 +51,7 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void Bitrate_Kbps_ffmpeg_string()
-    {
-        Assert.Equal("192k", Bitrate.Kbps(192).ToFfmpegString());
-    }
+    public void Bitrate_Kbps_ffmpeg_string() => Assert.Equal("192k", Bitrate.Kbps(192).ToFfmpegString());
 
     [Fact]
     public void Bitrate_Mbps_value()
@@ -82,16 +61,10 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void Bitrate_Mbps_ffmpeg_string()
-    {
-        Assert.Equal("4M", Bitrate.Mbps(4).ToFfmpegString());
-    }
+    public void Bitrate_Mbps_ffmpeg_string() => Assert.Equal("4M", Bitrate.Mbps(4).ToFfmpegString());
 
     [Fact]
-    public void Bitrate_equality()
-    {
-        Assert.Equal(Bitrate.Kbps(1000), Bitrate.Mbps(1));
-    }
+    public void Bitrate_equality() => Assert.Equal(Bitrate.Kbps(1000), Bitrate.Mbps(1));
 
     [Fact]
     public void Framerate_Fps_int()
@@ -112,10 +85,7 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void Framerate_Ntsc30_equals_rational()
-    {
-        Assert.Equal(Framerate.Ntsc30, Framerate.Rational(30000, 1001));
-    }
+    public void Framerate_Ntsc30_equals_rational() => Assert.Equal(Framerate.Ntsc30, Framerate.Rational(30000, 1001));
 
     [Fact]
     public void Framerate_ToDouble()
@@ -141,64 +111,34 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void Preset_Slow_name()
-    {
-        Assert.Equal("slow", Preset.Slow.Name);
-    }
+    public void Preset_Slow_name() => Assert.Equal("slow", Preset.Slow.Name);
 
     [Fact]
-    public void Preset_Custom_factory()
-    {
-        Assert.Equal("p5", Preset.Custom("p5").Name);
-    }
+    public void Preset_Custom_factory() => Assert.Equal("p5", Preset.Custom("p5").Name);
 
     [Fact]
-    public void VideoProfile_High_name()
-    {
-        Assert.Equal("high", VideoProfile.High.Name);
-    }
+    public void VideoProfile_High_name() => Assert.Equal("high", VideoProfile.High.Name);
 
     [Fact]
-    public void Tune_Film_name()
-    {
-        Assert.Equal("film", Tune.Film.Name);
-    }
+    public void Tune_Film_name() => Assert.Equal("film", Tune.Film.Name);
 
     [Fact]
-    public void PixelFormat_Yuv420p_name()
-    {
-        Assert.Equal("yuv420p", PixelFormat.Yuv420p.Name);
-    }
+    public void PixelFormat_Yuv420p_name() => Assert.Equal("yuv420p", PixelFormat.Yuv420p.Name);
 
     [Fact]
-    public void ContainerFormat_Mp4_name()
-    {
-        Assert.Equal("mp4", ContainerFormat.Mp4.Name);
-    }
+    public void ContainerFormat_Mp4_name() => Assert.Equal("mp4", ContainerFormat.Mp4.Name);
 
     [Fact]
-    public void ContainerFormat_Null_name()
-    {
-        Assert.Equal("null", ContainerFormat.Null.Name);
-    }
+    public void ContainerFormat_Null_name() => Assert.Equal("null", ContainerFormat.Null.Name);
 
     [Fact]
-    public void ContainerFormat_Mkv_name()
-    {
-        Assert.Equal("matroska", ContainerFormat.Mkv.Name);
-    }
+    public void ContainerFormat_Mkv_name() => Assert.Equal("matroska", ContainerFormat.Mkv.Name);
 
     [Fact]
-    public void HWAccel_Cuda_name()
-    {
-        Assert.Equal("cuda", HWAccel.Cuda.Name);
-    }
+    public void HWAccel_Cuda_name() => Assert.Equal("cuda", HWAccel.Cuda.Name);
 
     [Fact]
-    public void HWAccel_Custom_factory()
-    {
-        Assert.Equal("vulkan", HWAccel.Custom("vulkan").Name);
-    }
+    public void HWAccel_Custom_factory() => Assert.Equal("vulkan", HWAccel.Custom("vulkan").Name);
 
     [Fact]
     public void VideoCodec_type_safety()

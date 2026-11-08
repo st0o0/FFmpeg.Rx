@@ -12,29 +12,20 @@ public sealed class ErrorClassifierTests
     [InlineData("Connection refused")]
     [InlineData("Network is unreachable")]
     [InlineData("Temporary failure in name resolution")]
-    public void Transient_errors_are_classified_correctly(string error)
-    {
-        Assert.Equal(FailureKind.Transient, ErrorClassifier.Classify(error));
-    }
+    public void Transient_errors_are_classified_correctly(string error) => Assert.Equal(FailureKind.Transient, ErrorClassifier.Classify(error));
 
     [Theory]
     [InlineData("HTTP error 403 Forbidden")]
     [InlineData("Invalid data found when processing input")]
     [InlineData("No such file or directory")]
     [InlineData("Something completely unknown")]
-    public void Permanent_errors_are_classified_correctly(string error)
-    {
-        Assert.Equal(FailureKind.Permanent, ErrorClassifier.Classify(error));
-    }
+    public void Permanent_errors_are_classified_correctly(string error) => Assert.Equal(FailureKind.Permanent, ErrorClassifier.Classify(error));
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void Null_or_empty_is_permanent(string? error)
-    {
-        Assert.Equal(FailureKind.Permanent, ErrorClassifier.Classify(error));
-    }
+    public void Null_or_empty_is_permanent(string? error) => Assert.Equal(FailureKind.Permanent, ErrorClassifier.Classify(error));
 
     [Fact]
     public void ExtractError_finds_http_error_line()
@@ -54,8 +45,5 @@ public sealed class ErrorClassifierTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void ExtractError_returns_empty_for_null_or_whitespace(string? stderr)
-    {
-        Assert.Equal("", ErrorClassifier.ExtractError(stderr));
-    }
+    public void ExtractError_returns_empty_for_null_or_whitespace(string? stderr) => Assert.Equal("", ErrorClassifier.ExtractError(stderr));
 }

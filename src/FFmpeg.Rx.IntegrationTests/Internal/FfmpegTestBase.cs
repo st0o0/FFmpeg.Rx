@@ -20,13 +20,7 @@ public abstract class FfmpegTestBase : IAsyncLifetime, IClassFixture<FfmpegFixtu
         return ValueTask.CompletedTask;
     }
 
-    protected string TestAsset(string name)
-    {
-        return Path.Combine(TestPaths.TestData, name);
-    }
+    protected string TestAsset(string name) => Path.Combine(TestPaths.TestData, name);
 
-    protected string OutputPath(string name)
-    {
-        return Path.Combine(_outputDir, name);
-    }
+    protected string OutputPath(string name) => Path.Combine(_outputDir, name);
 }
