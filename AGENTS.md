@@ -12,8 +12,7 @@ src/
     Events/               # FfmpegEvent hierarchy (Observable stream)
     FilterGraph/          # Complex filter graph (DAG)
     Filters/              # Simple filter interfaces + implementations
-    Internal/             # ArgumentSerializer, ProcessRunner, parsers
-    IO/                   # IPipeSource, IPipeSink, stream adapters
+    Internal/             # ArgumentSerializer, ProgressParser, ErrorClassifier, ProbeRunner
     Metadata/             # FFMetadata chapter builder
     Models/               # Pipeline records: PipelineSpec, InputSpec, OutputSpec, etc.
     Probing/              # ffprobe: MediaInfo, stream info records
@@ -24,7 +23,7 @@ src/
     EventStream/          # Progress events, cancellation, error handling
     Probing/              # ffprobe against known test files
     Filters/              # Scale, crop verified by probing output
-    PipeIO/               # Named pipe input/output (Windows)
+    PipeIO/               # Pipe input/output via CliWrap
     Advanced/             # Multi-output, containers, metadata
 testdata/                 # Synthetic test media (lavfi-generated, CC0)
 ```
@@ -36,7 +35,7 @@ Three-layer design — each layer is independently testable:
 ```
 Layer 1: Pipeline records   — what the user wants   (PipelineSpec, OutputSpec, CodecSpec...)
 Layer 2: Scoped builders    — how the user says it   (PipelineBuilder, OutputBuilder, StreamBuilder...)
-Layer 3: Serializer+Runner  — how it gets done        (ArgumentSerializer, ProcessRunner)
+Layer 3: Serializer+CliWrap — how it gets done        (ArgumentSerializer, FfmpegSession via CliWrap)
 ```
 
 ### Core types
@@ -49,9 +48,8 @@ Layer 3: Serializer+Runner  — how it gets done        (ArgumentSerializer, Pro
 | `StreamSpec` | Stream mapping with disjoint CodecSpec |
 | `CodecSpec` | Abstract: StreamCopy, VideoEncode, AudioEncode, SubtitleEncode |
 | `IFfmpegSession` | Consumer-facing interface (mockable) |
-| `FfmpegSession` | Internal implementation: one process, Observable lifecycle |
+| `FfmpegSession` | Implementation: CliWrap execution, R3 event bridging |
 | `ArgumentSerializer` | Pattern-matches on records → CLI string |
-| `ProcessRunner` | Process.Start + R3 Subjects + graceful cancellation |
 
 ### Value objects (readonly record struct)
 
@@ -118,5 +116,6 @@ dotnet run --project src/FFmpeg.Rx.Tests/FFmpeg.Rx.Tests.csproj
 ## Dependencies
 
 - R3 (Cysharp) — reactive Observable implementation
+- CliWrap — process execution, stdin/stdout piping
 - xUnit v3 — testing on Microsoft.Testing.Platform
 - System.Text.Json — ffprobe JSON parsing (source-generated)
