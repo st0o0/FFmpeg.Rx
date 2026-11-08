@@ -48,20 +48,12 @@ internal static class ArgumentSerializer
                 sb.Append("-i \"").Append(file.Path).Append("\" ");
                 break;
             case PipeInputSpec pipe:
-                if (pipe.Source.StreamFormat is { Length: > 0 })
+                if (pipe.Format is { Length: > 0 })
                 {
-                    sb.Append("-f ").Append(pipe.Source.StreamFormat).Append(' ');
+                    sb.Append("-f ").Append(pipe.Format).Append(' ');
                 }
 
-                if (OperatingSystem.IsWindows())
-                {
-                    sb.Append(@"-i \\.\pipe\").Append(pipe.PipeName).Append(' ');
-                }
-                else
-                {
-                    sb.Append("-i pipe:").Append(pipe.PipeName).Append(' ');
-                }
-
+                sb.Append("-i pipe:0 ");
                 break;
         }
     }
@@ -186,16 +178,8 @@ internal static class ArgumentSerializer
                 case NullDestination:
                     sb.Append(" /dev/null");
                     break;
-                case PipeDestination pipe:
-                    if (OperatingSystem.IsWindows())
-                    {
-                        sb.Append(@" \\.\pipe\").Append(pipe.PipeName);
-                    }
-                    else
-                    {
-                        sb.Append(" pipe:").Append(pipe.PipeName);
-                    }
-
+                case PipeDestination:
+                    sb.Append(" pipe:1");
                     break;
             }
         }
@@ -309,7 +293,7 @@ internal static class ArgumentSerializer
         }
     }
 
-    private static void SerializeTimeRange(StringBuilder sb, Models.TimeRange range)
+    private static void SerializeTimeRange(StringBuilder sb, TimeRange range)
     {
         if (range.Seek is { } seek)
         {
@@ -445,11 +429,14 @@ internal static class ArgumentSerializer
         return ts.ToString(@"hh\:mm\:ss\.fff", CultureInfo.InvariantCulture);
     }
 
-    internal static char StreamTypeChar(StreamType type) => type switch
+    internal static char StreamTypeChar(StreamType type)
     {
-        StreamType.Video => 'v',
-        StreamType.Audio => 'a',
-        StreamType.Subtitle => 's',
-        _ => '?'
-    };
+        return type switch
+        {
+            StreamType.Video => 'v',
+            StreamType.Audio => 'a',
+            StreamType.Subtitle => 's',
+            _ => '?'
+        };
+    }
 }
