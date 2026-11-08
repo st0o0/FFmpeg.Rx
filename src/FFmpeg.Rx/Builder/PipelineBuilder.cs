@@ -51,7 +51,7 @@ public sealed class PipelineBuilder
         return this;
     }
 
-    public FfmpegSession Output(string path, Action<OutputOptions> configure)
+    public IFfmpegSession Output(string path, Action<OutputOptions> configure)
     {
         var options = new OutputOptions();
         configure(options);
@@ -63,7 +63,7 @@ public sealed class PipelineBuilder
         return FfmpegSession.Create(pipeline);
     }
 
-    public FfmpegSession OutputPipe(IPipeSink sink, Action<OutputOptions> configure)
+    public IFfmpegSession OutputPipe(IPipeSink sink, Action<OutputOptions> configure)
     {
         var options = new OutputOptions();
         configure(options);
@@ -82,7 +82,7 @@ public sealed class PipelineBuilder
         return new MultiOutputBuilder(_inputs, _globalOptions, _binaryPath);
     }
 
-    public FfmpegSession OutputTee(Action<OutputOptions> configureOutput, Action<TeeBuilder> configureTee)
+    public IFfmpegSession OutputTee(Action<OutputOptions> configureOutput, Action<TeeBuilder> configureTee)
     {
         var options = new OutputOptions();
         configureOutput(options);
@@ -97,7 +97,7 @@ public sealed class PipelineBuilder
         return FfmpegSession.Create(pipeline);
     }
 
-    public FfmpegSession OutputNull(Action<OutputOptions> configure)
+    public IFfmpegSession OutputNull(Action<OutputOptions> configure)
     {
         var options = new OutputOptions();
         configure(options);

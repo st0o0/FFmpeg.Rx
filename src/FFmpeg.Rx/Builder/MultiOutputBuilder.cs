@@ -27,7 +27,7 @@ public sealed class MultiOutputBuilder
         return this;
     }
 
-    public FfmpegSession Build()
+    public IFfmpegSession Build()
     {
         var pipeline = new FfmpegPipeline(
             [.. _inputs], [.. _outputs], [.. _globalOptions], _binaryPath);
