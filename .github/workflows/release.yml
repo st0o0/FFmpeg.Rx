@@ -23,7 +23,7 @@ jobs:
     permissions:
       contents: read
     with:
-      solution-file: ProjectName.slnx
+      solution-file: FFmpeg.Rx.slnx
       version: ${{ needs.release-please.outputs.version }}
 
   publish:

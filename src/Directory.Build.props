@@ -19,6 +19,8 @@
         <RepositoryType>git</RepositoryType>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <Description>Reactive FFmpeg process wrapper using R3 Observables. Type-safe, composable, testable.</Description>
+        <PackageTags>ffmpeg;video;audio;transcode;reactive;r3;observable</PackageTags>
         <DebugType>embedded</DebugType>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>

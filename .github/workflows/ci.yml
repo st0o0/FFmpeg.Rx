@@ -16,7 +16,7 @@ jobs:
     with:
       solution-file: FFmpeg.Rx.slnx
       has-dockerfile: false
-      locked-mode: false
+      locked-mode: true
 
   commits:
     uses: st0o0/github-workflows/.github/workflows/commitlint.yml@main
