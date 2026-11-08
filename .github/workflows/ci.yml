@@ -14,8 +14,9 @@ jobs:
   dotnet:
     uses: st0o0/github-workflows/.github/workflows/dotnet-ci.yml@main
     with:
-      solution-file: ProjectName.slnx
+      solution-file: FFmpeg.Rx.slnx
       has-dockerfile: false
+      locked-mode: false
 
   commits:
     uses: st0o0/github-workflows/.github/workflows/commitlint.yml@main

@@ -1,20 +1,30 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  FFmpeg.Rx — Reactive FFmpeg process wrapper using R3 Observables.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Tech stack: C# / .NET 10, R3 (Cysharp), xUnit v3 on Microsoft.Testing.Platform
+
+  Architecture: Three-layer — Pipeline records (domain truth) → Scoped builders (fluent API sugar) → ArgumentSerializer + ProcessRunner (implementation).
+
+  Value objects as readonly record struct with static factories and Custom() escape hatch.
+  Disjoint sum types for CodecSpec (StreamCopy | VideoEncode | AudioEncode | SubtitleEncode) and QualitySpec (ConstantQuality | ConstantBitrate).
+  IFfmpegSession interface for consumer mockability.
+
+  Conventions: Allman braces, sealed by default, var when type apparent, no XML docs, dotnet format enforced, warnings are errors.
+  Tests: xUnit v3 via dotnet run (not dotnet test), no vacuous assertions, inline timeouts on async tests, assert typed values.
+
+rules:
+  proposal:
+    - Keep proposals under 500 words
+    - Always include Goals and Non-Goals sections
+  design:
+    - Document alternatives considered for each decision
+    - Include code examples for key design decisions
+  specs:
+    - Each requirement must have at least one scenario
+    - Scenarios use WHEN/THEN format
+  tasks:
+    - Each task should be completable in under 2 hours
+    - Group related tasks by architectural layer
+    - Mark dependencies between groups explicitly
