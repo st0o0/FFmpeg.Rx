@@ -17,4 +17,5 @@
   <Project Path="FFmpeg.Rx/FFmpeg.Rx.csproj" />
   <Project Path="FFmpeg.Rx.Tests/FFmpeg.Rx.Tests.csproj" />
   <Project Path="FFmpeg.Rx.IntegrationTests/FFmpeg.Rx.IntegrationTests.csproj" />
+  <Project Path="FFmpeg.Rx.Example/FFmpeg.Rx.Example.csproj" />
 </Solution>

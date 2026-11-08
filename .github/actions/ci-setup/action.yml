@@ -1,8 +1,8 @@
 name: CI Setup
-description: Install ffmpeg for integration tests
+description: Install ffmpeg for integration tests and native AOT toolchain
 
 runs:
   using: composite
   steps:
-    - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+    - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg clang zlib1g-dev
       shell: bash
