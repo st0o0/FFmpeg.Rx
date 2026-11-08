@@ -12,7 +12,7 @@ public sealed class ArgumentBuilderTests
         var pipeline = new FfmpegPipeline(
             [new UrlInput(new Uri("https://example.com/video.mp4"), UserAgent: "Mozilla/5.0", Proxy: "http://proxy:8888")],
             new FfmpegOutput("out.mkv",
-                [new StreamMapping(0, 0, StreamType.Video, VideoCodec.Copy)],
+                [new StreamMapping(0, 0, StreamType.Video, VideoCodec.Copy.Name)],
                 []),
             []);
 
@@ -40,8 +40,8 @@ public sealed class ArgumentBuilderTests
         var pipeline = new FfmpegPipeline(
             [new UrlInput(new Uri("https://example.com/v.mp4"))],
             new FfmpegOutput("out.mkv",
-                [new StreamMapping(0, 0, StreamType.Video, VideoCodec.Copy),
-                 new StreamMapping(0, 0, StreamType.Audio, VideoCodec.Copy)],
+                [new StreamMapping(0, 0, StreamType.Video, VideoCodec.Copy.Name),
+                 new StreamMapping(0, 0, StreamType.Audio, VideoCodec.Copy.Name)],
                 []),
             []);
 
@@ -59,9 +59,9 @@ public sealed class ArgumentBuilderTests
             [new UrlInput(new Uri("https://example.com/v.mp4")),
              new FileInput("/subs.srt")],
             new FfmpegOutput("out.mkv",
-                [new StreamMapping(0, 0, StreamType.Video, VideoCodec.Copy),
-                 new StreamMapping(0, 0, StreamType.Audio, VideoCodec.Copy),
-                 new StreamMapping(1, 0, StreamType.Subtitle, "srt")],
+                [new StreamMapping(0, 0, StreamType.Video, VideoCodec.Copy.Name),
+                 new StreamMapping(0, 0, StreamType.Audio, VideoCodec.Copy.Name),
+                 new StreamMapping(1, 0, StreamType.Subtitle, SubtitleCodec.Srt.Name)],
                 []),
             []);
 

@@ -40,7 +40,7 @@ public sealed class FfmpegSessionIntegrationTests
 
         await using var session = Ffmpeg.Input(new Uri("https://example.com/nonexistent.mp4"))
             .Output("out.mkv", o => o
-                .Map(0, 0, StreamType.Video, VideoCodec.Copy));
+                .Map(0, 0, StreamType.Video, VideoCodec.Copy.Name));
 
         session.Events.Subscribe(events.Add);
 
@@ -86,5 +86,16 @@ public sealed class FfmpegSessionIntegrationTests
 
         Assert.False(result.Success);
         Assert.Contains("Failed to start FFmpeg", result.Error);
+    }
+
+    [Fact]
+    public void IFfmpegSession_is_implemented_by_FfmpegSession()
+    {
+        var spec = new PipelineSpec(
+            [new FileInputSpec("input.mp4")],
+            [new OutputSpec(new FileDestination("out.mp4"))]);
+
+        var session = FfmpegSession.Create(spec);
+        Assert.IsAssignableFrom<IFfmpegSession>(session);
     }
 }

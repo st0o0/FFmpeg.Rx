@@ -9,15 +9,18 @@ public sealed class MultiOutputTests
     [Fact]
     public void Multiple_outputs_in_single_command()
     {
-        var pipeline = new FfmpegPipeline(
-            [new FileInput("input.mp4")],
+        var spec = new PipelineSpec(
+            [new FileInputSpec("input.mp4")],
             [
-                new FfmpegOutput("hd.mp4", [new StreamMapping(0, 0, StreamType.Video, VideoCodec.LibX264)], ["-crf 18"]),
-                new FfmpegOutput("sd.mp4", [new StreamMapping(0, 0, StreamType.Video, VideoCodec.LibX264)], ["-crf 28"])
-            ],
-            []);
+                new OutputSpec(new FileDestination("hd.mp4"),
+                    Streams: [new StreamSpec(0, 0, StreamType.Video,
+                        new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Quality: Quality.Crf(18))))]),
+                new OutputSpec(new FileDestination("sd.mp4"),
+                    Streams: [new StreamSpec(0, 0, StreamType.Video,
+                        new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Quality: Quality.Crf(28))))])
+            ]);
 
-        var args = ArgumentBuilder.Build(pipeline);
+        var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-crf 18", args);
         Assert.Contains("\"hd.mp4\"", args);
         Assert.Contains("-crf 28", args);
@@ -29,7 +32,7 @@ public sealed class MultiOutputTests
     {
         var pipeline = new FfmpegPipeline(
             [new FileInput("input.mp4")],
-            [new FfmpegOutput("", [new StreamMapping(0, 0, StreamType.Video, VideoCodec.LibX264)], [])],
+            [new FfmpegOutput("", [new StreamMapping(0, 0, StreamType.Video, VideoCodec.H264.Name)], [])],
             [],
             TeeOutput: new TeeOutput([
                 new TeeTarget("out1.mp4", Format: "mp4"),
@@ -59,11 +62,14 @@ public sealed class MultiOutputTests
     }
 
     [Fact]
-    public void Null_output()
+    public void Null_output_serializes()
     {
-        var session = Ffmpeg.Input("input.mp4")
-            .OutputNull(o => o.AudioFilter(f => f.SilenceDetect(-30, 2)));
+        var spec = new PipelineSpec(
+            [new FileInputSpec("input.mp4")],
+            [new OutputSpec(NullDestination.Instance, Container: ContainerFormat.Null)]);
 
-        Assert.NotNull(session);
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-f null", args);
+        Assert.Contains("/dev/null", args);
     }
 }
