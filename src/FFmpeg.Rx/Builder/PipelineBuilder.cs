@@ -7,6 +7,7 @@ public sealed class PipelineBuilder
     private readonly string? _binaryPath;
     private readonly List<InputSpec> _inputs = [];
     private readonly List<string> _globalOptions = [];
+    private TimeSpan? _knownDuration;
 
     internal PipelineBuilder(string? binaryPath)
     {
@@ -37,9 +38,10 @@ public sealed class PipelineBuilder
         return this;
     }
 
-    public PipelineBuilder WithProgressReporting()
+    public PipelineBuilder WithProgressReporting(TimeSpan? knownDuration = null)
     {
         _globalOptions.Add("-progress pipe:1");
+        _knownDuration = knownDuration;
         return this;
     }
 
@@ -76,10 +78,7 @@ public sealed class PipelineBuilder
         return BuildSession([output]);
     }
 
-    public MultiOutputBuilder Outputs()
-    {
-        return new MultiOutputBuilder(_inputs, _globalOptions, _binaryPath);
-    }
+    public MultiOutputBuilder Outputs() => new(_inputs, _globalOptions, _binaryPath);
 
     private IFfmpegSession BuildSession(OutputSpec[] outputs)
     {
@@ -87,7 +86,8 @@ public sealed class PipelineBuilder
             [.. _inputs],
             outputs,
             _globalOptions.Count > 0 ? [.. _globalOptions] : null,
-            _binaryPath);
+            _binaryPath,
+            _knownDuration);
         return FfmpegSession.Create(spec);
     }
 }

@@ -37,6 +37,20 @@ public sealed class FfmpegSession : IFfmpegSession
                 "This session has already been run. Build a new session from the pipeline.");
         }
 
+        var totalDuration = _spec.TotalDuration;
+        if (totalDuration is null && _spec.Inputs is [FileInputSpec fileInput])
+        {
+            try
+            {
+                var info = await Ffprobe.AnalyseAsync(fileInput.Path, ct).ConfigureAwait(false);
+                totalDuration = info.Duration;
+            }
+            catch
+            {
+                // probe failure is not fatal
+            }
+        }
+
         var sw = Stopwatch.StartNew();
         var stderrLines = new List<string>();
         var progressBlock = new Dictionary<string, string>();
@@ -69,7 +83,7 @@ public sealed class FfmpegSession : IFfmpegSession
             return await ExecuteWithPipeOutput(cmd, sw, stderrLines, ct).ConfigureAwait(false);
         }
 
-        return await ExecuteWithEventStream(cmd, sw, stderrLines, progressBlock, ct).ConfigureAwait(false);
+        return await ExecuteWithEventStream(cmd, sw, stderrLines, progressBlock, totalDuration, ct).ConfigureAwait(false);
     }
 
     private async Task<FfmpegResult> ExecuteWithEventStream(
@@ -77,6 +91,7 @@ public sealed class FfmpegSession : IFfmpegSession
         Stopwatch sw,
         List<string> stderrLines,
         Dictionary<string, string> progressBlock,
+        TimeSpan? totalDuration,
         CancellationToken ct)
     {
         var exitCode = 0;
@@ -95,6 +110,11 @@ public sealed class FfmpegSession : IFfmpegSession
                         if (progress is not null)
                         {
                             _subject.OnNext(progress);
+                            if (totalDuration is { } dur && dur.TotalMicroseconds > 0)
+                            {
+                                var percent = Math.Min(100.0, progress.TimeUs / dur.TotalMicroseconds * 100.0);
+                                _subject.OnNext(new PercentageProgressEvent(percent, progress));
+                            }
                         }
 
                         break;
@@ -177,10 +197,7 @@ public sealed class FfmpegSession : IFfmpegSession
         return new FfmpegResult(false, exitCode, error, elapsed, kind);
     }
 
-    public static IFfmpegSession Create(PipelineSpec spec)
-    {
-        return new FfmpegSession(spec);
-    }
+    public static IFfmpegSession Create(PipelineSpec spec) => new FfmpegSession(spec);
 
     public ValueTask DisposeAsync()
     {

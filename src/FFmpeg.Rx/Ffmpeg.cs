@@ -1,27 +1,59 @@
 using FFmpeg.Rx.Builder;
 using FFmpeg.Rx.Models;
+using FFmpeg.Rx.Probing;
 
 namespace FFmpeg.Rx;
 
 public static class Ffmpeg
 {
-    public static PipelineBuilder Input(Uri url)
+    public static PipelineBuilder Input(Uri url) => new PipelineBuilder(null).AddInput(new UrlInputSpec(url));
+
+    public static PipelineBuilder Input(string filePath) =>
+        new PipelineBuilder(null).AddInput(new FileInputSpec(filePath));
+
+    public static PipelineBuilder Input(Stream source, string format) =>
+        new PipelineBuilder(null).AddInput(new PipeInputSpec(source, format));
+
+    public static PipelineBuilder At(string binaryPath) => new(binaryPath);
+
+    public static Task<MediaInfo> Probe(string path, CancellationToken ct = default)
     {
-        return new PipelineBuilder(null).AddInput(new UrlInputSpec(url));
+        return Ffprobe.AnalyseAsync(path, ct);
     }
 
-    public static PipelineBuilder Input(string filePath)
+    public static async Task<FfmpegResult> Snapshot(string inputPath, TimeSpan time, string outputPath, CancellationToken ct = default)
     {
-        return new PipelineBuilder(null).AddInput(new FileInputSpec(filePath));
+        var spec = new PipelineSpec(
+            [new FileInputSpec(inputPath) { Options = new InputOptionSpec(Seek: time) }],
+            [new OutputSpec(
+                new FileDestination(outputPath),
+                CustomArgs: ["-frames:v 1", "-update 1"])]);
+        await using var session = FfmpegSession.Create(spec);
+        return await session.RunAsync(ct);
     }
 
-    public static PipelineBuilder Input(Stream source, string format)
+    public static async Task<FfmpegResult> Concat(IEnumerable<string> inputPaths, string outputPath, CancellationToken ct = default)
     {
-        return new PipelineBuilder(null).AddInput(new PipeInputSpec(source, format));
-    }
+        var listFile = Path.Combine(Path.GetTempPath(), $"ffmpeg_rx_concat_{Guid.NewGuid():N}.txt");
+        try
+        {
+            var lines = inputPaths.Select(p => $"file '{p.Replace("'", "'\\''")}'");
+            await File.WriteAllLinesAsync(listFile, lines, ct);
 
-    public static PipelineBuilder At(string binaryPath)
-    {
-        return new PipelineBuilder(binaryPath);
+            var spec = new PipelineSpec(
+                [new FileInputSpec(listFile) { Options = new InputOptionSpec(CustomArgs: ["-f concat", "-safe 0"]) }],
+                [new OutputSpec(
+                    new FileDestination(outputPath),
+                    CustomArgs: ["-c copy"])]);
+            await using var session = FfmpegSession.Create(spec);
+            return await session.RunAsync(ct);
+        }
+        finally
+        {
+            if (File.Exists(listFile))
+            {
+                File.Delete(listFile);
+            }
+        }
     }
 }
