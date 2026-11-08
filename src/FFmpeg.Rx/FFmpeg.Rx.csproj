@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="FFmpeg.Rx.Tests" />
+    <InternalsVisibleTo Include="FFmpeg.Rx.IntegrationTests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CliWrap" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
     <PackageReference Include="R3" />
   </ItemGroup>
 

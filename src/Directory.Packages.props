@@ -5,8 +5,7 @@
   <ItemGroup>
     <!-- Library dependencies: minimum versions, so consumers are not forced to update. -->
     <PackageVersion Include="CliWrap" Version="[3.10.5,4)" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.403" />
-    <PackageVersion Include="R3" Version="[1.2.9,)" />
+<PackageVersion Include="R3" Version="[1.2.9,)" />
     <!-- Testing -->
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.3.1" />

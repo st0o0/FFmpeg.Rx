@@ -96,11 +96,11 @@ await using var session = FfmpegSession.Create(new PipelineSpec(
 
 ## Key Concepts
 
-- **Value Objects** — `VideoCodec`, `AudioCodec`, `Bitrate`, `Framerate`, `Preset` etc. are `readonly record struct` with static factories and `Custom()` escape hatch
-- **Disjoint Sum Types** — `CodecSpec` → `StreamCopy | VideoEncode | AudioEncode | SubtitleEncode`. CRF and Bitrate are mutually exclusive via `QualitySpec`
-- **Three Layers** — Pipeline records (domain) → Builders (fluent API) → CliWrap execution
-- **IFfmpegSession** — Interface for consumer mocking. Program against the interface, not the implementation
-- **R3 Observables** — All event streams use [R3](https://github.com/Cysharp/R3), the modern reactive implementation
+- **Value Objects** - `VideoCodec`, `AudioCodec`, `Bitrate`, `Framerate`, `Preset` etc. are `readonly record struct` with static factories and `Custom()` escape hatch
+- **Disjoint Sum Types** - `CodecSpec` = `StreamCopy | VideoEncode | AudioEncode | SubtitleEncode`. CRF and Bitrate are mutually exclusive via `QualitySpec`
+- **Three Layers** - Pipeline records (domain), Builders (fluent API), CliWrap execution
+- **IFfmpegSession** - Interface for consumer mocking. Program against the interface, not the implementation
+- **R3 Observables** - All event streams use [R3](https://github.com/Cysharp/R3), the modern reactive implementation
 
 ## Development
 
