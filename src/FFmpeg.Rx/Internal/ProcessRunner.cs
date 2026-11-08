@@ -10,6 +10,7 @@ internal sealed class ProcessRunner
 {
     private readonly FfmpegPipeline _pipeline;
     private readonly string _binaryPath;
+    private readonly string? _prebuiltArgs;
     private readonly Subject<FfmpegEvent> _events;
     private Process? _process;
 
@@ -20,9 +21,17 @@ internal sealed class ProcessRunner
         _events = events;
     }
 
+    internal ProcessRunner(FfmpegPipeline pipeline, Subject<FfmpegEvent> events, string prebuiltArgs)
+    {
+        _pipeline = pipeline;
+        _binaryPath = FfmpegOptions.ResolveFfmpegBinary(pipeline.BinaryPath);
+        _prebuiltArgs = prebuiltArgs;
+        _events = events;
+    }
+
     internal async Task<FfmpegResult> RunAsync(CancellationToken ct)
     {
-        var arguments = ArgumentBuilder.Build(_pipeline);
+        var arguments = _prebuiltArgs ?? ArgumentBuilder.Build(_pipeline);
         var sw = Stopwatch.StartNew();
 
         var psi = new ProcessStartInfo

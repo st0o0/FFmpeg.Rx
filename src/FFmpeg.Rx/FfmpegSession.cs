@@ -5,7 +5,7 @@ using R3;
 
 namespace FFmpeg.Rx;
 
-public sealed class FfmpegSession : IAsyncDisposable
+public sealed class FfmpegSession : IFfmpegSession
 {
     private readonly ProcessRunner _runner;
     private readonly Subject<FfmpegEvent> _subject = new();
@@ -14,6 +14,17 @@ public sealed class FfmpegSession : IAsyncDisposable
     private FfmpegSession(FfmpegPipeline pipeline)
     {
         _runner = new ProcessRunner(pipeline, _subject);
+    }
+
+    private FfmpegSession(PipelineSpec spec)
+    {
+        var args = ArgumentSerializer.Serialize(spec);
+        var pipeline = new FfmpegPipeline(
+            [],
+            [new FfmpegOutput("dummy", [], [])],
+            []);
+        pipeline = pipeline with { BinaryPath = spec.BinaryPath };
+        _runner = new ProcessRunner(pipeline, _subject, args);
     }
 
     public Observable<FfmpegEvent> Events => _subject.AsObservable();
@@ -34,6 +45,8 @@ public sealed class FfmpegSession : IAsyncDisposable
     }
 
     public static FfmpegSession Create(FfmpegPipeline pipeline) => new(pipeline);
+
+    public static IFfmpegSession Create(PipelineSpec spec) => new FfmpegSession(spec);
 
     public ValueTask DisposeAsync()
     {
