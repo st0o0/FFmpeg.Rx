@@ -11,7 +11,7 @@ Reactive FFmpeg process wrapper using [R3](https://github.com/Cysharp/R3) Observ
 
 ## Why FFmpeg.Rx?
 
-Most .NET FFmpeg wrappers pass encoding options as raw strings — codec names, bitrate values, filter expressions. Typos compile fine and fail at runtime. FFmpeg.Rx replaces string bags with typed records: every codec, bitrate, preset, pixel format, and container is a .NET type with static factories and a `Custom()` escape hatch. The pipeline is a record tree you can inspect, test, and serialize — builders are syntactic sugar on top.
+Most .NET FFmpeg wrappers pass encoding options as raw strings - codec names, bitrate values, filter expressions. Typos compile fine and fail at runtime. FFmpeg.Rx replaces string bags with typed records: every codec, bitrate, preset, pixel format, and container is a .NET type with static factories and a `Custom()` escape hatch. The pipeline is a record tree you can inspect, test, and serialize - builders are syntactic sugar on top.
 
 Events (progress, log, lifecycle) come as R3 Observables, not callbacks. One session wraps one process. Build → Run → Done.
 
@@ -21,34 +21,34 @@ Events (progress, log, lifecycle) come as R3 Observables, not callbacks. One ses
 
 ### Pipeline
 
-- **Type-safe codecs** — `VideoCodec.H264`, `AudioCodec.Aac`, `SubtitleCodec.Srt` as `readonly record struct`
-- **Disjoint sum types** — `StreamCopy | VideoEncode | AudioEncode | SubtitleEncode` enforced at compile time
-- **Value objects** — `Bitrate`, `Framerate`, `Preset`, `PixelFormat`, `ContainerFormat` with `Custom()` escape hatch
-- **Immutable records** — `PipelineSpec`, `OutputSpec`, `StreamSpec` as the testable truth
+- **Type-safe codecs** - `VideoCodec.H264`, `AudioCodec.Aac`, `SubtitleCodec.Srt` as `readonly record struct`
+- **Disjoint sum types** - `StreamCopy | VideoEncode | AudioEncode | SubtitleEncode` enforced at compile time
+- **Value objects** - `Bitrate`, `Framerate`, `Preset`, `PixelFormat`, `ContainerFormat` with `Custom()` escape hatch
+- **Immutable records** - `PipelineSpec`, `OutputSpec`, `StreamSpec` as the testable truth
 
 ### Events
 
-- **R3 Observables** — `Progress`, `Log`, typed `FfmpegEvent` hierarchy
-- **Progress reporting** — speed, bytes written, time position, percentage via known duration
+- **R3 Observables** - `Progress`, `Log`, typed `FfmpegEvent` hierarchy
+- **Progress reporting** - speed, bytes written, time position, percentage via known duration
 
 ### Probing
 
-- **ffprobe integration** — `Ffmpeg.Probe()` returns strongly-typed `MediaInfo`
-- **Source-generated JSON** — AOT-compatible deserialization via `JsonSerializerContext`
-- **Stream info** — video, audio, subtitle streams with codec, resolution, sample rate, chapters
+- **ffprobe integration** - `Ffmpeg.Probe()` returns strongly-typed `MediaInfo`
+- **Source-generated JSON** - AOT-compatible deserialization via `JsonSerializerContext`
+- **Stream info** - video, audio, subtitle streams with codec, resolution, sample rate, chapters
 
 ### Convenience
 
-- **Snapshots** — extract single frames with `Ffmpeg.Snapshot()`
-- **Concatenation** — join files with `Ffmpeg.Concat()`
-- **Custom binary path** — `Ffmpeg.At("/path/to/ffmpeg")`
-- **Pipe I/O** — stdin/stdout streaming via CliWrap
+- **Snapshots** - extract single frames with `Ffmpeg.Snapshot()`
+- **Concatenation** - join files with `Ffmpeg.Concat()`
+- **Custom binary path** - `Ffmpeg.At("/path/to/ffmpeg")`
+- **Pipe I/O** - stdin/stdout streaming via CliWrap
 
 ### Extensibility
 
-- **`CustomArg()` escape hatch** — on every builder for uncovered FFmpeg flags
-- **`IFfmpegSession` interface** — mock sessions in consumer tests
-- **Filters** — scale, crop, fade, pad, and custom filter expressions
+- **`CustomArg()` escape hatch** - on every builder for uncovered FFmpeg flags
+- **`IFfmpegSession` interface** - mock sessions in consumer tests
+- **Filters** - scale, crop, fade, pad, and custom filter expressions
 
 ---
 
@@ -157,7 +157,7 @@ await using var session = Ffmpeg.At("/usr/local/bin/ffmpeg")
 
 ## Architecture
 
-Three-layer design — each layer is independently testable:
+Three-layer design - each layer is independently testable:
 
 ```
 Layer 1: Pipeline records     what the user wants    PipelineSpec, OutputSpec, CodecSpec...
