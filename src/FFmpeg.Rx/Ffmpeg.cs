@@ -28,8 +28,11 @@ public static class Ffmpeg
             [new OutputSpec(
                 new FileDestination(outputPath),
                 CustomArgs: ["-frames:v 1", "-update 1"])]);
-        await using var session = FfmpegSession.Create(spec);
-        return await session.RunAsync(ct);
+        var session = FfmpegSession.Create(spec);
+        await using (session.ConfigureAwait(false))
+        {
+            return await session.RunAsync(ct).ConfigureAwait(false);
+        }
     }
 
     public static async Task<FfmpegResult> Concat(IEnumerable<string> inputPaths, string outputPath, CancellationToken ct = default)
@@ -38,15 +41,18 @@ public static class Ffmpeg
         try
         {
             var lines = inputPaths.Select(p => $"file '{p.Replace("'", "'\\''")}'");
-            await File.WriteAllLinesAsync(listFile, lines, ct);
+            await File.WriteAllLinesAsync(listFile, lines, ct).ConfigureAwait(false);
 
             var spec = new PipelineSpec(
                 [new FileInputSpec(listFile) { Options = new InputOptionSpec(CustomArgs: ["-f concat", "-safe 0"]) }],
                 [new OutputSpec(
                     new FileDestination(outputPath),
                     CustomArgs: ["-c copy"])]);
-            await using var session = FfmpegSession.Create(spec);
-            return await session.RunAsync(ct);
+            var session = FfmpegSession.Create(spec);
+            await using (session.ConfigureAwait(false))
+            {
+                return await session.RunAsync(ct).ConfigureAwait(false);
+            }
         }
         finally
         {

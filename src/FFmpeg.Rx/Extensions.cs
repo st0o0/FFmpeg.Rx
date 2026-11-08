@@ -1,4 +1,3 @@
-using FFmpeg.Rx.Events;
 using R3;
 
 namespace FFmpeg.Rx;

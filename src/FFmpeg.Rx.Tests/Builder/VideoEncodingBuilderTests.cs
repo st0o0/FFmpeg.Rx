@@ -1,6 +1,5 @@
 using FFmpeg.Rx.Builder;
 using FFmpeg.Rx.Codecs;
-using FFmpeg.Rx.Models;
 
 namespace FFmpeg.Rx.Tests.Builder;
 

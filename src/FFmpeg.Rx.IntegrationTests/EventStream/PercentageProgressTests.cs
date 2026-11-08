@@ -1,7 +1,6 @@
 using FFmpeg.Rx.Codecs;
 using FFmpeg.Rx.Events;
 using FFmpeg.Rx.IntegrationTests.Internal;
-using FFmpeg.Rx.Models;
 using R3;
 
 namespace FFmpeg.Rx.IntegrationTests.EventStream;

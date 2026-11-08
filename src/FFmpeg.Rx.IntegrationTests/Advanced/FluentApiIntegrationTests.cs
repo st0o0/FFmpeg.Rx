@@ -1,6 +1,5 @@
 using FFmpeg.Rx.Codecs;
 using FFmpeg.Rx.IntegrationTests.Internal;
-using FFmpeg.Rx.Models;
 
 namespace FFmpeg.Rx.IntegrationTests.Advanced;
 

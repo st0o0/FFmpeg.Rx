@@ -1,7 +1,6 @@
 using FFmpeg.Rx.Builder;
 using FFmpeg.Rx.Codecs;
 using FFmpeg.Rx.FilterGraph;
-using FFmpeg.Rx.Filters;
 using FFmpeg.Rx.Models;
 
 namespace FFmpeg.Rx.Tests.Builder;

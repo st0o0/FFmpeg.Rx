@@ -1,5 +1,3 @@
-using FFmpeg.Rx.Models;
-
 namespace FFmpeg.Rx.Tests.Builder;
 
 public sealed class MultiOutputBuilderTests
