@@ -27,8 +27,5 @@ public sealed class AudioEncodingBuilder
         return this;
     }
 
-    internal AudioEncodingOptions Build()
-    {
-        return new AudioEncodingOptions(_bitrate, _sampleRate, _channels);
-    }
+    internal AudioEncodingOptions Build() => new(_bitrate, _sampleRate, _channels);
 }

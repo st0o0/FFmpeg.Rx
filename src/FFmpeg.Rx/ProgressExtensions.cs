@@ -18,8 +18,6 @@ public static class ProgressExtensions
     }
 
     public static Observable<PercentageProgressEvent> WithPercentage(
-        this Observable<ProgressEvent> source, TimeSpan totalDuration)
-    {
-        return source.Select(p => new PercentageProgressEvent(p.AsPercentage(totalDuration), p));
-    }
+        this Observable<ProgressEvent> source, TimeSpan totalDuration) =>
+        source.Select(p => new PercentageProgressEvent(p.AsPercentage(totalDuration), p));
 }

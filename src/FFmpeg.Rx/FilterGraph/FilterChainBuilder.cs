@@ -60,8 +60,5 @@ public sealed class FilterChainBuilder
         return this;
     }
 
-    internal string Render()
-    {
-        return string.Join(",", _filters.Select(f => f.Render()));
-    }
+    internal string Render() => string.Join(",", _filters.Select(f => f.Render()));
 }

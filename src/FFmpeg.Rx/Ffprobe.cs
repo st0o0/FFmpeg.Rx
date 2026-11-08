@@ -5,10 +5,7 @@ namespace FFmpeg.Rx;
 
 public static class Ffprobe
 {
-    public static Task<MediaInfo> AnalyseAsync(string path, CancellationToken ct = default)
-    {
-        return AnalyseAsync(path, null, ct);
-    }
+    public static Task<MediaInfo> AnalyseAsync(string path, CancellationToken ct = default) => AnalyseAsync(path, null, ct);
 
     public static Task<MediaInfo> AnalyseAsync(string path, FfprobeOptions? options, CancellationToken ct = default)
     {
@@ -22,10 +19,7 @@ public static class Ffprobe
         return ProbeRunner.RunAsync(arguments, binary, ct);
     }
 
-    public static Task<MediaInfo> AnalyseAsync(Uri url, CancellationToken ct = default)
-    {
-        return AnalyseAsync(url, null, ct);
-    }
+    public static Task<MediaInfo> AnalyseAsync(Uri url, CancellationToken ct = default) => AnalyseAsync(url, null, ct);
 
     public static Task<MediaInfo> AnalyseAsync(Uri url, FfprobeOptions? options, CancellationToken ct = default)
     {

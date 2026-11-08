@@ -27,8 +27,5 @@ public sealed class MetadataBuilder
         return this;
     }
 
-    internal MetadataSpec Build()
-    {
-        return new MetadataSpec(_globalEntries, _stripAll, _copyFromInput);
-    }
+    internal MetadataSpec Build() => new(_globalEntries, _stripAll, _copyFromInput);
 }

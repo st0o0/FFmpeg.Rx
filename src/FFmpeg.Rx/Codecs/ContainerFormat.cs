@@ -4,7 +4,10 @@ public readonly record struct ContainerFormat
 {
     public string Name { get; }
 
-    private ContainerFormat(string name) => Name = name;
+    private ContainerFormat(string name)
+    {
+        Name = name;
+    }
 
     public static ContainerFormat Mp4 => new("mp4");
     public static ContainerFormat Mkv => new("matroska");
@@ -19,13 +22,7 @@ public readonly record struct ContainerFormat
     public static ContainerFormat Flac => new("flac");
     public static ContainerFormat Null => new("null");
 
-    public static ContainerFormat Custom(string name)
-    {
-        return new ContainerFormat(name);
-    }
+    public static ContainerFormat Custom(string name) => new(name);
 
-    public override string ToString()
-    {
-        return Name;
-    }
+    public override string ToString() => Name;
 }

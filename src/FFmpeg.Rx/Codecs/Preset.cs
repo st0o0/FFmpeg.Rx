@@ -4,7 +4,10 @@ public readonly record struct Preset
 {
     public string Name { get; }
 
-    private Preset(string name) => Name = name;
+    private Preset(string name)
+    {
+        Name = name;
+    }
 
     public static Preset UltraFast => new("ultrafast");
     public static Preset SuperFast => new("superfast");
@@ -16,13 +19,7 @@ public readonly record struct Preset
     public static Preset Slower => new("slower");
     public static Preset VerySlow => new("veryslow");
 
-    public static Preset Custom(string name)
-    {
-        return new Preset(name);
-    }
+    public static Preset Custom(string name) => new(name);
 
-    public override string ToString()
-    {
-        return Name;
-    }
+    public override string ToString() => Name;
 }

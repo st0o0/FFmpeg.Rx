@@ -424,10 +424,7 @@ internal static class ArgumentSerializer
         sb.Append('"');
     }
 
-    private static string FormatTime(TimeSpan ts)
-    {
-        return ts.ToString(@"hh\:mm\:ss\.fff", CultureInfo.InvariantCulture);
-    }
+    private static string FormatTime(TimeSpan ts) => ts.ToString(@"hh\:mm\:ss\.fff", CultureInfo.InvariantCulture);
 
     internal static char StreamTypeChar(StreamType type)
     {

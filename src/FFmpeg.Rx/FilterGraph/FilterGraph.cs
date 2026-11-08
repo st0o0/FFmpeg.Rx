@@ -6,10 +6,7 @@ public sealed record FilterGraph(
     IReadOnlyList<GraphInput> Inputs,
     IReadOnlyList<GraphNode> Nodes)
 {
-    public static FilterGraphBuilder Create()
-    {
-        return new FilterGraphBuilder();
-    }
+    public static FilterGraphBuilder Create() => new();
 
     public string Serialize()
     {

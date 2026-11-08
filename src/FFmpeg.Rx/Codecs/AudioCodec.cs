@@ -4,7 +4,10 @@ public readonly record struct AudioCodec
 {
     public string Name { get; }
 
-    private AudioCodec(string name) => Name = name;
+    private AudioCodec(string name)
+    {
+        Name = name;
+    }
 
     public static AudioCodec Aac => new("aac");
     public static AudioCodec Opus => new("libopus");
@@ -15,13 +18,7 @@ public readonly record struct AudioCodec
     public static AudioCodec Vorbis => new("libvorbis");
     public static AudioCodec Copy => new("copy");
 
-    public static AudioCodec Custom(string name)
-    {
-        return new AudioCodec(name);
-    }
+    public static AudioCodec Custom(string name) => new(name);
 
-    public override string ToString()
-    {
-        return Name;
-    }
+    public override string ToString() => Name;
 }

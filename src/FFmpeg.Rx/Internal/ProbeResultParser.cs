@@ -85,20 +85,11 @@ internal static class ProbeResultParser
             : TimeSpan.Zero;
     }
 
-    private static TimeSpan ParseDurationSeconds(string? value)
-    {
-        return ParseDuration(value);
-    }
+    private static TimeSpan ParseDurationSeconds(string? value) => ParseDuration(value);
 
-    private static long ParseLong(string? value)
-    {
-        return value is not null && long.TryParse(value, CultureInfo.InvariantCulture, out var result) ? result : 0;
-    }
+    private static long ParseLong(string? value) => value is not null && long.TryParse(value, CultureInfo.InvariantCulture, out var result) ? result : 0;
 
-    private static int ParseInt(string? value)
-    {
-        return value is not null && int.TryParse(value, CultureInfo.InvariantCulture, out var result) ? result : 0;
-    }
+    private static int ParseInt(string? value) => value is not null && int.TryParse(value, CultureInfo.InvariantCulture, out var result) ? result : 0;
 
     private static double ParseFps(string? value)
     {

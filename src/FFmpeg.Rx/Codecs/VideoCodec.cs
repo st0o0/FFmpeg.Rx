@@ -4,7 +4,10 @@ public readonly record struct VideoCodec
 {
     public string Name { get; }
 
-    private VideoCodec(string name) => Name = name;
+    private VideoCodec(string name)
+    {
+        Name = name;
+    }
 
     public static VideoCodec H264 => new("libx264");
     public static VideoCodec Hevc => new("libx265");
@@ -22,13 +25,7 @@ public readonly record struct VideoCodec
     public static VideoCodec H264Cuvid => new("h264_cuvid");
     public static VideoCodec Copy => new("copy");
 
-    public static VideoCodec Custom(string name)
-    {
-        return new VideoCodec(name);
-    }
+    public static VideoCodec Custom(string name) => new(name);
 
-    public override string ToString()
-    {
-        return Name;
-    }
+    public override string ToString() => Name;
 }

@@ -41,10 +41,7 @@ public sealed class FilterGraphBuilder
         return this;
     }
 
-    public FilterGraph Build()
-    {
-        return new FilterGraph(_inputs.AsReadOnly(), _nodes.AsReadOnly());
-    }
+    public FilterGraph Build() => new(_inputs.AsReadOnly(), _nodes.AsReadOnly());
 
     private string ResolveLabel(string label)
     {

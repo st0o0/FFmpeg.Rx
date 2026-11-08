@@ -4,10 +4,7 @@ namespace FFmpeg.Rx.Filters;
 
 public sealed record ScaleFilter(int Width, int Height) : IVideoFilter
 {
-    public string Render()
-    {
-        return $"scale={Width}:{Height}";
-    }
+    public string Render() => $"scale={Width}:{Height}";
 }
 
 public sealed record ScaleDimensionFilter(int Value, ScaleDimension Dimension) : IVideoFilter
@@ -28,42 +25,27 @@ public enum ScaleDimension
 
 public sealed record CropFilter(int Width, int Height, int X, int Y) : IVideoFilter
 {
-    public string Render()
-    {
-        return $"crop={Width}:{Height}:{X}:{Y}";
-    }
+    public string Render() => $"crop={Width}:{Height}:{X}:{Y}";
 }
 
 public sealed record CropExprFilter(string Expression) : IVideoFilter
 {
-    public string Render()
-    {
-        return $"crop={Expression}";
-    }
+    public string Render() => $"crop={Expression}";
 }
 
 public sealed record HFlipFilter : IVideoFilter
 {
-    public string Render()
-    {
-        return "hflip";
-    }
+    public string Render() => "hflip";
 }
 
 public sealed record VFlipFilter : IVideoFilter
 {
-    public string Render()
-    {
-        return "vflip";
-    }
+    public string Render() => "vflip";
 }
 
 public sealed record TransposeFilter(TransposeMode Mode) : IVideoFilter
 {
-    public string Render()
-    {
-        return $"transpose={(int)Mode}";
-    }
+    public string Render() => $"transpose={(int)Mode}";
 }
 
 public enum TransposeMode
@@ -117,16 +99,10 @@ public enum FadeType
 
 public sealed record PadFilter(int Width, int Height, int X, int Y, string Color) : IVideoFilter
 {
-    public string Render()
-    {
-        return $"pad={Width}:{Height}:{X}:{Y}:{Color}";
-    }
+    public string Render() => $"pad={Width}:{Height}:{X}:{Y}:{Color}";
 }
 
 public sealed record YadifFilter : IVideoFilter
 {
-    public string Render()
-    {
-        return "yadif";
-    }
+    public string Render() => "yadif";
 }

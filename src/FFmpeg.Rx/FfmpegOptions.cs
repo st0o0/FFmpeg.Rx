@@ -7,24 +7,16 @@ public sealed record FfmpegOptions
     public string? TempDirectory { get; init; }
     public string? WorkingDirectory { get; init; }
 
-    private static FfmpegOptions? _global;
+    public static FfmpegOptions? Global { get; private set; }
 
-    public static FfmpegOptions? Global => _global;
+    public static void Configure(FfmpegOptions options) => Global = options;
 
-    public static void Configure(FfmpegOptions options)
-    {
-        _global = options;
-    }
-
-    public static void Reset()
-    {
-        _global = null;
-    }
+    public static void Reset() => Global = null;
 
     internal static string ResolveFfmpegBinary(string? perSessionOverride)
     {
         return perSessionOverride
-            ?? _global?.BinaryPath
+            ?? Global?.BinaryPath
             ?? FindOnPath("ffmpeg")
             ?? "ffmpeg";
     }
@@ -32,7 +24,7 @@ public sealed record FfmpegOptions
     internal static string ResolveFfprobeBinary(string? perSessionOverride)
     {
         return perSessionOverride
-            ?? _global?.FfprobeBinaryPath
+            ?? Global?.FfprobeBinaryPath
             ?? FindOnPath("ffprobe")
             ?? "ffprobe";
     }

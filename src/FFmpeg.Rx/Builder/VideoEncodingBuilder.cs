@@ -48,8 +48,5 @@ public sealed class VideoEncodingBuilder
         return this;
     }
 
-    internal VideoEncodingOptions Build()
-    {
-        return new VideoEncodingOptions(_quality, _preset, _profile, _tune, _pixelFormat, _framerate);
-    }
+    internal VideoEncodingOptions Build() => new(_quality, _preset, _profile, _tune, _pixelFormat, _framerate);
 }

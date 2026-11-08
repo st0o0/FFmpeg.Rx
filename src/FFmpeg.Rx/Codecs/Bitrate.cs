@@ -6,22 +6,16 @@ public readonly record struct Bitrate
 {
     public long BitsPerSecond { get; }
 
-    private Bitrate(long bitsPerSecond) => BitsPerSecond = bitsPerSecond;
-
-    public static Bitrate Kbps(int kilobits)
+    private Bitrate(long bitsPerSecond)
     {
-        return new Bitrate(kilobits * 1000L);
+        BitsPerSecond = bitsPerSecond;
     }
 
-    public static Bitrate Mbps(int megabits)
-    {
-        return new Bitrate(megabits * 1_000_000L);
-    }
+    public static Bitrate Kbps(int kilobits) => new(kilobits * 1000L);
 
-    public static Bitrate Mbps(double megabits)
-    {
-        return new Bitrate((long)(megabits * 1_000_000));
-    }
+    public static Bitrate Mbps(int megabits) => new(megabits * 1_000_000L);
+
+    public static Bitrate Mbps(double megabits) => new((long)(megabits * 1_000_000));
 
     internal string ToFfmpegString()
     {
@@ -37,8 +31,5 @@ public readonly record struct Bitrate
         return BitsPerSecond.ToString(CultureInfo.InvariantCulture);
     }
 
-    public override string ToString()
-    {
-        return ToFfmpegString();
-    }
+    public override string ToString() => ToFfmpegString();
 }

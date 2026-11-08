@@ -15,10 +15,7 @@ public sealed class TeeBuilder
         return this;
     }
 
-    internal TeeOutput Build()
-    {
-        return new TeeOutput([.. _targets]);
-    }
+    internal TeeOutput Build() => new([.. _targets]);
 }
 
 public sealed class TeeTargetOptions

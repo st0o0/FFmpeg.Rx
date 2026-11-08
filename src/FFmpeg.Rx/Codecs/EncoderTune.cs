@@ -4,7 +4,10 @@ public readonly record struct Tune
 {
     public string Name { get; }
 
-    private Tune(string name) => Name = name;
+    private Tune(string name)
+    {
+        Name = name;
+    }
 
     public static Tune Film => new("film");
     public static Tune Animation => new("animation");
@@ -13,13 +16,7 @@ public readonly record struct Tune
     public static Tune FastDecode => new("fastdecode");
     public static Tune ZeroLatency => new("zerolatency");
 
-    public static Tune Custom(string name)
-    {
-        return new Tune(name);
-    }
+    public static Tune Custom(string name) => new(name);
 
-    public override string ToString()
-    {
-        return Name;
-    }
+    public override string ToString() => Name;
 }
