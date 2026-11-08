@@ -1,7 +1,7 @@
-# typed-pipeline-model Specification
+# pipeline-model Specification
 
 ## Purpose
-TBD - created by archiving change api-redesign. Update Purpose after archive.
+Immutable record hierarchy representing a complete FFmpeg invocation — PipelineSpec, InputSpec, OutputSpec, StreamSpec, CodecSpec, and supporting types.
 ## Requirements
 ### Requirement: PipelineSpec as root record
 The system SHALL represent a complete FFmpeg invocation as an immutable `PipelineSpec` record containing `Inputs` (IReadOnlyList<InputSpec>), `Outputs` (IReadOnlyList<OutputSpec>), `GlobalOptions`, and optional `BinaryPath`.
@@ -76,4 +76,25 @@ Domain records (OutputSpec, StreamSpec, EncodingOptions) SHALL NOT carry `string
 #### Scenario: Encoding options are typed
 - **WHEN** a VideoEncode is inspected
 - **THEN** CRF is an int, Preset is a Preset struct, Profile is a VideoProfile struct — not strings
+
+### Requirement: Single model hierarchy
+The library SHALL use only the typed `*Spec` record hierarchy (`PipelineSpec`, `OutputSpec`, `InputSpec`, `StreamSpec`, `CodecSpec`). No parallel string-based model types.
+
+#### Scenario: No old types
+- **WHEN** the Models namespace is inspected
+- **THEN** only `*Spec` records, `OutputDestination` hierarchy, `TeeOutput`, `FfmpegResult`, and `FilterSpec` exist
+
+### Requirement: Single session construction path
+`FfmpegSession` SHALL have exactly one factory: `Create(PipelineSpec)`.
+
+#### Scenario: One factory method
+- **WHEN** `FfmpegSession.Create` is called
+- **THEN** it only accepts `PipelineSpec`
+
+### Requirement: No IO abstraction layer
+Pipe I/O SHALL use CliWrap's `PipeSource`/`PipeTarget` directly. No library-owned pipe interfaces.
+
+#### Scenario: No IO directory
+- **WHEN** the project structure is inspected
+- **THEN** there is no `IO/` directory
 

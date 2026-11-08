@@ -1,7 +1,7 @@
 # readme-structure Specification
 
 ## Purpose
-TBD - created by archiving change readme-overhaul. Update Purpose after archive.
+Defines the structure and content requirements for the project README.
 ## Requirements
 ### Requirement: README follows library family structure
 The README SHALL follow this section order: badges → why → features → installation → quick start → examples → architecture → building from source → contributing → license.
@@ -18,11 +18,11 @@ The README SHALL include a "Why FFmpeg.Rx?" section explaining differentiation f
 - **THEN** there is a section explaining the type-safe, reactive approach vs string-based alternatives
 
 ### Requirement: README includes grouped feature overview
-The README SHALL include a features section with grouped bullet points covering pipeline, events, probing, and extensibility.
+The README SHALL include a features section with a flat bullet list covering the library's key differentiators: typed pipeline model, disjoint codec specs, R3 observables, ffprobe integration, convenience APIs, escape hatches, and mockability.
 
-#### Scenario: Features section present
+#### Scenario: Features section is a flat scannable list
 - **WHEN** a developer skims the README
-- **THEN** features are grouped by concern (Pipeline, Events, Probing, Extensibility) with bullet descriptions
+- **THEN** features appear as a single flat bullet list (no sub-headings) with 7-10 items, each one line
 
 ### Requirement: README includes architecture diagram
 The README SHALL include an ASCII diagram showing the 3-layer architecture (Records → Builders → Serializer+CliWrap).

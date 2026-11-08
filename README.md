@@ -19,36 +19,13 @@ Events (progress, log, lifecycle) come as R3 Observables, not callbacks. One ses
 
 ## Features
 
-### Pipeline
-
-- **Type-safe codecs** - `VideoCodec.H264`, `AudioCodec.Aac`, `SubtitleCodec.Srt` as `readonly record struct`
-- **Disjoint sum types** - `StreamCopy | VideoEncode | AudioEncode | SubtitleEncode` enforced at compile time
-- **Value objects** - `Bitrate`, `Framerate`, `Preset`, `PixelFormat`, `ContainerFormat` with `Custom()` escape hatch
-- **Immutable records** - `PipelineSpec`, `OutputSpec`, `StreamSpec` as the testable truth
-
-### Events
-
-- **R3 Observables** - `Progress`, `Log`, typed `FfmpegEvent` hierarchy
-- **Progress reporting** - speed, bytes written, time position, percentage via known duration
-
-### Probing
-
-- **ffprobe integration** - `Ffmpeg.Probe()` returns strongly-typed `MediaInfo`
-- **Source-generated JSON** - AOT-compatible deserialization via `JsonSerializerContext`
-- **Stream info** - video, audio, subtitle streams with codec, resolution, sample rate, chapters
-
-### Convenience
-
-- **Snapshots** - extract single frames with `Ffmpeg.Snapshot()`
-- **Concatenation** - join files with `Ffmpeg.Concat()`
-- **Custom binary path** - `Ffmpeg.At("/path/to/ffmpeg")`
-- **Pipe I/O** - stdin/stdout streaming via CliWrap
-
-### Extensibility
-
-- **`CustomArg()` escape hatch** - on every builder for uncovered FFmpeg flags
-- **`IFfmpegSession` interface** - mock sessions in consumer tests
-- **Filters** - scale, crop, fade, pad, and custom filter expressions
+- **Typed pipeline model** - codecs, bitrates, presets, formats as .NET types, not strings
+- **Disjoint codec specs** - `StreamCopy | VideoEncode | AudioEncode | SubtitleEncode` at compile time
+- **R3 Observables** - progress, log, and lifecycle events as reactive streams
+- **ffprobe integration** - strongly-typed `MediaInfo` with AOT-compatible JSON
+- **Convenience APIs** - snapshots, concatenation, pipe I/O
+- **Escape hatches** - `CustomArg()` on every builder, `Custom()` on every value object
+- **Mockable** - `IFfmpegSession` for consumer tests
 
 ---
 

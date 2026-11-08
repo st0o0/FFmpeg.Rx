@@ -1,7 +1,7 @@
 # scoped-builders Specification
 
 ## Purpose
-TBD - created by archiving change api-redesign. Update Purpose after archive.
+Scoped fluent builders that produce typed pipeline records — OutputBuilder, StreamBuilder, encoding builders, and pipeline entry points.
 ## Requirements
 ### Requirement: OutputBuilder scoped to output concerns
 The system SHALL provide an `OutputBuilder` with methods: `.Stream()`, `.VideoFilter()`, `.AudioFilter()`, `.FilterComplex()`, `.Container()`, `.TimeRange()`, `.Metadata()`, `.FastStart()`, `.MovFlags()`, `.NoOverwrite()`, `.MapLabel()`, `.CustomArg()`. It SHALL produce an `OutputSpec` record.
@@ -62,4 +62,32 @@ Each builder SHALL provide a `.CustomArg(string)` method for raw FFmpeg argument
 #### Scenario: Custom argument
 - **WHEN** user calls `.CustomArg("-bsf:a aac_adtstoasc")` on an OutputBuilder
 - **THEN** the OutputSpec.CustomArgs contains the raw string
+
+### Requirement: PipelineBuilder produces PipelineSpec
+`PipelineBuilder` SHALL collect `InputSpec` records (not `FfmpegInput`) and produce `PipelineSpec` (not `FfmpegPipeline`). Output methods SHALL use `OutputBuilder` to create `OutputSpec`.
+
+#### Scenario: Builder produces typed spec
+- **WHEN** `Ffmpeg.Input("v.mp4").Output("out.mp4", o => o.Stream(...))` is called
+- **THEN** the session is backed by a `PipelineSpec` with typed records throughout
+
+### Requirement: Ffmpeg static entry uses new InputSpec
+`Ffmpeg.Input(string)` SHALL create `FileInputSpec`. `Ffmpeg.Input(Uri)` SHALL create `UrlInputSpec`. `Ffmpeg.Input(Stream, string)` SHALL create `PipeInputSpec`.
+
+#### Scenario: File input
+- **WHEN** `Ffmpeg.Input("video.mp4")` is called
+- **THEN** a `FileInputSpec` is added to the builder
+
+### Requirement: Pipe input via Stream
+`PipelineBuilder.Input(Stream, string format)` SHALL create a `PipeInputSpec` that carries the stream reference directly. No pipe name generation, no Named Pipe paths.
+
+#### Scenario: Stream input
+- **WHEN** `Ffmpeg.Input(myStream, "rawvideo")` is called
+- **THEN** a `PipeInputSpec` with the stream is created
+
+### Requirement: TeeOutput migrated to new model
+`TeeOutput` and `TeeTarget` SHALL be moved to the new model (or kept as-is since `OutputSpec` already references `TeeOutput`). The tee serialization in `ArgumentSerializer` stays.
+
+#### Scenario: Tee output
+- **WHEN** a tee output is configured
+- **THEN** it is part of `OutputSpec.Tee` and serialized correctly
 

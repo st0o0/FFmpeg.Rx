@@ -1,7 +1,7 @@
-# snapshot-concat Specification
+# convenience-apis Specification
 
 ## Purpose
-TBD - created by archiving change v1-release. Update Purpose after archive.
+Convenience APIs for common FFmpeg operations — snapshot extraction, file concatenation, and probe shortcuts.
 ## Requirements
 ### Requirement: Snapshot extraction
 `Ffmpeg.Snapshot(string inputPath, TimeSpan time, string outputPath)` SHALL extract a single frame as an image file.

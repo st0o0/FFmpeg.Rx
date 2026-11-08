@@ -1,7 +1,7 @@
 # integration-tests Specification
 
 ## Purpose
-TBD - created by archiving change integration-tests. Update Purpose after archive.
+Integration tests verifying real FFmpeg execution — transcoding, remuxing, events, cancellation, errors, probing, filters, pipe I/O, multi-output, containers, and metadata.
 ## Requirements
 ### Requirement: Basic transcode tests
 Tests SHALL verify real transcoding: H264→H264 with CRF, stream copy (remux), format conversion (MP4→MKV), audio transcode (AAC→AAC with different bitrate).
@@ -106,4 +106,32 @@ Tests SHALL verify metadata operations on real files.
 #### Scenario: Strip metadata
 - **WHEN** a session strips metadata with MetadataSpec(StripAll: true)
 - **THEN** the output file has no global metadata entries
+
+### Requirement: Tee muxer integration test
+A test SHALL verify that tee muxer produces multiple output files from a single ffmpeg process.
+
+#### Scenario: Tee split to two files
+- **WHEN** a tee output with two targets is executed
+- **THEN** both output files exist and contain valid media
+
+### Requirement: Multi-output integration test
+A test SHALL verify that multiple outputs from a single process produce correct files.
+
+#### Scenario: Two outputs different quality
+- **WHEN** a multi-output session encodes to CRF 18 and CRF 28
+- **THEN** both files exist and the CRF-28 file is smaller
+
+### Requirement: Null output integration test
+A test SHALL verify the analysis pattern (null output with filter detection).
+
+#### Scenario: Null output with audio filter
+- **WHEN** a session outputs to null with a silence detection filter
+- **THEN** the session completes successfully
+
+### Requirement: Fluent API end-to-end integration test
+A test SHALL verify the full `Ffmpeg.Input().Output()` fluent path with real ffmpeg.
+
+#### Scenario: Fluent transcode
+- **WHEN** `Ffmpeg.Input(file).Output(path, o => o.Stream(...).Encode(...))` runs
+- **THEN** the output file is a valid media file
 
