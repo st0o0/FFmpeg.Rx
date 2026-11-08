@@ -10,7 +10,7 @@ Add `CliWrap` NuGet dependency. It provides:
 - Deadlock-free stdin/stdout/stderr handling
 - `PipeSource.FromStream` / `PipeTarget.ToStream` for pipe I/O (cross-platform)
 - `ListenAsync()` → `IAsyncEnumerable<CommandEvent>` for real-time output
-- Immutable `Command` building (matches our immutable PipelineSpec)
+- Immutable `Command` building (matches our immutable PipelineConfig)
 - Dual-token cancellation (graceful + forceful)
 
 **Trade-off:** +1 dependency, but -12 files and -300 lines of manual process code.
@@ -41,7 +41,7 @@ The session owns the full lifecycle: build command → execute → parse → emi
 
 ### D3: Pipe I/O via CliWrap PipeSource/PipeTarget
 
-Input piping: `PipeInputSpec` carries a `Stream` reference. Session sets `WithStandardInputPipe(PipeSource.FromStream(stream))` and uses `-i pipe:0` in args.
+Input piping: `PipeInputConfig` carries a `Stream` reference. Session sets `WithStandardInputPipe(PipeSource.FromStream(stream))` and uses `-i pipe:0` in args.
 
 Output piping: `PipeDestination` carries a `Stream` reference. Session sets `WithStandardOutputPipe(PipeTarget.ToStream(stream))` and uses `pipe:1` as output path.
 
@@ -78,7 +78,7 @@ Files deleted:
 
 ### D6: PipelineBuilder rewired
 
-PipelineBuilder collects `InputSpec` (not `FfmpegInput`) and produces `PipelineSpec` (not `FfmpegPipeline`). Output methods use `OutputBuilder` (not `OutputOptions`). The fluent API surface stays the same for consumers — only the internal wiring changes.
+PipelineBuilder collects `InputConfig` (not `FfmpegInput`) and produces `PipelineConfig` (not `FfmpegPipeline`). Output methods use `OutputBuilder` (not `OutputOptions`). The fluent API surface stays the same for consumers — only the internal wiring changes.
 
 ### D7: ProbeRunner simplified
 

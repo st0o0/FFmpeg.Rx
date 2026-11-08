@@ -6,18 +6,18 @@ namespace FFmpeg.Rx.Tests;
 
 public sealed class MetadataTests
 {
-    private static string SerializeWithMetadata(MetadataSpec metadata)
+    private static string SerializeWithMetadata(MetadataConfig metadata)
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"), Metadata: metadata)]);
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"), Metadata: metadata)]);
         return ArgumentSerializer.Serialize(spec);
     }
 
     [Fact]
     public void Global_metadata()
     {
-        var args = SerializeWithMetadata(new MetadataSpec(
+        var args = SerializeWithMetadata(new MetadataConfig(
             GlobalEntries: [new("title", "My Video")]));
         Assert.Contains("-metadata title=\"My Video\"", args);
     }
@@ -25,24 +25,24 @@ public sealed class MetadataTests
     [Fact]
     public void Without_metadata()
     {
-        var args = SerializeWithMetadata(new MetadataSpec(StripAll: true));
+        var args = SerializeWithMetadata(new MetadataConfig(StripAll: true));
         Assert.Contains("-map_metadata -1", args);
     }
 
     [Fact]
     public void Copy_metadata_from()
     {
-        var args = SerializeWithMetadata(new MetadataSpec(CopyFromInput: 0));
+        var args = SerializeWithMetadata(new MetadataConfig(CopyFromInput: 0));
         Assert.Contains("-map_metadata 0", args);
     }
 
     [Fact]
     public void Stream_metadata_on_stream_spec()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"),
-                Streams: [new StreamSpec(0, 0, StreamType.Audio, new StreamCopy(),
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"),
+                Streams: [new StreamConfig(0, 0, StreamType.Audio, new StreamCopy(),
                     Metadata: [new("title", "English")])])]);
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-map 0:a:0", args);

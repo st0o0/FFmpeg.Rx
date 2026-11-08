@@ -10,15 +10,15 @@ public sealed class MetadataTests : FfmpegTestBase
     {
         var output = OutputPath("stripped.mp4");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4"))],
+            [new OutputConfig(
                 new FileDestination(output),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio, new StreamCopy())
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy())
                 ],
-                Metadata: new MetadataSpec(StripAll: true))]));
+                Metadata: new MetadataConfig(StripAll: true))]));
 
         var result = await session.RunAsync(TestContext.Current.CancellationToken);
 
@@ -31,15 +31,15 @@ public sealed class MetadataTests : FfmpegTestBase
     {
         var output = OutputPath("titled.mp4");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4"))],
+            [new OutputConfig(
                 new FileDestination(output),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio, new StreamCopy())
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy())
                 ],
-                Metadata: new MetadataSpec(
+                Metadata: new MetadataConfig(
                     GlobalEntries: [new("title", "Test Title")]))]));
 
         var result = await session.RunAsync(TestContext.Current.CancellationToken);

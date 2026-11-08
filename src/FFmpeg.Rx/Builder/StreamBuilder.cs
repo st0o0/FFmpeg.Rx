@@ -8,7 +8,7 @@ public sealed class StreamBuilder
     private readonly int _inputIndex;
     private readonly int? _streamIndex;
     private readonly StreamType _type;
-    private CodecSpec? _codec;
+    private CodecConfig? _codec;
     private List<KeyValuePair<string, string>>? _metadata;
     private string? _disposition;
 
@@ -60,9 +60,9 @@ public sealed class StreamBuilder
         return this;
     }
 
-    internal StreamSpec Build()
+    internal StreamConfig Build()
     {
-        return new StreamSpec(
+        return new StreamConfig(
             _inputIndex,
             _streamIndex,
             _type,

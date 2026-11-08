@@ -62,7 +62,7 @@
 - [x] 8.1 `MultiOutputTests.Two_outputs_different_quality` — two outputs, both exist, size differs
 - [x] 8.2 `ContainerFormatTests.Output_to_Mkv` — ContainerFormat.Mkv, probe Matroska
 - [x] 8.3 `ContainerFormatTests.Output_to_Ts` — ContainerFormat.Ts, verify MPEG-TS output
-- [x] 8.4 `MetadataTests.Strip_all_metadata` — MetadataSpec(StripAll: true), probe no metadata
+- [x] 8.4 `MetadataTests.Strip_all_metadata` — MetadataConfig(StripAll: true), probe no metadata
 - [x] 8.5 `MetadataTests.Add_global_metadata` — add title, probe it back
 
 ## 9. Finalize

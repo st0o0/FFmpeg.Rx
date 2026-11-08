@@ -137,7 +137,7 @@ await using var session = Ffmpeg.At("/usr/local/bin/ffmpeg")
 Three-layer design - each layer is independently testable:
 
 ```
-Layer 1: Pipeline records     what the user wants    PipelineSpec, OutputSpec, CodecSpec...
+Layer 1: Pipeline records     what the user wants    PipelineConfig, OutputConfig, CodecConfig...
                               (immutable, inspectable, serializable)
                                         |
 Layer 2: Scoped builders      how the user says it   PipelineBuilder, OutputBuilder, StreamBuilder...
@@ -151,10 +151,10 @@ Layer 3: Serializer + CliWrap how it gets done        ArgumentSerializer → Cli
 
 | Type | Role |
 |------|------|
-| `PipelineSpec` | Root record: inputs + outputs + global options |
-| `InputSpec` | Abstract: `FileInput`, `UrlInput`, `PipeInput` |
-| `OutputSpec` | Destination, streams, container, filters, metadata |
-| `CodecSpec` | `StreamCopy` \| `VideoEncode` \| `AudioEncode` \| `SubtitleEncode` |
+| `PipelineConfig` | Root record: inputs + outputs + global options |
+| `InputConfig` | Abstract: `FileInput`, `UrlInput`, `PipeInput` |
+| `OutputConfig` | Destination, streams, container, filters, metadata |
+| `CodecConfig` | `StreamCopy` \| `VideoEncode` \| `AudioEncode` \| `SubtitleEncode` |
 | `IFfmpegSession` | Consumer-facing interface (mockable) |
 | `FfmpegSession` | CliWrap execution, R3 event bridging |
 

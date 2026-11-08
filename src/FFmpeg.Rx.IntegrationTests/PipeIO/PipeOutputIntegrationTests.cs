@@ -10,9 +10,9 @@ public sealed class PipeOutputIntegrationTests : FfmpegTestBase
     {
         using var outputStream = new MemoryStream();
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("audio_only_3s.m4a"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("audio_only_3s.m4a"))],
+            [new OutputConfig(
                 new PipeDestination(outputStream),
                 CustomArgs: ["-f s16le", "-acodec pcm_s16le", "-ar 44100", "-ac 1"])]));
 

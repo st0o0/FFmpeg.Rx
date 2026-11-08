@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Single execution path
-FfmpegSession SHALL have one internal execution method, not two. The execution mode (EventStream vs PipeOutput) SHALL be determined from PipelineSpec and passed as configuration.
+FfmpegSession SHALL have one internal execution method, not two. The execution mode (EventStream vs PipeOutput) SHALL be determined from PipelineConfig and passed as configuration.
 
 #### Scenario: File-to-file uses EventStream mode
 - **WHEN** all outputs use FileDestination

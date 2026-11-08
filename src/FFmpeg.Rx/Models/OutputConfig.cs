@@ -2,12 +2,12 @@ using FFmpeg.Rx.Codecs;
 
 namespace FFmpeg.Rx.Models;
 
-public sealed record OutputSpec(
+public sealed record OutputConfig(
     OutputDestination Destination,
-    IReadOnlyList<StreamSpec>? Streams = null,
+    IReadOnlyList<StreamConfig>? Streams = null,
     ContainerFormat? Container = null,
-    FilterSpec? Filters = null,
-    MetadataSpec? Metadata = null,
+    FilterConfig? Filters = null,
+    MetadataConfig? Metadata = null,
     TimeRange? TimeRange = null,
     bool Overwrite = true,
     bool FastStart = false,

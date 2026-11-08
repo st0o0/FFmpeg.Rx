@@ -5,7 +5,7 @@ namespace FFmpeg.Rx.Builder;
 public sealed class PipelineBuilder
 {
     private readonly string? _binaryPath;
-    private readonly List<InputSpec> _inputs = [];
+    private readonly List<InputConfig> _inputs = [];
     private readonly List<string> _globalOptions = [];
     private TimeSpan? _knownDuration;
 
@@ -14,7 +14,7 @@ public sealed class PipelineBuilder
         _binaryPath = binaryPath;
     }
 
-    internal PipelineBuilder AddInput(InputSpec input)
+    internal PipelineBuilder AddInput(InputConfig input)
     {
         _inputs.Add(input);
         return this;
@@ -22,19 +22,19 @@ public sealed class PipelineBuilder
 
     public PipelineBuilder Input(Uri url)
     {
-        _inputs.Add(new UrlInputSpec(url));
+        _inputs.Add(new UrlInputConfig(url));
         return this;
     }
 
     public PipelineBuilder Input(string filePath)
     {
-        _inputs.Add(new FileInputSpec(filePath));
+        _inputs.Add(new FileInputConfig(filePath));
         return this;
     }
 
     public PipelineBuilder Input(Stream source, string format)
     {
-        _inputs.Add(new PipeInputSpec(source, format));
+        _inputs.Add(new PipeInputConfig(source, format));
         return this;
     }
 
@@ -80,9 +80,9 @@ public sealed class PipelineBuilder
 
     public MultiOutputBuilder Outputs() => new(_inputs, _globalOptions, _binaryPath);
 
-    private IFfmpegSession BuildSession(OutputSpec[] outputs)
+    private IFfmpegSession BuildSession(OutputConfig[] outputs)
     {
-        var spec = new PipelineSpec(
+        var spec = new PipelineConfig(
             [.. _inputs],
             outputs,
             _globalOptions.Count > 0 ? [.. _globalOptions] : null,

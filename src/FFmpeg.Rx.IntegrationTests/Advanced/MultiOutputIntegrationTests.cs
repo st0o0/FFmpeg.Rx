@@ -12,17 +12,17 @@ public sealed class MultiOutputIntegrationTests : FfmpegTestBase
         var hq = OutputPath("hq.mp4");
         var lq = OutputPath("lq.mp4");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4"))],
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4"))],
             [
-                new OutputSpec(
+                new OutputConfig(
                     new FileDestination(hq),
-                    Streams: [new StreamSpec(0, 0, StreamType.Video,
+                    Streams: [new StreamConfig(0, 0, StreamType.Video,
                         new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(
                             Quality: Quality.Crf(18), Preset: Preset.UltraFast)))]),
-                new OutputSpec(
+                new OutputConfig(
                     new FileDestination(lq),
-                    Streams: [new StreamSpec(0, 0, StreamType.Video,
+                    Streams: [new StreamConfig(0, 0, StreamType.Video,
                         new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(
                             Quality: Quality.Crf(38), Preset: Preset.UltraFast)))])
             ]));

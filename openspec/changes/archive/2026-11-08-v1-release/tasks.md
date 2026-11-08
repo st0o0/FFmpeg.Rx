@@ -24,8 +24,8 @@
 ## 3. Percentage Progress
 
 - [x] 3.1 Update `PipelineBuilder.WithProgressReporting(TimeSpan? knownDuration = null)` to store duration
-- [x] 3.2 Update `PipelineSpec` to carry optional `TotalDuration` for percentage calculation
-- [x] 3.3 Implement auto-probe in `FfmpegSession`: if TotalDuration is null and single FileInputSpec, probe before run
+- [x] 3.2 Update `PipelineConfig` to carry optional `TotalDuration` for percentage calculation
+- [x] 3.3 Implement auto-probe in `FfmpegSession`: if TotalDuration is null and single FileInputConfig, probe before run
 - [x] 3.4 Emit `PercentageProgressEvent` alongside `ProgressEvent` when TotalDuration is known
 - [x] 3.5 Unit test: PercentageProgressEvent calculation (timeUs / totalDurationUs * 100)
 - [x] 3.6 Integration test: transcode with WithProgressReporting emits PercentageProgressEvents
@@ -35,23 +35,23 @@
 - [x] 4.1 `VideoEncodingBuilderTests` — Quality, Preset, Profile, Tune, PixelFormat, Framerate → assert on VideoEncodingOptions
 - [x] 4.2 `AudioEncodingBuilderTests` — Bitrate, SampleRate, Channels → assert on AudioEncodingOptions
 - [x] 4.3 `TimeRangeBuilderTests` — Seek, Duration, StopTime → assert on TimeRange record
-- [x] 4.4 `MetadataBuilderTests` — Global, StripAll, CopyFrom → assert on MetadataSpec record
-- [x] 4.5 `StreamBuilderTests` — Copy, Encode(Video), Encode(Audio), Encode(Subtitle), Metadata, Disposition → assert on StreamSpec
-- [x] 4.6 `OutputBuilderTests` — all methods: Stream, VideoFilter, AudioFilter, FilterComplex, Container, TimeRange, Metadata, FastStart, MovFlags, NoOverwrite, MapLabel, CustomArg → assert on OutputSpec
+- [x] 4.4 `MetadataBuilderTests` — Global, StripAll, CopyFrom → assert on MetadataConfig record
+- [x] 4.5 `StreamBuilderTests` — Copy, Encode(Video), Encode(Audio), Encode(Subtitle), Metadata, Disposition → assert on StreamConfig
+- [x] 4.6 `OutputBuilderTests` — all methods: Stream, VideoFilter, AudioFilter, FilterComplex, Container, TimeRange, Metadata, FastStart, MovFlags, NoOverwrite, MapLabel, CustomArg → assert on OutputConfig
 - [x] 4.7 `TeeBuilderTests` — add targets with options → assert on TeeOutput/TeeTarget records
-- [x] 4.8 `MultiOutputBuilderTests` — add multiple outputs → assert Build() produces correct PipelineSpec
+- [x] 4.8 `MultiOutputBuilderTests` — add multiple outputs → assert Build() produces correct PipelineConfig
 
 ## 5. Fluent API Tests (25-43% → 100%)
 
-- [x] 5.1 `Ffmpeg.Input(string)` → produces PipelineBuilder with FileInputSpec
-- [x] 5.2 `Ffmpeg.Input(Uri)` → produces PipelineBuilder with UrlInputSpec
-- [x] 5.3 `Ffmpeg.Input(Stream, format)` → produces PipelineBuilder with PipeInputSpec
-- [x] 5.4 `Ffmpeg.At(path).Input(...)` → custom binary path propagates to PipelineSpec
-- [x] 5.5 `PipelineBuilder.Output(path, configure)` → IFfmpegSession with correct PipelineSpec
-- [x] 5.6 `PipelineBuilder.OutputPipe(stream, configure)` → PipeDestination in OutputSpec
-- [x] 5.7 `PipelineBuilder.OutputNull(configure)` → NullDestination in OutputSpec
-- [x] 5.8 `PipelineBuilder.OutputTee(configure, tee)` → TeeOutput in OutputSpec
-- [x] 5.9 `PipelineBuilder.Outputs().Output(...).Output(...).Build()` → multiple OutputSpecs
+- [x] 5.1 `Ffmpeg.Input(string)` → produces PipelineBuilder with FileInputConfig
+- [x] 5.2 `Ffmpeg.Input(Uri)` → produces PipelineBuilder with UrlInputConfig
+- [x] 5.3 `Ffmpeg.Input(Stream, format)` → produces PipelineBuilder with PipeInputConfig
+- [x] 5.4 `Ffmpeg.At(path).Input(...)` → custom binary path propagates to PipelineConfig
+- [x] 5.5 `PipelineBuilder.Output(path, configure)` → IFfmpegSession with correct PipelineConfig
+- [x] 5.6 `PipelineBuilder.OutputPipe(stream, configure)` → PipeDestination in OutputConfig
+- [x] 5.7 `PipelineBuilder.OutputNull(configure)` → NullDestination in OutputConfig
+- [x] 5.8 `PipelineBuilder.OutputTee(configure, tee)` → TeeOutput in OutputConfig
+- [x] 5.9 `PipelineBuilder.Outputs().Output(...).Output(...).Build()` → multiple OutputConfigs
 - [x] 5.10 `PipelineBuilder.WithProgressReporting()` → global options contain `-progress pipe:1`
 
 ## 6. Filter Builder Tests (0% → 100%)

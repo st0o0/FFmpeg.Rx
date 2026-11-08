@@ -8,9 +8,9 @@ Replace the hand-rolled process management with CliWrap, delete the entire old m
 
 ### Delete old model (12 files)
 
-- `FfmpegPipeline`, `FfmpegOutput`, `StreamMapping` — superseded by `PipelineSpec`, `OutputSpec`, `StreamSpec`
-- `FfmpegInput`, `FileInput`, `UrlInput` (old) — superseded by `InputSpec` hierarchy
-- `PipeInput`, `PipeOutput` — superseded by `PipeInputSpec`, `PipeDestination`
+- `FfmpegPipeline`, `FfmpegOutput`, `StreamMapping` — superseded by `PipelineConfig`, `OutputConfig`, `StreamConfig`
+- `FfmpegInput`, `FileInput`, `UrlInput` (old) — superseded by `InputConfig` hierarchy
+- `PipeInput`, `PipeOutput` — superseded by `PipeInputConfig`, `PipeDestination`
 - `ArgumentBuilder` — superseded by `ArgumentSerializer`
 - `OutputOptions`, `InputOptions` (old builders) — superseded by `OutputBuilder`, new typed builders
 - `IPipeSource`, `IPipeSink`, `StreamPipeSource`, `StreamPipeSink` — replaced by CliWrap's `PipeSource`/`PipeTarget`
@@ -31,12 +31,12 @@ Replace the hand-rolled process management with CliWrap, delete the entire old m
 
 ### Single construction path
 
-- `FfmpegSession` has ONE constructor: `PipelineSpec`
+- `FfmpegSession` has ONE constructor: `PipelineConfig`
 - `FfmpegSession.Create(FfmpegPipeline)` — deleted
-- `PipelineBuilder` produces `PipelineSpec` via new typed builders
+- `PipelineBuilder` produces `PipelineConfig` via new typed builders
 
 ### Update tests
 
-- All tests already use the new typed API (PipelineSpec + ArgumentSerializer)
+- All tests already use the new typed API (PipelineConfig + ArgumentSerializer)
 - Delete tests that reference old model types
 - Integration tests stay as-is (they test behavior, not internals)

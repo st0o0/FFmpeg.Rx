@@ -9,9 +9,9 @@ public sealed class EcosystemExtrasTests
     [Fact]
     public void Negative_map_via_custom_arg()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"),
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"),
                 CustomArgs: ["-map -0:a"])]);
 
         var args = ArgumentSerializer.Serialize(spec);
@@ -21,9 +21,9 @@ public sealed class EcosystemExtrasTests
     [Fact]
     public void Codec_tag_via_custom_arg()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"),
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"),
                 CustomArgs: ["-tag:v hvc1"])]);
 
         var args = ArgumentSerializer.Serialize(spec);
@@ -33,9 +33,9 @@ public sealed class EcosystemExtrasTests
     [Fact]
     public void MovFlags_single()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"), MovFlags: ["faststart"])]);
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"), MovFlags: ["faststart"])]);
 
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-movflags faststart", args);
@@ -44,9 +44,9 @@ public sealed class EcosystemExtrasTests
     [Fact]
     public void MovFlags_multiple()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"), MovFlags: ["frag_keyframe", "empty_moov"])]);
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"), MovFlags: ["frag_keyframe", "empty_moov"])]);
 
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-movflags frag_keyframe+empty_moov", args);
@@ -55,9 +55,9 @@ public sealed class EcosystemExtrasTests
     [Fact]
     public void FastStart_emits_movflags()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"), FastStart: true)]);
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"), FastStart: true)]);
 
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-movflags +faststart", args);
@@ -66,12 +66,12 @@ public sealed class EcosystemExtrasTests
     [Fact]
     public void CopyStreams_via_stream_copy()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"),
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio, new StreamCopy())])]);
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy())])]);
 
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-c:v copy", args);
@@ -81,9 +81,9 @@ public sealed class EcosystemExtrasTests
     [Fact]
     public void Image_sequence_input()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("frames/img_%04d.png") { Options = new InputOptionSpec(Framerate: Framerate.Fps(30)) }],
-            [new OutputSpec(new FileDestination("out.mp4"))]);
+        var spec = new PipelineConfig(
+            [new FileInputConfig("frames/img_%04d.png") { Options = new InputOptionConfig(Framerate: Framerate.Fps(30)) }],
+            [new OutputConfig(new FileDestination("out.mp4"))]);
 
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-framerate 30", args);
@@ -93,12 +93,12 @@ public sealed class EcosystemExtrasTests
     [Fact]
     public void Stream_recording_pattern()
     {
-        var spec = new PipelineSpec(
-            [new UrlInputSpec(new Uri("rtmp://live.example.com/stream"))],
-            [new OutputSpec(new FileDestination("recording.ts"),
+        var spec = new PipelineConfig(
+            [new UrlInputConfig(new Uri("rtmp://live.example.com/stream"))],
+            [new OutputConfig(new FileDestination("recording.ts"),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio, new StreamCopy())],
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy())],
                 TimeRange: new TimeRange(Duration: TimeSpan.FromSeconds(60)))]);
 
         var args = ArgumentSerializer.Serialize(spec);
@@ -111,13 +111,13 @@ public sealed class EcosystemExtrasTests
     [Fact]
     public void Subtitle_mux_pattern()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("video.mp4"), new FileInputSpec("subs.srt")],
-            [new OutputSpec(new FileDestination("out.mkv"),
+        var spec = new PipelineConfig(
+            [new FileInputConfig("video.mp4"), new FileInputConfig("subs.srt")],
+            [new OutputConfig(new FileDestination("out.mkv"),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio, new StreamCopy()),
-                    new StreamSpec(1, 0, StreamType.Subtitle, new SubtitleEncode(SubtitleCodec.Srt))])]);
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy()),
+                    new StreamConfig(1, 0, StreamType.Subtitle, new SubtitleEncode(SubtitleCodec.Srt))])]);
 
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-map 1:s:0", args);

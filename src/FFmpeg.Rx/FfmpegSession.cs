@@ -10,13 +10,13 @@ namespace FFmpeg.Rx;
 
 public sealed class FfmpegSession : IFfmpegSession
 {
-    private readonly PipelineSpec _spec;
+    private readonly PipelineConfig _spec;
     private readonly string _args;
     private readonly string _binaryPath;
     private readonly Subject<FfmpegEvent> _subject = new();
     private int _started;
 
-    private FfmpegSession(PipelineSpec spec)
+    private FfmpegSession(PipelineConfig spec)
     {
         _spec = spec;
         _args = ArgumentSerializer.Serialize(spec);
@@ -87,7 +87,7 @@ public sealed class FfmpegSession : IFfmpegSession
         }
     }
 
-    public static IFfmpegSession Create(PipelineSpec spec) => new FfmpegSession(spec);
+    public static IFfmpegSession Create(PipelineConfig spec) => new FfmpegSession(spec);
 
     public ValueTask DisposeAsync()
     {
@@ -102,7 +102,7 @@ public sealed class FfmpegSession : IFfmpegSession
             return _spec.TotalDuration;
         }
 
-        if (_spec.Inputs is [FileInputSpec fileInput])
+        if (_spec.Inputs is [FileInputConfig fileInput])
         {
             try
             {
@@ -124,7 +124,7 @@ public sealed class FfmpegSession : IFfmpegSession
             .WithArguments(_args)
             .WithValidation(CommandResultValidation.None);
 
-        var pipeInput = _spec.Inputs.OfType<PipeInputSpec>().FirstOrDefault();
+        var pipeInput = _spec.Inputs.OfType<PipeInputConfig>().FirstOrDefault();
         if (pipeInput is not null)
         {
             cmd = cmd.WithStandardInputPipe(PipeSource.FromStream(pipeInput.Source));
@@ -222,7 +222,7 @@ public sealed class FfmpegSession : IFfmpegSession
         return new FfmpegResult(false, 1, error, sw.Elapsed, FailureKind.Permanent);
     }
 
-    private static ExecutionMode DetectMode(PipelineSpec spec) =>
+    private static ExecutionMode DetectMode(PipelineConfig spec) =>
         spec.Outputs.Any(o => o.Destination is PipeDestination)
             ? ExecutionMode.PipeOutput
             : ExecutionMode.EventStream;

@@ -9,14 +9,14 @@ public sealed class MultiOutputTests
     [Fact]
     public void Multiple_outputs_in_single_command()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
             [
-                new OutputSpec(new FileDestination("hd.mp4"),
-                    Streams: [new StreamSpec(0, 0, StreamType.Video,
+                new OutputConfig(new FileDestination("hd.mp4"),
+                    Streams: [new StreamConfig(0, 0, StreamType.Video,
                         new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Quality: Quality.Crf(18))))]),
-                new OutputSpec(new FileDestination("sd.mp4"),
-                    Streams: [new StreamSpec(0, 0, StreamType.Video,
+                new OutputConfig(new FileDestination("sd.mp4"),
+                    Streams: [new StreamConfig(0, 0, StreamType.Video,
                         new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Quality: Quality.Crf(28))))])
             ]);
 
@@ -30,11 +30,11 @@ public sealed class MultiOutputTests
     [Fact]
     public void Tee_muxer_two_targets()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(
                 new FileDestination(""),
-                Streams: [new StreamSpec(0, 0, StreamType.Video,
+                Streams: [new StreamConfig(0, 0, StreamType.Video,
                     new VideoEncode(VideoCodec.H264, new VideoEncodingOptions()))],
                 Tee: new TeeOutput([
                     new TeeTarget("out1.mp4", Format: "mp4"),
@@ -48,9 +48,9 @@ public sealed class MultiOutputTests
     [Fact]
     public void Tee_with_select_and_ignore()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(
                 new FileDestination(""),
                 Tee: new TeeOutput([
                     new TeeTarget("video.mp4", Format: "mp4", Select: "v"),
@@ -64,9 +64,9 @@ public sealed class MultiOutputTests
     [Fact]
     public void Null_output_serializes()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(NullDestination.Instance, Container: ContainerFormat.Null)]);
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(NullDestination.Instance, Container: ContainerFormat.Null)]);
 
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-f null", args);

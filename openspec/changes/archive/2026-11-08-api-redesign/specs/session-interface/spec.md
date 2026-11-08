@@ -8,7 +8,7 @@ The system SHALL define `IFfmpegSession` as a public interface extending `IAsync
 - **THEN** they can mock it for testing without requiring an ffmpeg binary
 
 ### Requirement: FfmpegSession implements IFfmpegSession
-`FfmpegSession` SHALL implement `IFfmpegSession`. Its constructor SHALL remain internal. Creation SHALL happen via `PipelineBuilder.Output()` or `FfmpegSession.Create(PipelineSpec)`.
+`FfmpegSession` SHALL implement `IFfmpegSession`. Its constructor SHALL remain internal. Creation SHALL happen via `PipelineBuilder.Output()` or `FfmpegSession.Create(PipelineConfig)`.
 
 #### Scenario: Session creation
 - **WHEN** user calls `Ffmpeg.Input(...).Output(...)`

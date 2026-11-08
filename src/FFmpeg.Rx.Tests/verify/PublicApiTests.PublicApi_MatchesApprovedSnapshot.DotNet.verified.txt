@@ -87,7 +87,7 @@ namespace FFmpeg.Rx.Builder
         public FFmpeg.Rx.Builder.VideoEncodingBuilder PixelFormat(FFmpeg.Rx.Codecs.PixelFormat format) { }
         public FFmpeg.Rx.Builder.VideoEncodingBuilder Preset(FFmpeg.Rx.Codecs.Preset preset) { }
         public FFmpeg.Rx.Builder.VideoEncodingBuilder Profile(FFmpeg.Rx.Codecs.VideoProfile profile) { }
-        public FFmpeg.Rx.Builder.VideoEncodingBuilder Quality(FFmpeg.Rx.Codecs.QualitySpec quality) { }
+        public FFmpeg.Rx.Builder.VideoEncodingBuilder Quality(FFmpeg.Rx.Codecs.QualityConfig quality) { }
         public FFmpeg.Rx.Builder.VideoEncodingBuilder Tune(FFmpeg.Rx.Codecs.Tune tune) { }
     }
 }
@@ -115,12 +115,12 @@ namespace FFmpeg.Rx.Codecs
         public static FFmpeg.Rx.Codecs.Bitrate Mbps(double megabits) { }
         public static FFmpeg.Rx.Codecs.Bitrate Mbps(int megabits) { }
     }
-    public sealed class ConstantBitrate : FFmpeg.Rx.Codecs.QualitySpec, System.IEquatable<FFmpeg.Rx.Codecs.ConstantBitrate>
+    public sealed class ConstantBitrate : FFmpeg.Rx.Codecs.QualityConfig, System.IEquatable<FFmpeg.Rx.Codecs.ConstantBitrate>
     {
         public ConstantBitrate(FFmpeg.Rx.Codecs.Bitrate Rate) { }
         public FFmpeg.Rx.Codecs.Bitrate Rate { get; init; }
     }
-    public sealed class ConstantQuality : FFmpeg.Rx.Codecs.QualitySpec, System.IEquatable<FFmpeg.Rx.Codecs.ConstantQuality>
+    public sealed class ConstantQuality : FFmpeg.Rx.Codecs.QualityConfig, System.IEquatable<FFmpeg.Rx.Codecs.ConstantQuality>
     {
         public ConstantQuality(int Crf) { }
         public int Crf { get; init; }
@@ -200,12 +200,12 @@ namespace FFmpeg.Rx.Codecs
     }
     public static class Quality
     {
-        public static FFmpeg.Rx.Codecs.QualitySpec Bitrate(FFmpeg.Rx.Codecs.Bitrate rate) { }
-        public static FFmpeg.Rx.Codecs.QualitySpec Crf(int value) { }
+        public static FFmpeg.Rx.Codecs.QualityConfig Bitrate(FFmpeg.Rx.Codecs.Bitrate rate) { }
+        public static FFmpeg.Rx.Codecs.QualityConfig Crf(int value) { }
     }
-    public abstract class QualitySpec : System.IEquatable<FFmpeg.Rx.Codecs.QualitySpec>
+    public abstract class QualityConfig : System.IEquatable<FFmpeg.Rx.Codecs.QualityConfig>
     {
-        protected QualitySpec() { }
+        protected QualityConfig() { }
     }
     public readonly struct SubtitleCodec : System.IEquatable<FFmpeg.Rx.Codecs.SubtitleCodec>
     {
@@ -345,7 +345,7 @@ namespace FFmpeg.Rx
         public R3.Observable<FFmpeg.Rx.Events.ProgressEvent> Progress { get; }
         public System.Threading.Tasks.ValueTask DisposeAsync() { }
         public System.Threading.Tasks.Task<FFmpeg.Rx.Models.FfmpegResult> RunAsync(System.Threading.CancellationToken ct = default) { }
-        public static FFmpeg.Rx.IFfmpegSession Create(FFmpeg.Rx.Models.PipelineSpec spec) { }
+        public static FFmpeg.Rx.IFfmpegSession Create(FFmpeg.Rx.Models.PipelineConfig spec) { }
     }
     public static class FfmpegSessionExtensions
     {
@@ -641,7 +641,7 @@ namespace FFmpeg.Rx.Metadata
 }
 namespace FFmpeg.Rx.Models
 {
-    public sealed class AudioEncode : FFmpeg.Rx.Models.CodecSpec, System.IEquatable<FFmpeg.Rx.Models.AudioEncode>
+    public sealed class AudioEncode : FFmpeg.Rx.Models.CodecConfig, System.IEquatable<FFmpeg.Rx.Models.AudioEncode>
     {
         public AudioEncode(FFmpeg.Rx.Codecs.AudioCodec Codec, FFmpeg.Rx.Models.AudioEncodingOptions Options) { }
         public FFmpeg.Rx.Codecs.AudioCodec Codec { get; init; }
@@ -654,13 +654,13 @@ namespace FFmpeg.Rx.Models
         public int? Channels { get; init; }
         public int? SampleRate { get; init; }
     }
-    public abstract class CodecSpec : System.IEquatable<FFmpeg.Rx.Models.CodecSpec>
+    public abstract class CodecConfig : System.IEquatable<FFmpeg.Rx.Models.CodecConfig>
     {
-        protected CodecSpec() { }
+        protected CodecConfig() { }
     }
-    public sealed class ComplexFilterSpec : FFmpeg.Rx.Models.FilterSpec, System.IEquatable<FFmpeg.Rx.Models.ComplexFilterSpec>
+    public sealed class ComplexFilterConfig : FFmpeg.Rx.Models.FilterConfig, System.IEquatable<FFmpeg.Rx.Models.ComplexFilterConfig>
     {
-        public ComplexFilterSpec(FFmpeg.Rx.FilterGraph.FilterGraph Graph) { }
+        public ComplexFilterConfig(FFmpeg.Rx.FilterGraph.FilterGraph Graph) { }
         public FFmpeg.Rx.FilterGraph.FilterGraph Graph { get; init; }
     }
     public sealed class FfmpegResult : System.IEquatable<FFmpeg.Rx.Models.FfmpegResult>
@@ -677,18 +677,23 @@ namespace FFmpeg.Rx.Models
         public FileDestination(string Path) { }
         public string Path { get; init; }
     }
-    public sealed class FileInputSpec : FFmpeg.Rx.Models.InputSpec, System.IEquatable<FFmpeg.Rx.Models.FileInputSpec>
+    public sealed class FileInputConfig : FFmpeg.Rx.Models.InputConfig, System.IEquatable<FFmpeg.Rx.Models.FileInputConfig>
     {
-        public FileInputSpec(string Path) { }
+        public FileInputConfig(string Path) { }
         public string Path { get; init; }
     }
-    public abstract class FilterSpec : System.IEquatable<FFmpeg.Rx.Models.FilterSpec>
+    public abstract class FilterConfig : System.IEquatable<FFmpeg.Rx.Models.FilterConfig>
     {
-        protected FilterSpec() { }
+        protected FilterConfig() { }
     }
-    public sealed class InputOptionSpec : System.IEquatable<FFmpeg.Rx.Models.InputOptionSpec>
+    public abstract class InputConfig : System.IEquatable<FFmpeg.Rx.Models.InputConfig>
     {
-        public InputOptionSpec(System.TimeSpan? Seek = default, FFmpeg.Rx.Codecs.HWAccel? HWAccel = default, string? HWAccelDevice = null, string? HWAccelOutputFormat = null, FFmpeg.Rx.Codecs.VideoCodec? VideoDecoder = default, FFmpeg.Rx.Codecs.Framerate? Framerate = default, bool Loop = false, int? StreamLoop = default, System.Collections.Generic.IReadOnlyList<string>? CustomArgs = null) { }
+        protected InputConfig() { }
+        public FFmpeg.Rx.Models.InputOptionConfig? Options { get; init; }
+    }
+    public sealed class InputOptionConfig : System.IEquatable<FFmpeg.Rx.Models.InputOptionConfig>
+    {
+        public InputOptionConfig(System.TimeSpan? Seek = default, FFmpeg.Rx.Codecs.HWAccel? HWAccel = default, string? HWAccelDevice = null, string? HWAccelOutputFormat = null, FFmpeg.Rx.Codecs.VideoCodec? VideoDecoder = default, FFmpeg.Rx.Codecs.Framerate? Framerate = default, bool Loop = false, int? StreamLoop = default, System.Collections.Generic.IReadOnlyList<string>? CustomArgs = null) { }
         public System.Collections.Generic.IReadOnlyList<string>? CustomArgs { get; init; }
         public FFmpeg.Rx.Codecs.Framerate? Framerate { get; init; }
         public FFmpeg.Rx.Codecs.HWAccel? HWAccel { get; init; }
@@ -699,14 +704,9 @@ namespace FFmpeg.Rx.Models
         public int? StreamLoop { get; init; }
         public FFmpeg.Rx.Codecs.VideoCodec? VideoDecoder { get; init; }
     }
-    public abstract class InputSpec : System.IEquatable<FFmpeg.Rx.Models.InputSpec>
+    public sealed class MetadataConfig : System.IEquatable<FFmpeg.Rx.Models.MetadataConfig>
     {
-        protected InputSpec() { }
-        public FFmpeg.Rx.Models.InputOptionSpec? Options { get; init; }
-    }
-    public sealed class MetadataSpec : System.IEquatable<FFmpeg.Rx.Models.MetadataSpec>
-    {
-        public MetadataSpec(System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? GlobalEntries = null, bool StripAll = false, int? CopyFromInput = default) { }
+        public MetadataConfig(System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? GlobalEntries = null, bool StripAll = false, int? CopyFromInput = default) { }
         public int? CopyFromInput { get; init; }
         public System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? GlobalEntries { get; init; }
         public bool StripAll { get; init; }
@@ -716,68 +716,68 @@ namespace FFmpeg.Rx.Models
         public NullDestination() { }
         public static FFmpeg.Rx.Models.NullDestination Instance { get; }
     }
-    public abstract class OutputDestination : System.IEquatable<FFmpeg.Rx.Models.OutputDestination>
+    public sealed class OutputConfig : System.IEquatable<FFmpeg.Rx.Models.OutputConfig>
     {
-        protected OutputDestination() { }
-    }
-    public sealed class OutputSpec : System.IEquatable<FFmpeg.Rx.Models.OutputSpec>
-    {
-        public OutputSpec(FFmpeg.Rx.Models.OutputDestination Destination, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.StreamSpec>? Streams = null, FFmpeg.Rx.Codecs.ContainerFormat? Container = default, FFmpeg.Rx.Models.FilterSpec? Filters = null, FFmpeg.Rx.Models.MetadataSpec? Metadata = null, FFmpeg.Rx.Models.TimeRange? TimeRange = null, bool Overwrite = true, bool FastStart = false, System.Collections.Generic.IReadOnlyList<string>? MovFlags = null, System.Collections.Generic.IReadOnlyList<string>? LabelMappings = null, FFmpeg.Rx.Models.TeeOutput? Tee = null, System.Collections.Generic.IReadOnlyList<string>? CustomArgs = null) { }
+        public OutputConfig(FFmpeg.Rx.Models.OutputDestination Destination, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.StreamConfig>? Streams = null, FFmpeg.Rx.Codecs.ContainerFormat? Container = default, FFmpeg.Rx.Models.FilterConfig? Filters = null, FFmpeg.Rx.Models.MetadataConfig? Metadata = null, FFmpeg.Rx.Models.TimeRange? TimeRange = null, bool Overwrite = true, bool FastStart = false, System.Collections.Generic.IReadOnlyList<string>? MovFlags = null, System.Collections.Generic.IReadOnlyList<string>? LabelMappings = null, FFmpeg.Rx.Models.TeeOutput? Tee = null, System.Collections.Generic.IReadOnlyList<string>? CustomArgs = null) { }
         public FFmpeg.Rx.Codecs.ContainerFormat? Container { get; init; }
         public System.Collections.Generic.IReadOnlyList<string>? CustomArgs { get; init; }
         public FFmpeg.Rx.Models.OutputDestination Destination { get; init; }
         public bool FastStart { get; init; }
-        public FFmpeg.Rx.Models.FilterSpec? Filters { get; init; }
+        public FFmpeg.Rx.Models.FilterConfig? Filters { get; init; }
         public System.Collections.Generic.IReadOnlyList<string>? LabelMappings { get; init; }
-        public FFmpeg.Rx.Models.MetadataSpec? Metadata { get; init; }
+        public FFmpeg.Rx.Models.MetadataConfig? Metadata { get; init; }
         public System.Collections.Generic.IReadOnlyList<string>? MovFlags { get; init; }
         public bool Overwrite { get; init; }
-        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.StreamSpec>? Streams { get; init; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.StreamConfig>? Streams { get; init; }
         public FFmpeg.Rx.Models.TeeOutput? Tee { get; init; }
         public FFmpeg.Rx.Models.TimeRange? TimeRange { get; init; }
+    }
+    public abstract class OutputDestination : System.IEquatable<FFmpeg.Rx.Models.OutputDestination>
+    {
+        protected OutputDestination() { }
     }
     public sealed class PipeDestination : FFmpeg.Rx.Models.OutputDestination, System.IEquatable<FFmpeg.Rx.Models.PipeDestination>
     {
         public PipeDestination(System.IO.Stream Destination) { }
         public System.IO.Stream Destination { get; init; }
     }
-    public sealed class PipeInputSpec : FFmpeg.Rx.Models.InputSpec, System.IEquatable<FFmpeg.Rx.Models.PipeInputSpec>
+    public sealed class PipeInputConfig : FFmpeg.Rx.Models.InputConfig, System.IEquatable<FFmpeg.Rx.Models.PipeInputConfig>
     {
-        public PipeInputSpec(System.IO.Stream Source, string Format) { }
+        public PipeInputConfig(System.IO.Stream Source, string Format) { }
         public string Format { get; init; }
         public System.IO.Stream Source { get; init; }
     }
-    public sealed class PipelineSpec : System.IEquatable<FFmpeg.Rx.Models.PipelineSpec>
+    public sealed class PipelineConfig : System.IEquatable<FFmpeg.Rx.Models.PipelineConfig>
     {
-        public PipelineSpec(System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.InputSpec> Inputs, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.OutputSpec> Outputs, System.Collections.Generic.IReadOnlyList<string>? GlobalOptions = null, string? BinaryPath = null, System.TimeSpan? TotalDuration = default) { }
+        public PipelineConfig(System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.InputConfig> Inputs, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.OutputConfig> Outputs, System.Collections.Generic.IReadOnlyList<string>? GlobalOptions = null, string? BinaryPath = null, System.TimeSpan? TotalDuration = default) { }
         public string? BinaryPath { get; init; }
         public System.Collections.Generic.IReadOnlyList<string>? GlobalOptions { get; init; }
-        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.InputSpec> Inputs { get; init; }
-        public FFmpeg.Rx.Models.OutputSpec Output { get; }
-        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.OutputSpec> Outputs { get; init; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.InputConfig> Inputs { get; init; }
+        public FFmpeg.Rx.Models.OutputConfig Output { get; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.OutputConfig> Outputs { get; init; }
         public System.TimeSpan? TotalDuration { get; init; }
     }
-    public sealed class SimpleFilterSpec : FFmpeg.Rx.Models.FilterSpec, System.IEquatable<FFmpeg.Rx.Models.SimpleFilterSpec>
+    public sealed class SimpleFilterConfig : FFmpeg.Rx.Models.FilterConfig, System.IEquatable<FFmpeg.Rx.Models.SimpleFilterConfig>
     {
-        public SimpleFilterSpec(System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IVideoFilter>? VideoFilters = null, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IAudioFilter>? AudioFilters = null) { }
+        public SimpleFilterConfig(System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IVideoFilter>? VideoFilters = null, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IAudioFilter>? AudioFilters = null) { }
         public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IAudioFilter>? AudioFilters { get; init; }
         public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IVideoFilter>? VideoFilters { get; init; }
     }
-    public sealed class StreamCopy : FFmpeg.Rx.Models.CodecSpec, System.IEquatable<FFmpeg.Rx.Models.StreamCopy>
+    public sealed class StreamConfig : System.IEquatable<FFmpeg.Rx.Models.StreamConfig>
     {
-        public StreamCopy() { }
-    }
-    public sealed class StreamSpec : System.IEquatable<FFmpeg.Rx.Models.StreamSpec>
-    {
-        public StreamSpec(int InputIndex, int? StreamIndex, FFmpeg.Rx.StreamType Type, FFmpeg.Rx.Models.CodecSpec Codec, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? Metadata = null, string? Disposition = null) { }
-        public FFmpeg.Rx.Models.CodecSpec Codec { get; init; }
+        public StreamConfig(int InputIndex, int? StreamIndex, FFmpeg.Rx.StreamType Type, FFmpeg.Rx.Models.CodecConfig Codec, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? Metadata = null, string? Disposition = null) { }
+        public FFmpeg.Rx.Models.CodecConfig Codec { get; init; }
         public string? Disposition { get; init; }
         public int InputIndex { get; init; }
         public System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? Metadata { get; init; }
         public int? StreamIndex { get; init; }
         public FFmpeg.Rx.StreamType Type { get; init; }
     }
-    public sealed class SubtitleEncode : FFmpeg.Rx.Models.CodecSpec, System.IEquatable<FFmpeg.Rx.Models.SubtitleEncode>
+    public sealed class StreamCopy : FFmpeg.Rx.Models.CodecConfig, System.IEquatable<FFmpeg.Rx.Models.StreamCopy>
+    {
+        public StreamCopy() { }
+    }
+    public sealed class SubtitleEncode : FFmpeg.Rx.Models.CodecConfig, System.IEquatable<FFmpeg.Rx.Models.SubtitleEncode>
     {
         public SubtitleEncode(FFmpeg.Rx.Codecs.SubtitleCodec Codec) { }
         public FFmpeg.Rx.Codecs.SubtitleCodec Codec { get; init; }
@@ -804,12 +804,12 @@ namespace FFmpeg.Rx.Models
         public System.TimeSpan? Seek { get; init; }
         public System.TimeSpan? StopTime { get; init; }
     }
-    public sealed class UrlInputSpec : FFmpeg.Rx.Models.InputSpec, System.IEquatable<FFmpeg.Rx.Models.UrlInputSpec>
+    public sealed class UrlInputConfig : FFmpeg.Rx.Models.InputConfig, System.IEquatable<FFmpeg.Rx.Models.UrlInputConfig>
     {
-        public UrlInputSpec(System.Uri Url) { }
+        public UrlInputConfig(System.Uri Url) { }
         public System.Uri Url { get; init; }
     }
-    public sealed class VideoEncode : FFmpeg.Rx.Models.CodecSpec, System.IEquatable<FFmpeg.Rx.Models.VideoEncode>
+    public sealed class VideoEncode : FFmpeg.Rx.Models.CodecConfig, System.IEquatable<FFmpeg.Rx.Models.VideoEncode>
     {
         public VideoEncode(FFmpeg.Rx.Codecs.VideoCodec Codec, FFmpeg.Rx.Models.VideoEncodingOptions Options) { }
         public FFmpeg.Rx.Codecs.VideoCodec Codec { get; init; }
@@ -817,12 +817,12 @@ namespace FFmpeg.Rx.Models
     }
     public sealed class VideoEncodingOptions : System.IEquatable<FFmpeg.Rx.Models.VideoEncodingOptions>
     {
-        public VideoEncodingOptions(FFmpeg.Rx.Codecs.QualitySpec? Quality = null, FFmpeg.Rx.Codecs.Preset? Preset = default, FFmpeg.Rx.Codecs.VideoProfile? Profile = default, FFmpeg.Rx.Codecs.Tune? Tune = default, FFmpeg.Rx.Codecs.PixelFormat? PixelFormat = default, FFmpeg.Rx.Codecs.Framerate? Framerate = default) { }
+        public VideoEncodingOptions(FFmpeg.Rx.Codecs.QualityConfig? Quality = null, FFmpeg.Rx.Codecs.Preset? Preset = default, FFmpeg.Rx.Codecs.VideoProfile? Profile = default, FFmpeg.Rx.Codecs.Tune? Tune = default, FFmpeg.Rx.Codecs.PixelFormat? PixelFormat = default, FFmpeg.Rx.Codecs.Framerate? Framerate = default) { }
         public FFmpeg.Rx.Codecs.Framerate? Framerate { get; init; }
         public FFmpeg.Rx.Codecs.PixelFormat? PixelFormat { get; init; }
         public FFmpeg.Rx.Codecs.Preset? Preset { get; init; }
         public FFmpeg.Rx.Codecs.VideoProfile? Profile { get; init; }
-        public FFmpeg.Rx.Codecs.QualitySpec? Quality { get; init; }
+        public FFmpeg.Rx.Codecs.QualityConfig? Quality { get; init; }
         public FFmpeg.Rx.Codecs.Tune? Tune { get; init; }
     }
 }

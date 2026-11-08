@@ -11,15 +11,15 @@ public sealed class SubtitleMuxTests : FfmpegTestBase
     {
         var output = OutputPath("out.mkv");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4")),
-             new FileInputSpec(TestAsset("subtitle.srt"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4")),
+             new FileInputConfig(TestAsset("subtitle.srt"))],
+            [new OutputConfig(
                 new FileDestination(output),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio, new StreamCopy()),
-                    new StreamSpec(1, 0, StreamType.Subtitle, new SubtitleEncode(SubtitleCodec.Srt))
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy()),
+                    new StreamConfig(1, 0, StreamType.Subtitle, new SubtitleEncode(SubtitleCodec.Srt))
                 ])]));
 
         var result = await session.RunAsync(TestContext.Current.CancellationToken);

@@ -14,7 +14,7 @@ src/
     Filters/              # Simple filter interfaces + implementations
     Internal/             # ArgumentSerializer, ProgressParser, ErrorClassifier, ProbeRunner
     Metadata/             # FFMetadata chapter builder
-    Models/               # Pipeline records: PipelineSpec, InputSpec, OutputSpec, etc.
+    Models/               # Pipeline records: PipelineConfig, InputConfig, OutputConfig, etc.
     Probing/              # ffprobe: MediaInfo, stream info records
   FFmpeg.Rx.Tests/        # xUnit v3 unit tests (no ffmpeg binary needed)
   FFmpeg.Rx.IntegrationTests/ # xUnit v3 integration tests (requires ffmpeg)
@@ -33,7 +33,7 @@ testdata/                 # Synthetic test media (lavfi-generated, CC0)
 Three-layer design — each layer is independently testable:
 
 ```
-Layer 1: Pipeline records   — what the user wants   (PipelineSpec, OutputSpec, CodecSpec...)
+Layer 1: Pipeline records   — what the user wants   (PipelineConfig, OutputConfig, CodecConfig...)
 Layer 2: Scoped builders    — how the user says it   (PipelineBuilder, OutputBuilder, StreamBuilder...)
 Layer 3: Serializer+CliWrap — how it gets done        (ArgumentSerializer, FfmpegSession via CliWrap)
 ```
@@ -42,11 +42,11 @@ Layer 3: Serializer+CliWrap — how it gets done        (ArgumentSerializer, Ffm
 
 | Type | Role |
 |------|------|
-| `PipelineSpec` | Root record: inputs + outputs + global options |
-| `InputSpec` | Abstract: FileInput, UrlInput, PipeInput |
-| `OutputSpec` | Typed output: destination, streams, container, filters, metadata, time range |
-| `StreamSpec` | Stream mapping with disjoint CodecSpec |
-| `CodecSpec` | Abstract: StreamCopy, VideoEncode, AudioEncode, SubtitleEncode |
+| `PipelineConfig` | Root record: inputs + outputs + global options |
+| `InputConfig` | Abstract: FileInput, UrlInput, PipeInput |
+| `OutputConfig` | Typed output: destination, streams, container, filters, metadata, time range |
+| `StreamConfig` | Stream mapping with disjoint CodecConfig |
+| `CodecConfig` | Abstract: StreamCopy, VideoEncode, AudioEncode, SubtitleEncode |
 | `IFfmpegSession` | Consumer-facing interface (mockable) |
 | `FfmpegSession` | Implementation: CliWrap execution, R3 event bridging |
 | `ArgumentSerializer` | Pattern-matches on records → CLI string |
@@ -59,10 +59,10 @@ static factories and `Custom()` escape hatch.
 
 ### Disjoint sum types
 
-- `CodecSpec` → StreamCopy | VideoEncode | AudioEncode | SubtitleEncode
-- `QualitySpec` → ConstantQuality(Crf) | ConstantBitrate(Rate)
+- `CodecConfig` → StreamCopy | VideoEncode | AudioEncode | SubtitleEncode
+- `QualityConfig` → ConstantQuality(Crf) | ConstantBitrate(Rate)
 - `OutputDestination` → FileDestination | PipeDestination | NullDestination
-- `FilterSpec` → SimpleFilterSpec | ComplexFilterSpec
+- `FilterConfig` → SimpleFilterConfig | ComplexFilterConfig
 
 ### Event stream
 

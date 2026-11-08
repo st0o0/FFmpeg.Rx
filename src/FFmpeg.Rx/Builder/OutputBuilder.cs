@@ -7,10 +7,10 @@ namespace FFmpeg.Rx.Builder;
 public sealed class OutputBuilder
 {
     private readonly OutputDestination _destination;
-    private List<StreamSpec>? _streams;
+    private List<StreamConfig>? _streams;
     private ContainerFormat? _container;
-    private FilterSpec? _filters;
-    private MetadataSpec? _metadata;
+    private FilterConfig? _filters;
+    private MetadataConfig? _metadata;
     private TimeRange? _timeRange;
     private bool _overwrite = true;
     private bool _fastStart;
@@ -45,7 +45,7 @@ public sealed class OutputBuilder
     {
         var builder = new VideoFilterBuilder();
         configure(builder);
-        _filters = new SimpleFilterSpec(builder.Filters, (_filters as SimpleFilterSpec)?.AudioFilters);
+        _filters = new SimpleFilterConfig(builder.Filters, (_filters as SimpleFilterConfig)?.AudioFilters);
         return this;
     }
 
@@ -53,13 +53,13 @@ public sealed class OutputBuilder
     {
         var builder = new AudioFilterBuilder();
         configure(builder);
-        _filters = new SimpleFilterSpec((_filters as SimpleFilterSpec)?.VideoFilters, builder.Filters);
+        _filters = new SimpleFilterConfig((_filters as SimpleFilterConfig)?.VideoFilters, builder.Filters);
         return this;
     }
 
     public OutputBuilder FilterComplex(FilterGraph.FilterGraph graph)
     {
-        _filters = new ComplexFilterSpec(graph);
+        _filters = new ComplexFilterConfig(graph);
         return this;
     }
 
@@ -118,9 +118,9 @@ public sealed class OutputBuilder
         return this;
     }
 
-    internal OutputSpec Build()
+    internal OutputConfig Build()
     {
-        return new OutputSpec(
+        return new OutputConfig(
             _destination,
             _streams,
             _container,

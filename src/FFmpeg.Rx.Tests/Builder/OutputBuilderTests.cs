@@ -7,7 +7,7 @@ namespace FFmpeg.Rx.Tests.Builder;
 
 public sealed class OutputBuilderTests
 {
-    private static OutputSpec Build(Action<OutputBuilder> configure)
+    private static OutputConfig Build(Action<OutputBuilder> configure)
     {
         var builder = new OutputBuilder(new FileDestination("out.mp4"));
         configure(builder);
@@ -46,7 +46,7 @@ public sealed class OutputBuilderTests
     public void VideoFilter_sets_simple_filter()
     {
         var spec = Build(o => o.VideoFilter(f => f.Scale(1920, 1080)));
-        var simple = Assert.IsType<SimpleFilterSpec>(spec.Filters);
+        var simple = Assert.IsType<SimpleFilterConfig>(spec.Filters);
         Assert.NotNull(simple.VideoFilters);
         Assert.Single(simple.VideoFilters);
     }
@@ -55,7 +55,7 @@ public sealed class OutputBuilderTests
     public void AudioFilter_sets_simple_filter()
     {
         var spec = Build(o => o.AudioFilter(f => f.Volume(1.5)));
-        var simple = Assert.IsType<SimpleFilterSpec>(spec.Filters);
+        var simple = Assert.IsType<SimpleFilterConfig>(spec.Filters);
         Assert.NotNull(simple.AudioFilters);
         Assert.Single(simple.AudioFilters);
     }
@@ -68,7 +68,7 @@ public sealed class OutputBuilderTests
             .Chain("v_in", f => f.Scale(1920, 1080), "v_out")
             .Build();
         var spec = Build(o => o.FilterComplex(graph));
-        Assert.IsType<ComplexFilterSpec>(spec.Filters);
+        Assert.IsType<ComplexFilterConfig>(spec.Filters);
     }
 
     [Fact]

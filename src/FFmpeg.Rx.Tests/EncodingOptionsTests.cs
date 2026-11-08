@@ -6,18 +6,18 @@ namespace FFmpeg.Rx.Tests;
 
 public sealed class EncodingOptionsTests
 {
-    private static string SerializeWith(Action<OutputSpec> _setup, OutputSpec output)
+    private static string SerializeWith(Action<OutputConfig> _setup, OutputConfig output)
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
             [output]);
         return ArgumentSerializer.Serialize(spec);
     }
 
-    private static string SerializeOutput(OutputSpec output)
+    private static string SerializeOutput(OutputConfig output)
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
             [output]);
         return ArgumentSerializer.Serialize(spec);
     }
@@ -25,8 +25,8 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Crf_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
-            Streams: [new StreamSpec(0, 0, StreamType.Video,
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
+            Streams: [new StreamConfig(0, 0, StreamType.Video,
                 new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Quality: Quality.Crf(23))))]));
         Assert.Contains("-crf 23", args);
     }
@@ -34,8 +34,8 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Video_bitrate_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
-            Streams: [new StreamSpec(0, 0, StreamType.Video,
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
+            Streams: [new StreamConfig(0, 0, StreamType.Video,
                 new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Quality: Quality.Bitrate(Bitrate.Mbps(4)))))]));
         Assert.Contains("-b:v 4M", args);
     }
@@ -43,8 +43,8 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Audio_bitrate_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
-            Streams: [new StreamSpec(0, 0, StreamType.Audio,
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
+            Streams: [new StreamConfig(0, 0, StreamType.Audio,
                 new AudioEncode(AudioCodec.Aac, new AudioEncodingOptions(Bitrate: Bitrate.Kbps(192))))]));
         Assert.Contains("-b:a 192k", args);
     }
@@ -52,8 +52,8 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Framerate_int_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
-            Streams: [new StreamSpec(0, 0, StreamType.Video,
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
+            Streams: [new StreamConfig(0, 0, StreamType.Video,
                 new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Framerate: Framerate.Fps(30))))]));
         Assert.Contains("-r 30", args);
     }
@@ -61,8 +61,8 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Framerate_rational_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
-            Streams: [new StreamSpec(0, 0, StreamType.Video,
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
+            Streams: [new StreamConfig(0, 0, StreamType.Video,
                 new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Framerate: Framerate.Rational(30000, 1001))))]));
         Assert.Contains("-r 30000/1001", args);
     }
@@ -70,8 +70,8 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Preset_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
-            Streams: [new StreamSpec(0, 0, StreamType.Video,
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
+            Streams: [new StreamConfig(0, 0, StreamType.Video,
                 new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Preset: Preset.Slow)))]));
         Assert.Contains("-preset slow", args);
     }
@@ -79,8 +79,8 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Profile_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
-            Streams: [new StreamSpec(0, 0, StreamType.Video,
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
+            Streams: [new StreamConfig(0, 0, StreamType.Video,
                 new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Profile: VideoProfile.High)))]));
         Assert.Contains("-profile:v high", args);
     }
@@ -88,8 +88,8 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Pixel_format_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
-            Streams: [new StreamSpec(0, 0, StreamType.Video,
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
+            Streams: [new StreamConfig(0, 0, StreamType.Video,
                 new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(PixelFormat: PixelFormat.Yuv420p)))]));
         Assert.Contains("-pix_fmt yuv420p", args);
     }
@@ -97,7 +97,7 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Container_format_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.ts"),
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.ts"),
             Container: ContainerFormat.Ts));
         Assert.Contains("-f mpegts", args);
     }
@@ -105,8 +105,8 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Tune_emits_flag()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
-            Streams: [new StreamSpec(0, 0, StreamType.Video,
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
+            Streams: [new StreamConfig(0, 0, StreamType.Video,
                 new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(Tune: Tune.Film)))]));
         Assert.Contains("-tune film", args);
     }
@@ -114,14 +114,14 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Default_overwrite()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4")));
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4")));
         Assert.Contains("-y \"out.mp4\"", args);
     }
 
     [Fact]
     public void No_overwrite()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"), Overwrite: false));
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"), Overwrite: false));
         Assert.Contains("-n \"out.mp4\"", args);
         Assert.DoesNotContain("-y", args);
     }
@@ -160,16 +160,16 @@ public sealed class EncodingOptionsTests
     [Fact]
     public void Full_encoding_pipeline()
     {
-        var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
+        var args = SerializeOutput(new OutputConfig(new FileDestination("out.mp4"),
             Streams: [
-                new StreamSpec(0, 0, StreamType.Video,
+                new StreamConfig(0, 0, StreamType.Video,
                     new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(
                         Quality: Quality.Crf(23),
                         Preset: Preset.Medium,
                         Profile: VideoProfile.High,
                         PixelFormat: PixelFormat.Yuv420p,
                         Tune: Tune.Film))),
-                new StreamSpec(0, 0, StreamType.Audio,
+                new StreamConfig(0, 0, StreamType.Audio,
                     new AudioEncode(AudioCodec.Aac, new AudioEncodingOptions(Bitrate: Bitrate.Kbps(192))))]));
 
         Assert.Contains("-c:v libx264", args);

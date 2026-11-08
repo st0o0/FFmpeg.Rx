@@ -10,7 +10,7 @@
 ## 2. Merge execution paths
 
 - [x] 2.1 Create `ExecutionMode` enum (EventStream, PipeOutput)
-- [x] 2.2 Determine mode in RunAsync from PipelineSpec
+- [x] 2.2 Determine mode in RunAsync from PipelineConfig
 - [x] 2.3 Create `SessionState` class (StderrLines, ProgressBlock, ExitCode)
 - [x] 2.4 Rewrite RunAsync to single execution flow using mode + state
 - [x] 2.5 Delete ExecuteWithEventStream and ExecuteWithPipeOutput

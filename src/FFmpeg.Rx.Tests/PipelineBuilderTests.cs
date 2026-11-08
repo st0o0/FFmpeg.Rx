@@ -19,54 +19,54 @@ public sealed class PipelineBuilderTests
     }
 
     [Fact]
-    public void PipelineSpec_single_input_single_output()
+    public void PipelineConfig_single_input_single_output()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("video.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"),
-                Streams: [new StreamSpec(0, 0, StreamType.Video, new StreamCopy())])]);
+        var spec = new PipelineConfig(
+            [new FileInputConfig("video.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"),
+                Streams: [new StreamConfig(0, 0, StreamType.Video, new StreamCopy())])]);
 
         Assert.Single(spec.Inputs);
         Assert.Single(spec.Outputs);
-        Assert.IsType<FileInputSpec>(spec.Inputs[0]);
+        Assert.IsType<FileInputConfig>(spec.Inputs[0]);
         Assert.IsType<FileDestination>(spec.Output.Destination);
         Assert.IsType<StreamCopy>(spec.Output.Streams![0].Codec);
     }
 
     [Fact]
-    public void PipelineSpec_multiple_inputs()
+    public void PipelineConfig_multiple_inputs()
     {
-        var spec = new PipelineSpec(
-            [new UrlInputSpec(new Uri("https://example.com/v.mp4")),
-             new FileInputSpec("/subs.srt")],
-            [new OutputSpec(new FileDestination("out.mkv"),
+        var spec = new PipelineConfig(
+            [new UrlInputConfig(new Uri("https://example.com/v.mp4")),
+             new FileInputConfig("/subs.srt")],
+            [new OutputConfig(new FileDestination("out.mkv"),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(1, 0, StreamType.Subtitle, new SubtitleEncode(SubtitleCodec.Srt))])]);
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(1, 0, StreamType.Subtitle, new SubtitleEncode(SubtitleCodec.Srt))])]);
 
         Assert.Equal(2, spec.Inputs.Count);
-        Assert.IsType<UrlInputSpec>(spec.Inputs[0]);
-        Assert.IsType<FileInputSpec>(spec.Inputs[1]);
+        Assert.IsType<UrlInputConfig>(spec.Inputs[0]);
+        Assert.IsType<FileInputConfig>(spec.Inputs[1]);
     }
 
     [Fact]
-    public void PipelineSpec_with_binary_path()
+    public void PipelineConfig_with_binary_path()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"))],
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"))],
             BinaryPath: "/usr/local/bin/ffmpeg");
 
         Assert.Equal("/usr/local/bin/ffmpeg", spec.BinaryPath);
     }
 
     [Fact]
-    public void PipelineSpec_serializes_roundtrip()
+    public void PipelineConfig_serializes_roundtrip()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("video.mp4")],
-            [new OutputSpec(new FileDestination("out.mkv"),
-                Streams: [new StreamSpec(0, 0, StreamType.Video, new StreamCopy())],
+        var spec = new PipelineConfig(
+            [new FileInputConfig("video.mp4")],
+            [new OutputConfig(new FileDestination("out.mkv"),
+                Streams: [new StreamConfig(0, 0, StreamType.Video, new StreamCopy())],
                 CustomArgs: ["-bsf:a aac_adtstoasc"])]);
 
         var args = ArgumentSerializer.Serialize(spec);

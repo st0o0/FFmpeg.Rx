@@ -13,9 +13,9 @@ public sealed class PipeProgressIntegrationTests : FfmpegTestBase
         using var outputStream = new MemoryStream();
         var progressEvents = new List<ProgressEvent>();
 
-        var spec = new PipelineSpec(
-            [new FileInputSpec(TestAsset("audio_only_3s.m4a"))],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig(TestAsset("audio_only_3s.m4a"))],
+            [new OutputConfig(
                 new PipeDestination(outputStream),
                 CustomArgs: ["-f s16le", "-acodec pcm_s16le", "-ar 44100", "-ac 1"])],
             GlobalOptions: ["-progress pipe:1"]);

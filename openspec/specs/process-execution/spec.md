@@ -68,7 +68,7 @@ The library SHALL use CliWrap for all external process execution (ffmpeg and ffp
 Input piping SHALL use `PipeSource.FromStream` with `-i pipe:0`. Output piping SHALL use `PipeTarget.ToStream` with `pipe:1`. No Named Pipe servers.
 
 #### Scenario: Stream input
-- **WHEN** a `PipeInputSpec` carries a Stream
+- **WHEN** a `PipeInputConfig` carries a Stream
 - **THEN** CliWrap reads from the stream via stdin, cross-platform
 
 ### Requirement: Graceful cancellation

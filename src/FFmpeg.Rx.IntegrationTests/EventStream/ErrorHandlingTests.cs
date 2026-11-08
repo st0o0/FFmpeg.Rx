@@ -10,9 +10,9 @@ public sealed class ErrorHandlingTests : FfmpegTestBase
     {
         var output = OutputPath("out.mp4");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("corrupt.mp4"))],
-            [new OutputSpec(new FileDestination(output))]));
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("corrupt.mp4"))],
+            [new OutputConfig(new FileDestination(output))]));
 
         var result = await session.RunAsync(TestContext.Current.CancellationToken);
 
@@ -25,9 +25,9 @@ public sealed class ErrorHandlingTests : FfmpegTestBase
     {
         var output = OutputPath("out.mp4");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec("/nonexistent/path/video.mp4")],
-            [new OutputSpec(new FileDestination(output))]));
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig("/nonexistent/path/video.mp4")],
+            [new OutputConfig(new FileDestination(output))]));
 
         var result = await session.RunAsync(TestContext.Current.CancellationToken);
 

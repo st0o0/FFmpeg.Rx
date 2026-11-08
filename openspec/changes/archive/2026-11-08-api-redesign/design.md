@@ -41,14 +41,14 @@ readonly record struct VideoCodec(string Name)
 
 **Alternative considered:** String constants in static classes (current design). Rejected — no type safety between video/audio codecs.
 
-### D2: Copy vs Encode — disjoint CodecSpec
+### D2: Copy vs Encode — disjoint CodecConfig
 
 ```csharp
-abstract record CodecSpec;
-sealed record StreamCopy : CodecSpec;
-sealed record VideoEncode(VideoCodec Codec, VideoEncodingOptions Options) : CodecSpec;
-sealed record AudioEncode(AudioCodec Codec, AudioEncodingOptions Options) : CodecSpec;
-sealed record SubtitleEncode(SubtitleCodec Codec) : CodecSpec;
+abstract record CodecConfig;
+sealed record StreamCopy : CodecConfig;
+sealed record VideoEncode(VideoCodec Codec, VideoEncodingOptions Options) : CodecConfig;
+sealed record AudioEncode(AudioCodec Codec, AudioEncodingOptions Options) : CodecConfig;
+sealed record SubtitleEncode(SubtitleCodec Codec) : CodecConfig;
 ```
 
 `StreamCopy` carries no encoding options. This is enforced by the type system, not runtime validation. The builder API makes this natural: `s.Copy()` returns void (terminal), `s.Encode(codec, e => ...)` gives an encoding builder.
@@ -56,9 +56,9 @@ sealed record SubtitleEncode(SubtitleCodec Codec) : CodecSpec;
 ### D3: Quality — disjoint sum type
 
 ```csharp
-abstract record QualitySpec;
-sealed record ConstantQuality(int Crf) : QualitySpec;
-sealed record ConstantBitrate(Bitrate Rate) : QualitySpec;
+abstract record QualityConfig;
+sealed record ConstantQuality(int Crf) : QualityConfig;
+sealed record ConstantBitrate(Bitrate Rate) : QualityConfig;
 ```
 
 CRF and bitrate are mutually exclusive in FFmpeg. Making them variants of a single type enforces this: `.Quality(Quality.Crf(23))` OR `.Quality(Quality.Bitrate(Bitrate.Mbps(4)))`, never both. The `Quality` static class provides the factories.
@@ -94,13 +94,13 @@ No god objects. Each builder produces its corresponding record.
 ```csharp
 internal static class ArgumentSerializer
 {
-    internal static string Serialize(PipelineSpec pipeline) { ... }
+    internal static string Serialize(PipelineConfig pipeline) { ... }
     
     // Decomposes into per-concept serializers:
-    private static void SerializeInput(StringBuilder sb, InputSpec input) { ... }
-    private static void SerializeOutput(StringBuilder sb, OutputSpec output) { ... }
-    private static void SerializeStream(StringBuilder sb, StreamSpec stream) { ... }
-    private static void SerializeCodec(StringBuilder sb, CodecSpec codec, StreamType type)
+    private static void SerializeInput(StringBuilder sb, InputConfig input) { ... }
+    private static void SerializeOutput(StringBuilder sb, OutputConfig output) { ... }
+    private static void SerializeStream(StringBuilder sb, StreamConfig stream) { ... }
+    private static void SerializeCodec(StringBuilder sb, CodecConfig codec, StreamType type)
     {
         switch (codec)
         {

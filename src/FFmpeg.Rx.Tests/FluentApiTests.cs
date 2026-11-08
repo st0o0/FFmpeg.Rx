@@ -8,7 +8,7 @@ namespace FFmpeg.Rx.Tests;
 public sealed class FluentApiTests
 {
     [Fact]
-    public void Input_string_creates_FileInputSpec()
+    public void Input_string_creates_FileInputConfig()
     {
         var builder = new PipelineBuilder(null);
         builder.Input("video.mp4");
@@ -17,7 +17,7 @@ public sealed class FluentApiTests
     }
 
     [Fact]
-    public void Input_Uri_creates_UrlInputSpec()
+    public void Input_Uri_creates_UrlInputConfig()
     {
         var session = Ffmpeg.Input(new Uri("https://example.com/v.mp4"))
             .Output("out.mp4", o => o.Stream(0, 0, StreamType.Video, s => s.Copy()));
@@ -25,7 +25,7 @@ public sealed class FluentApiTests
     }
 
     [Fact]
-    public void Input_Stream_creates_PipeInputSpec()
+    public void Input_Stream_creates_PipeInputConfig()
     {
         using var stream = new MemoryStream();
         var session = Ffmpeg.Input(stream, "rawvideo")
@@ -109,9 +109,9 @@ public sealed class FluentApiTests
     [Fact]
     public void WithProgressReporting_adds_global_option()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("video.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"))],
+        var spec = new PipelineConfig(
+            [new FileInputConfig("video.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"))],
             GlobalOptions: ["-progress pipe:1"]);
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-progress pipe:1", args);

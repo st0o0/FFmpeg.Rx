@@ -7,7 +7,7 @@ namespace FFmpeg.Rx.Internal;
 
 internal static class ArgumentSerializer
 {
-    internal static string Serialize(PipelineSpec pipeline)
+    internal static string Serialize(PipelineConfig pipeline)
     {
         var sb = new StringBuilder();
 
@@ -40,7 +40,7 @@ internal static class ArgumentSerializer
         return sb.ToString();
     }
 
-    private static void SerializeInput(StringBuilder sb, InputSpec input)
+    private static void SerializeInput(StringBuilder sb, InputConfig input)
     {
         if (input.Options is { } opts)
         {
@@ -49,13 +49,13 @@ internal static class ArgumentSerializer
 
         switch (input)
         {
-            case UrlInputSpec url:
+            case UrlInputConfig url:
                 sb.Append("-i ").Append(url.Url).Append(' ');
                 break;
-            case FileInputSpec file:
+            case FileInputConfig file:
                 sb.Append("-i \"").Append(file.Path).Append("\" ");
                 break;
-            case PipeInputSpec pipe:
+            case PipeInputConfig pipe:
                 if (pipe.Format is { Length: > 0 })
                 {
                     sb.Append("-f ").Append(pipe.Format).Append(' ');
@@ -66,7 +66,7 @@ internal static class ArgumentSerializer
         }
     }
 
-    private static void SerializeInputOptions(StringBuilder sb, InputOptionSpec opts)
+    private static void SerializeInputOptions(StringBuilder sb, InputOptionConfig opts)
     {
         if (opts.HWAccel is { } hwaccel)
         {
@@ -117,7 +117,7 @@ internal static class ArgumentSerializer
         }
     }
 
-    private static void SerializeOutput(StringBuilder sb, OutputSpec output)
+    private static void SerializeOutput(StringBuilder sb, OutputConfig output)
     {
         if (output.Filters is { } filters)
         {
@@ -193,7 +193,7 @@ internal static class ArgumentSerializer
         }
     }
 
-    private static void SerializeStreamMappings(StringBuilder sb, IReadOnlyList<StreamSpec> streams)
+    private static void SerializeStreamMappings(StringBuilder sb, IReadOnlyList<StreamConfig> streams)
     {
         foreach (var stream in streams)
         {
@@ -207,7 +207,7 @@ internal static class ArgumentSerializer
         }
     }
 
-    private static void SerializeCodecs(StringBuilder sb, IReadOnlyList<StreamSpec> streams)
+    private static void SerializeCodecs(StringBuilder sb, IReadOnlyList<StreamConfig> streams)
     {
         var seen = new HashSet<StreamType>();
         foreach (var stream in streams)
@@ -221,7 +221,7 @@ internal static class ArgumentSerializer
         }
     }
 
-    private static void SerializeCodec(StringBuilder sb, CodecSpec codec, StreamType type)
+    private static void SerializeCodec(StringBuilder sb, CodecConfig codec, StreamType type)
     {
         switch (codec)
         {
@@ -319,7 +319,7 @@ internal static class ArgumentSerializer
         }
     }
 
-    private static void SerializeMetadata(StringBuilder sb, MetadataSpec metadata)
+    private static void SerializeMetadata(StringBuilder sb, MetadataConfig metadata)
     {
         if (metadata.StripAll)
         {
@@ -340,11 +340,11 @@ internal static class ArgumentSerializer
         }
     }
 
-    private static void SerializeFilters(StringBuilder sb, FilterSpec filters)
+    private static void SerializeFilters(StringBuilder sb, FilterConfig filters)
     {
         switch (filters)
         {
-            case SimpleFilterSpec simple:
+            case SimpleFilterConfig simple:
                 if (simple.VideoFilters is { Count: > 0 })
                 {
                     sb.Append("-vf \"");
@@ -378,7 +378,7 @@ internal static class ArgumentSerializer
                 }
 
                 break;
-            case ComplexFilterSpec complex:
+            case ComplexFilterConfig complex:
                 sb.Append("-filter_complex \"").Append(complex.Graph.Serialize()).Append("\" ");
                 break;
         }

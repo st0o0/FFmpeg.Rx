@@ -12,12 +12,12 @@ public sealed class CancellationTests : FfmpegTestBase
         var output = OutputPath("out.mp4");
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4")) { Options = new InputOptionSpec(StreamLoop: 10) }],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4")) { Options = new InputOptionConfig(StreamLoop: 10) }],
+            [new OutputConfig(
                 new FileDestination(output),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video,
+                    new StreamConfig(0, 0, StreamType.Video,
                         new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(
                             Quality: Quality.Crf(28), Preset: Preset.VerySlow)))
                 ])]));

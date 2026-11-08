@@ -1,9 +1,9 @@
 namespace FFmpeg.Rx.Models;
 
-public sealed record StreamSpec(
+public sealed record StreamConfig(
     int InputIndex,
     int? StreamIndex,
     StreamType Type,
-    CodecSpec Codec,
+    CodecConfig Codec,
     IReadOnlyList<KeyValuePair<string, string>>? Metadata = null,
     string? Disposition = null);

@@ -4,8 +4,8 @@ FFmpeg.Rx's current implementation is a string accumulator disguised as a fluent
 
 ## What Changes
 
-- **BREAKING** Replace `OutputOptions` string accumulator with typed `OutputSpec` record containing `StreamSpec[]`, `FilterSpec`, `MetadataSpec`, `TimeRange`, `ContainerFormat`
-- **BREAKING** Replace `StreamMapping(int, int, StreamType, string)` with `StreamSpec` carrying a disjoint `CodecSpec` (StreamCopy | VideoEncode | AudioEncode | SubtitleEncode)
+- **BREAKING** Replace `OutputOptions` string accumulator with typed `OutputConfig` record containing `StreamConfig[]`, `FilterConfig`, `MetadataConfig`, `TimeRange`, `ContainerFormat`
+- **BREAKING** Replace `StreamMapping(int, int, StreamType, string)` with `StreamConfig` carrying a disjoint `CodecConfig` (StreamCopy | VideoEncode | AudioEncode | SubtitleEncode)
 - **BREAKING** Replace string codec parameters with `readonly record struct` value types (`VideoCodec`, `AudioCodec`, `SubtitleCodec`) — type-safe between stream types, extensible via `.Custom()`
 - **BREAKING** Replace `FfmpegOutput.CustomArguments string[]` with typed record fields — escape hatch moves to `.CustomArg()` on builders
 - Add value objects: `Bitrate` (Kbps/Mbps), `Framerate` (Fps/Rational), `Quality` (Crf | Bitrate — disjoint), `Preset`, `VideoProfile`, `Tune`, `PixelFormat`, `ContainerFormat`
@@ -20,7 +20,7 @@ FFmpeg.Rx's current implementation is a string accumulator disguised as a fluent
 ## Capabilities
 
 ### New Capabilities
-- `typed-pipeline-model`: Immutable record model for the full FFmpeg pipeline — `PipelineSpec`, `InputSpec`, `OutputSpec`, `StreamSpec`, `CodecSpec`, `EncodingOptions`, `TimeRange`, `MetadataSpec`, `FilterSpec`. Records are the testable truth.
+- `typed-pipeline-model`: Immutable record model for the full FFmpeg pipeline — `PipelineConfig`, `InputConfig`, `OutputConfig`, `StreamConfig`, `CodecConfig`, `EncodingOptions`, `TimeRange`, `MetadataConfig`, `FilterConfig`. Records are the testable truth.
 - `value-objects`: Domain value types — `VideoCodec`, `AudioCodec`, `SubtitleCodec`, `Bitrate`, `Framerate`, `Quality`, `Preset`, `VideoProfile`, `Tune`, `PixelFormat`, `ContainerFormat`, `HWAccel`. All `readonly record struct` with static factories and `.Custom()` escape hatches.
 - `scoped-builders`: Fluent builder API where each context has its own type — `OutputBuilder`, `StreamBuilder`, `VideoEncodingBuilder`, `AudioEncodingBuilder`, `TimeRangeBuilder`, `MetadataBuilder`. Compile-time enforcement: no CRF on Copy, no Preset on audio, no Bitrate+CRF simultaneously.
 - `argument-serializer`: Renamed `ArgumentBuilder` → `ArgumentSerializer`. Pure function: typed records in, string[] out. Single place that knows FFmpeg CLI syntax. Independently testable from domain model.

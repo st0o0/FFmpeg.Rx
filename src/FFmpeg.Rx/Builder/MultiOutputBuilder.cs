@@ -4,12 +4,12 @@ namespace FFmpeg.Rx.Builder;
 
 public sealed class MultiOutputBuilder
 {
-    private readonly List<InputSpec> _inputs;
+    private readonly List<InputConfig> _inputs;
     private readonly List<string> _globalOptions;
     private readonly string? _binaryPath;
-    private readonly List<OutputSpec> _outputs = [];
+    private readonly List<OutputConfig> _outputs = [];
 
-    internal MultiOutputBuilder(List<InputSpec> inputs, List<string> globalOptions, string? binaryPath)
+    internal MultiOutputBuilder(List<InputConfig> inputs, List<string> globalOptions, string? binaryPath)
     {
         _inputs = inputs;
         _globalOptions = globalOptions;
@@ -26,7 +26,7 @@ public sealed class MultiOutputBuilder
 
     public IFfmpegSession Build()
     {
-        var spec = new PipelineSpec(
+        var spec = new PipelineConfig(
             [.. _inputs],
             [.. _outputs],
             _globalOptions.Count > 0 ? [.. _globalOptions] : null,

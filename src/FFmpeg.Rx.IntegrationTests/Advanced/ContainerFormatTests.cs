@@ -11,13 +11,13 @@ public sealed class ContainerFormatTests : FfmpegTestBase
     {
         var output = OutputPath("out.mkv");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4"))],
+            [new OutputConfig(
                 new FileDestination(output),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio, new StreamCopy())
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy())
                 ],
                 Container: ContainerFormat.Mkv)]));
 
@@ -35,13 +35,13 @@ public sealed class ContainerFormatTests : FfmpegTestBase
     {
         var output = OutputPath("out.ts");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4"))],
+            [new OutputConfig(
                 new FileDestination(output),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio, new StreamCopy())
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy())
                 ],
                 Container: ContainerFormat.Ts)]));
 

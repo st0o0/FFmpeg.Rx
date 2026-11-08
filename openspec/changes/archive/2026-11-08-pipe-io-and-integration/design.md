@@ -6,7 +6,7 @@ ffmpeg has three standard streams. Pipe I/O and progress reporting compete for t
 
 ### D1: Four execution modes
 
-FfmpegSession detects the mode from PipelineSpec:
+FfmpegSession detects the mode from PipelineConfig:
 
 | Mode | stdin | stdout | stderr | Progress via |
 |------|-------|--------|--------|-------------|
@@ -19,7 +19,7 @@ FfmpegSession detects the mode from PipelineSpec:
 
 When stdout is used for pipe output, `ArgumentSerializer` emits `-progress pipe:2` instead of `-progress pipe:1`. The progress parser reads from stderr events instead.
 
-The `WithProgressReporting()` flag sets a boolean on PipelineSpec. The serializer checks if any output has `PipeDestination` to decide which pipe to use.
+The `WithProgressReporting()` flag sets a boolean on PipelineConfig. The serializer checks if any output has `PipeDestination` to decide which pipe to use.
 
 Implementation: In `ArgumentSerializer.Serialize`, when emitting global options, detect `-progress pipe:1` and rewrite to `-progress pipe:2` if any output destination is `PipeDestination`.
 

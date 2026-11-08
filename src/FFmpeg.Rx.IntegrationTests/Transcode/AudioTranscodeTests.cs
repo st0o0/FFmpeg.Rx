@@ -11,13 +11,13 @@ public sealed class AudioTranscodeTests : FfmpegTestBase
     {
         var output = OutputPath("out.mp4");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4"))],
+            [new OutputConfig(
                 new FileDestination(output),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio,
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio,
                         new AudioEncode(AudioCodec.Aac, new AudioEncodingOptions(Bitrate: Bitrate.Kbps(64))))
                 ])]));
 
@@ -33,12 +33,12 @@ public sealed class AudioTranscodeTests : FfmpegTestBase
     {
         var output = OutputPath("out.m4a");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("audio_only_3s.m4a"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("audio_only_3s.m4a"))],
+            [new OutputConfig(
                 new FileDestination(output),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Audio,
+                    new StreamConfig(0, 0, StreamType.Audio,
                         new AudioEncode(AudioCodec.Aac, new AudioEncodingOptions(Bitrate: Bitrate.Kbps(32))))
                 ])]));
 

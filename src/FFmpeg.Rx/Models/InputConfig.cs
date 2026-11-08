@@ -2,18 +2,18 @@ using FFmpeg.Rx.Codecs;
 
 namespace FFmpeg.Rx.Models;
 
-public abstract record InputSpec
+public abstract record InputConfig
 {
-    public InputOptionSpec? Options { get; init; }
+    public InputOptionConfig? Options { get; init; }
 }
 
-public sealed record FileInputSpec(string Path) : InputSpec;
+public sealed record FileInputConfig(string Path) : InputConfig;
 
-public sealed record UrlInputSpec(Uri Url) : InputSpec;
+public sealed record UrlInputConfig(Uri Url) : InputConfig;
 
-public sealed record PipeInputSpec(Stream Source, string Format) : InputSpec;
+public sealed record PipeInputConfig(Stream Source, string Format) : InputConfig;
 
-public sealed record InputOptionSpec(
+public sealed record InputOptionConfig(
     TimeSpan? Seek = null,
     HWAccel? HWAccel = null,
     string? HWAccelDevice = null,

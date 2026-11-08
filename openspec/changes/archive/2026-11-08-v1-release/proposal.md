@@ -1,6 +1,6 @@
 ## Why
 
-FFmpeg.Rx has a clean typed architecture (CliWrap, PipelineSpec, scoped builders, R3 events) but is not release-ready. Missing: NuGet packaging infrastructure, common use cases (snapshot, concat), builder test coverage (0% on most builders), pipe I/O tests, and consumer documentation.
+FFmpeg.Rx has a clean typed architecture (CliWrap, PipelineConfig, scoped builders, R3 events) but is not release-ready. Missing: NuGet packaging infrastructure, common use cases (snapshot, concat), builder test coverage (0% on most builders), pipe I/O tests, and consumer documentation.
 
 ## What Changes
 
@@ -37,7 +37,7 @@ Unit test coverage for every public type:
 - `StreamBuilder` (43%) — test AudioEncode, SubtitleEncode, Metadata, Disposition
 
 **Untested features:**
-- `PipeInputSpec` / `PipeDestination` (0%) — pipe I/O via CliWrap
+- `PipeInputConfig` / `PipeDestination` (0%) — pipe I/O via CliWrap
 - `PercentageProgressEvent` (0%) — percentage calculation
 - `FfprobeException` (0%) — error path
 - `CropExprFilter`, `VolumeExprFilter` (0%) — expression-based filters
@@ -54,5 +54,5 @@ Unit test coverage for every public type:
 
 - C#14 `extension()` blocks for R3 composability
 - `.WithProgressReporting()` auto-wires `-progress pipe:1`
-- Clean up old TeeBuilder/TeeTargetOptions (align with OutputSpec.Tee pattern)
+- Clean up old TeeBuilder/TeeTargetOptions (align with OutputConfig.Tee pattern)
 - XML docs on public API for IntelliSense

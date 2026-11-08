@@ -104,7 +104,7 @@ Tests SHALL verify output to different containers.
 Tests SHALL verify metadata operations on real files.
 
 #### Scenario: Strip metadata
-- **WHEN** a session strips metadata with MetadataSpec(StripAll: true)
+- **WHEN** a session strips metadata with MetadataConfig(StripAll: true)
 - **THEN** the output file has no global metadata entries
 
 ### Requirement: Tee muxer integration test

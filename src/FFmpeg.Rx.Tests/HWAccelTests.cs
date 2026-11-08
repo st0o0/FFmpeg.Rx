@@ -6,11 +6,11 @@ namespace FFmpeg.Rx.Tests;
 
 public sealed class HWAccelTests
 {
-    private static string SerializeWithInput(InputOptionSpec opts)
+    private static string SerializeWithInput(InputOptionConfig opts)
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4") { Options = opts }],
-            [new OutputSpec(new FileDestination("out.mp4"))]);
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4") { Options = opts }],
+            [new OutputConfig(new FileDestination("out.mp4"))]);
         return ArgumentSerializer.Serialize(spec);
     }
 
@@ -29,7 +29,7 @@ public sealed class HWAccelTests
     [Fact]
     public void HWAccel_cuda()
     {
-        var args = SerializeWithInput(new InputOptionSpec(HWAccel: HWAccel.Cuda));
+        var args = SerializeWithInput(new InputOptionConfig(HWAccel: HWAccel.Cuda));
         var hwIdx = args.IndexOf("-hwaccel cuda", StringComparison.Ordinal);
         var iIdx = args.IndexOf("-i ", StringComparison.Ordinal);
         Assert.True(hwIdx >= 0 && hwIdx < iIdx);
@@ -38,7 +38,7 @@ public sealed class HWAccelTests
     [Fact]
     public void HWAccel_with_device()
     {
-        var args = SerializeWithInput(new InputOptionSpec(HWAccel: HWAccel.Cuda, HWAccelDevice: "0"));
+        var args = SerializeWithInput(new InputOptionConfig(HWAccel: HWAccel.Cuda, HWAccelDevice: "0"));
         Assert.Contains("-hwaccel cuda", args);
         Assert.Contains("-hwaccel_device 0", args);
     }
@@ -46,14 +46,14 @@ public sealed class HWAccelTests
     [Fact]
     public void HWAccel_output_format()
     {
-        var args = SerializeWithInput(new InputOptionSpec(HWAccelOutputFormat: "cuda"));
+        var args = SerializeWithInput(new InputOptionConfig(HWAccelOutputFormat: "cuda"));
         Assert.Contains("-hwaccel_output_format cuda", args);
     }
 
     [Fact]
     public void Video_decoder()
     {
-        var args = SerializeWithInput(new InputOptionSpec(VideoDecoder: VideoCodec.H264Cuvid));
+        var args = SerializeWithInput(new InputOptionConfig(VideoDecoder: VideoCodec.H264Cuvid));
         Assert.Contains("-c:v h264_cuvid", args);
         var cvIdx = args.IndexOf("-c:v h264_cuvid", StringComparison.Ordinal);
         var iIdx = args.IndexOf("-i ", StringComparison.Ordinal);

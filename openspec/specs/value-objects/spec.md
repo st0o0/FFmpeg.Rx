@@ -51,7 +51,7 @@ The system SHALL define `Framerate` as a `readonly record struct` with `Numerato
 - **THEN** it equals `Framerate.Rational(30000, 1001)`
 
 ### Requirement: Quality as disjoint sum type
-The system SHALL define `QualitySpec` as an abstract record with `ConstantQuality(int Crf)` and `ConstantBitrate(Bitrate Rate)` subtypes. A `Quality` static class SHALL provide `Crf(int)` and `Bitrate(Bitrate)` factories.
+The system SHALL define `QualityConfig` as an abstract record with `ConstantQuality(int Crf)` and `ConstantBitrate(Bitrate Rate)` subtypes. A `Quality` static class SHALL provide `Crf(int)` and `Bitrate(Bitrate)` factories.
 
 #### Scenario: CRF quality
 - **WHEN** user calls `Quality.Crf(23)`
@@ -62,7 +62,7 @@ The system SHALL define `QualitySpec` as an abstract record with `ConstantQualit
 - **THEN** it returns a `ConstantBitrate` with Rate.BitsPerSecond=4000000
 
 #### Scenario: Cannot set both
-- **WHEN** the builder exposes `.Quality(QualitySpec)`
+- **WHEN** the builder exposes `.Quality(QualityConfig)`
 - **THEN** calling it twice overwrites — there is no way to have both CRF and Bitrate simultaneously
 
 ### Requirement: Preset as readonly record struct

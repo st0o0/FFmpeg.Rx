@@ -11,11 +11,11 @@ public sealed class HWAccelIntegrationTests : FfmpegTestBase
     {
         var output = OutputPath("hevc.mp4");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4"))],
+            [new OutputConfig(
                 new FileDestination(output),
-                Streams: [new StreamSpec(0, 0, StreamType.Video,
+                Streams: [new StreamConfig(0, 0, StreamType.Video,
                     new VideoEncode(VideoCodec.Hevc, new VideoEncodingOptions()))])]));
 
         var result = await session.RunAsync(TestContext.Current.CancellationToken);
@@ -33,11 +33,11 @@ public sealed class HWAccelIntegrationTests : FfmpegTestBase
 
         var output = OutputPath("hw.mp4");
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4"))],
+            [new OutputConfig(
                 new FileDestination(output),
-                Streams: [new StreamSpec(0, 0, StreamType.Video,
+                Streams: [new StreamConfig(0, 0, StreamType.Video,
                     new VideoEncode(VideoCodec.H264Nvenc, new VideoEncodingOptions()))])]));
 
         var result = await session.RunAsync(TestContext.Current.CancellationToken);

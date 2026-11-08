@@ -5,14 +5,14 @@ namespace FFmpeg.Rx.Builder;
 
 public sealed class VideoEncodingBuilder
 {
-    private QualitySpec? _quality;
+    private QualityConfig? _quality;
     private Preset? _preset;
     private VideoProfile? _profile;
     private Tune? _tune;
     private PixelFormat? _pixelFormat;
     private Framerate? _framerate;
 
-    public VideoEncodingBuilder Quality(QualitySpec quality)
+    public VideoEncodingBuilder Quality(QualityConfig quality)
     {
         _quality = quality;
         return this;

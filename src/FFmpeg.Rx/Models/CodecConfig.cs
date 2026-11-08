@@ -2,18 +2,18 @@ using FFmpeg.Rx.Codecs;
 
 namespace FFmpeg.Rx.Models;
 
-public abstract record CodecSpec;
+public abstract record CodecConfig;
 
-public sealed record StreamCopy : CodecSpec;
+public sealed record StreamCopy : CodecConfig;
 
-public sealed record VideoEncode(VideoCodec Codec, VideoEncodingOptions Options) : CodecSpec;
+public sealed record VideoEncode(VideoCodec Codec, VideoEncodingOptions Options) : CodecConfig;
 
-public sealed record AudioEncode(AudioCodec Codec, AudioEncodingOptions Options) : CodecSpec;
+public sealed record AudioEncode(AudioCodec Codec, AudioEncodingOptions Options) : CodecConfig;
 
-public sealed record SubtitleEncode(SubtitleCodec Codec) : CodecSpec;
+public sealed record SubtitleEncode(SubtitleCodec Codec) : CodecConfig;
 
 public sealed record VideoEncodingOptions(
-    QualitySpec? Quality = null,
+    QualityConfig? Quality = null,
     Preset? Preset = null,
     VideoProfile? Profile = null,
     Tune? Tune = null,

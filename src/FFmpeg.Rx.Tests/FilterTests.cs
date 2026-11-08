@@ -67,11 +67,11 @@ public sealed class FilterTests
     [Fact]
     public void Video_filter_chain_serialization()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("in.mp4")],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig("in.mp4")],
+            [new OutputConfig(
                 new FileDestination("out.mp4"),
-                Filters: new SimpleFilterSpec(
+                Filters: new SimpleFilterConfig(
                     VideoFilters: [new ScaleFilter(1920, 1080), new HFlipFilter()]))]);
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-vf \"scale=1920:1080,hflip\"", args);
@@ -80,11 +80,11 @@ public sealed class FilterTests
     [Fact]
     public void Audio_filter_chain_serialization()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("in.mp4")],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig("in.mp4")],
+            [new OutputConfig(
                 new FileDestination("out.mp4"),
-                Filters: new SimpleFilterSpec(
+                Filters: new SimpleFilterConfig(
                     AudioFilters: [new LoudNormFilter(), new VolumeFilter(0.9)]))]);
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-af \"loudnorm,volume=0.9\"", args);
@@ -93,11 +93,11 @@ public sealed class FilterTests
     [Fact]
     public void Single_video_filter()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("in.mp4")],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig("in.mp4")],
+            [new OutputConfig(
                 new FileDestination("out.mp4"),
-                Filters: new SimpleFilterSpec(
+                Filters: new SimpleFilterConfig(
                     VideoFilters: [new ScaleFilter(1920, 1080)]))]);
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-vf \"scale=1920:1080\"", args);
@@ -106,9 +106,9 @@ public sealed class FilterTests
     [Fact]
     public void Label_mapping()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("in.mp4")],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig("in.mp4")],
+            [new OutputConfig(
                 new FileDestination("out.mp4"),
                 LabelMappings: ["out"])]);
         var args = ArgumentSerializer.Serialize(spec);

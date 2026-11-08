@@ -6,13 +6,13 @@
 
 ## 2. Rewrite FfmpegSession on CliWrap
 
-- [x] 2.1 Remove `FfmpegSession(FfmpegPipeline)` constructor — keep only `PipelineSpec` path
-- [x] 2.2 Remove dummy FfmpegPipeline creation hack in PipelineSpec constructor
+- [x] 2.1 Remove `FfmpegSession(FfmpegPipeline)` constructor — keep only `PipelineConfig` path
+- [x] 2.2 Remove dummy FfmpegPipeline creation hack in PipelineConfig constructor
 - [x] 2.3 Implement `RunAsync` using `Cli.Wrap().ListenAsync()` — stdout to ProgressParser, stderr to LogEvent/ErrorClassifier
 - [x] 2.4 Implement graceful cancellation: write `q` to stdin pipe when no pipe input, CliWrap graceful token as fallback
-- [x] 2.5 Implement pipe input: if PipeInputSpec has Stream, use `PipeSource.FromStream` + `-i pipe:0`
+- [x] 2.5 Implement pipe input: if PipeInputConfig has Stream, use `PipeSource.FromStream` + `-i pipe:0`
 - [x] 2.6 Implement pipe output: if PipeDestination has Stream, use `PipeTarget.ToStream` + `pipe:1`
-- [x] 2.7 Remove `FfmpegSession.Create(FfmpegPipeline)` — only `Create(PipelineSpec)` remains
+- [x] 2.7 Remove `FfmpegSession.Create(FfmpegPipeline)` — only `Create(PipelineConfig)` remains
 
 ## 3. Rewrite ProbeRunner on CliWrap
 
@@ -34,21 +34,21 @@
 
 ## 5. Rewire PipelineBuilder
 
-- [x] 5.1 Rewrite `PipelineBuilder` to collect `InputSpec` and produce `PipelineSpec` via `OutputBuilder`
-- [x] 5.2 Rewrite `Ffmpeg` static entry to create `FileInputSpec`/`UrlInputSpec`
+- [x] 5.1 Rewrite `PipelineBuilder` to collect `InputConfig` and produce `PipelineConfig` via `OutputBuilder`
+- [x] 5.2 Rewrite `Ffmpeg` static entry to create `FileInputConfig`/`UrlInputConfig`
 - [x] 5.3 Add `Ffmpeg.Input(Stream, string format)` overload for pipe input
-- [x] 5.4 Rewrite `PipelineBuilder.Output()` to use `OutputBuilder` → `OutputSpec` → `PipelineSpec` → `FfmpegSession.Create`
+- [x] 5.4 Rewrite `PipelineBuilder.Output()` to use `OutputBuilder` → `OutputConfig` → `PipelineConfig` → `FfmpegSession.Create`
 - [x] 5.5 Rewrite `PipelineBuilder.OutputPipe()` for pipe output via `PipeDestination`
 - [x] 5.6 Rewrite `PipelineBuilder.OutputNull()` using `NullDestination`
-- [x] 5.7 Rewrite `MultiOutputBuilder` to collect `OutputSpec` and produce `PipelineSpec`
-- [x] 5.8 Rewrite `PipelineBuilder.OutputTee()` using `OutputSpec.Tee`
+- [x] 5.7 Rewrite `MultiOutputBuilder` to collect `OutputConfig` and produce `PipelineConfig`
+- [x] 5.8 Rewrite `PipelineBuilder.OutputTee()` using `OutputConfig.Tee`
 - [x] 5.9 Delete `TeeBuilder` if TeeOutput can be built directly, or keep and adapt
 
 ## 6. Update tests
 
 - [x] 6.1 Delete old-model test references in `ArgumentBuilderTests` (or delete the file if all tests are in `ArgumentSerializerTests`)
-- [x] 6.2 Update `FfmpegSessionIntegrationTests` to use only `PipelineSpec` path
-- [x] 6.3 Update `PipelineBuilderTests` to test new builder → PipelineSpec flow
+- [x] 6.2 Update `FfmpegSessionIntegrationTests` to use only `PipelineConfig` path
+- [x] 6.3 Update `PipelineBuilderTests` to test new builder → PipelineConfig flow
 - [x] 6.4 Fix any remaining references to deleted types across all test files
 - [x] 6.5 Verify all 186 unit tests pass
 - [x] 6.6 Verify all 21 integration tests pass

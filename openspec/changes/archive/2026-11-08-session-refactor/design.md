@@ -10,7 +10,7 @@ FfmpegSession.RunAsync is 100+ lines with two execution paths, duplicated try/ca
 private enum ExecutionMode { EventStream, PipeOutput }
 ```
 
-Determined once in RunAsync from the PipelineSpec. The single `ExecuteAsync` method uses this to wire CliWrap differently:
+Determined once in RunAsync from the PipelineConfig. The single `ExecuteAsync` method uses this to wire CliWrap differently:
 - `EventStream`: ListenAsync, stdout for progress, stderr for logs
 - `PipeOutput`: ExecuteAsync with PipeTarget, stderr for both progress and logs
 

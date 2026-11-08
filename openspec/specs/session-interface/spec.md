@@ -11,7 +11,7 @@ The system SHALL define `IFfmpegSession` as a public interface extending `IAsync
 - **THEN** they can mock it for testing without requiring an ffmpeg binary
 
 ### Requirement: FfmpegSession implements IFfmpegSession
-`FfmpegSession` SHALL implement `IFfmpegSession`. Its constructor SHALL remain internal. Creation SHALL happen via `PipelineBuilder.Output()` or `FfmpegSession.Create(PipelineSpec)`.
+`FfmpegSession` SHALL implement `IFfmpegSession`. Its constructor SHALL remain internal. Creation SHALL happen via `PipelineBuilder.Output()` or `FfmpegSession.Create(PipelineConfig)`.
 
 #### Scenario: Session creation
 - **WHEN** user calls `Ffmpeg.Input(...).Output(...)`
@@ -25,7 +25,7 @@ The system SHALL define `IFfmpegSession` as a public interface extending `IAsync
 - **THEN** the compile-time return type is `IFfmpegSession`
 
 ### Requirement: Single execution path
-FfmpegSession SHALL have one internal execution method, not two. The execution mode (EventStream vs PipeOutput) SHALL be determined from PipelineSpec and passed as configuration.
+FfmpegSession SHALL have one internal execution method, not two. The execution mode (EventStream vs PipeOutput) SHALL be determined from PipelineConfig and passed as configuration.
 
 #### Scenario: File-to-file uses EventStream mode
 - **WHEN** all outputs use FileDestination

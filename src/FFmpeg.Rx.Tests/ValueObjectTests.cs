@@ -95,7 +95,7 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void QualitySpec_Crf_factory()
+    public void QualityConfig_Crf_factory()
     {
         var quality = Quality.Crf(23);
         var cq = Assert.IsType<ConstantQuality>(quality);
@@ -103,7 +103,7 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void QualitySpec_Bitrate_factory()
+    public void QualityConfig_Bitrate_factory()
     {
         var quality = Quality.Bitrate(Bitrate.Mbps(4));
         var cb = Assert.IsType<ConstantBitrate>(quality);

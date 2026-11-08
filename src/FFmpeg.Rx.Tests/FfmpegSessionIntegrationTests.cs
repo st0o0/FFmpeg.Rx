@@ -37,11 +37,11 @@ public sealed class FfmpegSessionIntegrationTests
 
         var events = new List<FfmpegEvent>();
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new UrlInputSpec(new Uri("https://example.com/nonexistent.mp4"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new UrlInputConfig(new Uri("https://example.com/nonexistent.mp4"))],
+            [new OutputConfig(
                 new FileDestination("out.mkv"),
-                Streams: [new StreamSpec(0, 0, StreamType.Video, new StreamCopy())])]));
+                Streams: [new StreamConfig(0, 0, StreamType.Video, new StreamCopy())])]));
 
         session.Events.Subscribe(events.Add);
 
@@ -61,9 +61,9 @@ public sealed class FfmpegSessionIntegrationTests
             Assert.Skip("ffmpeg not found on PATH");
         }
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new UrlInputSpec(new Uri("https://example.com/v.mp4"))],
-            [new OutputSpec(new FileDestination("out.mkv"))]));
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new UrlInputConfig(new Uri("https://example.com/v.mp4"))],
+            [new OutputConfig(new FileDestination("out.mkv"))]));
 
         _ = await session.RunAsync(TestContext.Current.CancellationToken);
 
@@ -74,9 +74,9 @@ public sealed class FfmpegSessionIntegrationTests
     [Fact]
     public async Task Missing_binary_produces_failed_result()
     {
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new UrlInputSpec(new Uri("https://example.com/v.mp4"))],
-            [new OutputSpec(new FileDestination("out.mkv"))],
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new UrlInputConfig(new Uri("https://example.com/v.mp4"))],
+            [new OutputConfig(new FileDestination("out.mkv"))],
             BinaryPath: "nonexistent-ffmpeg-binary-12345"));
 
         var result = await session.RunAsync(TestContext.Current.CancellationToken);
@@ -88,9 +88,9 @@ public sealed class FfmpegSessionIntegrationTests
     [Fact]
     public void IFfmpegSession_is_implemented_by_FfmpegSession()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("input.mp4")],
-            [new OutputSpec(new FileDestination("out.mp4"))]);
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"))]);
 
         var session = FfmpegSession.Create(spec);
         Assert.IsAssignableFrom<IFfmpegSession>(session);

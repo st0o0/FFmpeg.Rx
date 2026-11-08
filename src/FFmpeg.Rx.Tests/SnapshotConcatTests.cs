@@ -8,9 +8,9 @@ public sealed class SnapshotConcatTests
     [Fact]
     public void Snapshot_serializes_seek_and_frames()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("video.mp4") { Options = new InputOptionSpec(Seek: TimeSpan.FromSeconds(5)) }],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig("video.mp4") { Options = new InputOptionConfig(Seek: TimeSpan.FromSeconds(5)) }],
+            [new OutputConfig(
                 new FileDestination("thumb.jpg"),
                 CustomArgs: ["-frames:v 1", "-update 1"])]);
 
@@ -24,9 +24,9 @@ public sealed class SnapshotConcatTests
     [Fact]
     public void Concat_serializes_concat_demuxer()
     {
-        var spec = new PipelineSpec(
-            [new FileInputSpec("list.txt") { Options = new InputOptionSpec(CustomArgs: ["-f concat", "-safe 0"]) }],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig("list.txt") { Options = new InputOptionConfig(CustomArgs: ["-f concat", "-safe 0"]) }],
+            [new OutputConfig(
                 new FileDestination("output.mp4"),
                 CustomArgs: ["-c copy"])]);
 

@@ -15,7 +15,7 @@ The `Ffmpeg.Input() → .Output() → session` fluent path SHALL be tested for a
 
 #### Scenario: PipelineBuilder all output methods
 - **WHEN** each output method is called
-- **THEN** an IFfmpegSession is returned (and underlying PipelineSpec is correct)
+- **THEN** an IFfmpegSession is returned (and underlying PipelineConfig is correct)
 
 ### Requirement: Pipe I/O tests
 Pipe input (Stream → ffmpeg) and pipe output (ffmpeg → Stream) SHALL be tested in integration tests.

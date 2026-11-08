@@ -94,11 +94,11 @@ public sealed class FilterGraphTests
             .Chain("base", f => f.Scale(1920, 1080), "out")
             .Build();
 
-        var spec = new PipelineSpec(
-            [new FileInputSpec("in.mp4")],
-            [new OutputSpec(
+        var spec = new PipelineConfig(
+            [new FileInputConfig("in.mp4")],
+            [new OutputConfig(
                 new FileDestination("out.mp4"),
-                Filters: new ComplexFilterSpec(graph),
+                Filters: new ComplexFilterConfig(graph),
                 LabelMappings: ["out"])]);
 
         var args = ArgumentSerializer.Serialize(spec);

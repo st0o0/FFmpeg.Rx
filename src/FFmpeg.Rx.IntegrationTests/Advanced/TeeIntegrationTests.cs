@@ -14,13 +14,13 @@ public sealed class TeeIntegrationTests : FfmpegTestBase
         var teeOut1 = out1.Replace('\\', '/');
         var teeOut2 = out2.Replace('\\', '/');
 
-        await using var session = FfmpegSession.Create(new PipelineSpec(
-            [new FileInputSpec(TestAsset("video_h264_aac_5s.mp4"))],
-            [new OutputSpec(
+        await using var session = FfmpegSession.Create(new PipelineConfig(
+            [new FileInputConfig(TestAsset("video_h264_aac_5s.mp4"))],
+            [new OutputConfig(
                 new FileDestination(""),
                 Streams: [
-                    new StreamSpec(0, 0, StreamType.Video, new StreamCopy()),
-                    new StreamSpec(0, 0, StreamType.Audio, new StreamCopy())
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy())
                 ],
                 Tee: new TeeOutput([
                     new TeeTarget(teeOut1, Format: "mp4"),
