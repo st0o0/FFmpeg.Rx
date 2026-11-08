@@ -9,7 +9,7 @@ public sealed class VideoEncodingBuilder
     private Preset? _preset;
     private VideoProfile? _profile;
     private Tune? _tune;
-    private Codecs.PixelFormat? _pixelFormat;
+    private PixelFormat? _pixelFormat;
     private Framerate? _framerate;
 
     public VideoEncodingBuilder Quality(QualitySpec quality)
@@ -36,7 +36,7 @@ public sealed class VideoEncodingBuilder
         return this;
     }
 
-    public VideoEncodingBuilder PixelFormat(Codecs.PixelFormat format)
+    public VideoEncodingBuilder PixelFormat(PixelFormat format)
     {
         _pixelFormat = format;
         return this;
@@ -48,5 +48,8 @@ public sealed class VideoEncodingBuilder
         return this;
     }
 
-    internal VideoEncodingOptions Build() => new(_quality, _preset, _profile, _tune, _pixelFormat, _framerate);
+    internal VideoEncodingOptions Build()
+    {
+        return new VideoEncodingOptions(_quality, _preset, _profile, _tune, _pixelFormat, _framerate);
+    }
 }

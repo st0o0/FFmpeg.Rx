@@ -51,7 +51,7 @@ public sealed class FilterGraphBuilder
         var input = _inputs.Find(i => i.Label == label);
         if (input is not null)
         {
-            return $"{input.InputIndex}:{ArgumentBuilder.StreamTypeChar(input.Type)}";
+            return $"{input.InputIndex}:{ArgumentSerializer.StreamTypeChar(input.Type)}";
         }
         return label;
     }

@@ -11,7 +11,7 @@ public sealed class OutputBuilder
     private ContainerFormat? _container;
     private FilterSpec? _filters;
     private MetadataSpec? _metadata;
-    private Models.TimeRange? _timeRange;
+    private TimeRange? _timeRange;
     private bool _overwrite = true;
     private bool _fastStart;
     private List<string>? _movFlags;
@@ -118,17 +118,20 @@ public sealed class OutputBuilder
         return this;
     }
 
-    internal OutputSpec Build() => new(
-        _destination,
-        _streams,
-        _container,
-        _filters,
-        _metadata,
-        _timeRange,
-        _overwrite,
-        _fastStart,
-        _movFlags,
-        _labelMappings,
-        null,
-        _customArgs);
+    internal OutputSpec Build()
+    {
+        return new OutputSpec(
+            _destination,
+            _streams,
+            _container,
+            _filters,
+            _metadata,
+            _timeRange,
+            _overwrite,
+            _fastStart,
+            _movFlags,
+            _labelMappings,
+            null,
+            _customArgs);
+    }
 }

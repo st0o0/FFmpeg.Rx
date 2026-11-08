@@ -13,15 +13,29 @@ public readonly record struct Framerate
         Denominator = denominator;
     }
 
-    public static Framerate Fps(int fps) => new(fps, 1);
-    public static Framerate Fps(double fps) => new((int)(fps * 1000), 1000);
-    public static Framerate Rational(int numerator, int denominator) => new(numerator, denominator);
+    public static Framerate Fps(int fps)
+    {
+        return new Framerate(fps, 1);
+    }
+
+    public static Framerate Fps(double fps)
+    {
+        return new Framerate((int)(fps * 1000), 1000);
+    }
+
+    public static Framerate Rational(int numerator, int denominator)
+    {
+        return new Framerate(numerator, denominator);
+    }
 
     public static Framerate Ntsc24 => new(24000, 1001);
     public static Framerate Ntsc30 => new(30000, 1001);
     public static Framerate Ntsc60 => new(60000, 1001);
 
-    public double ToDouble() => (double)Numerator / Denominator;
+    public double ToDouble()
+    {
+        return (double)Numerator / Denominator;
+    }
 
     internal string ToFfmpegString()
     {
@@ -32,5 +46,8 @@ public readonly record struct Framerate
         return string.Create(CultureInfo.InvariantCulture, $"{Numerator}/{Denominator}");
     }
 
-    public override string ToString() => ToFfmpegString();
+    public override string ToString()
+    {
+        return ToFfmpegString();
+    }
 }

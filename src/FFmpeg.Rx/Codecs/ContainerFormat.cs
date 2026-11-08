@@ -19,7 +19,13 @@ public readonly record struct ContainerFormat
     public static ContainerFormat Flac => new("flac");
     public static ContainerFormat Null => new("null");
 
-    public static ContainerFormat Custom(string name) => new(name);
+    public static ContainerFormat Custom(string name)
+    {
+        return new ContainerFormat(name);
+    }
 
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

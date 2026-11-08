@@ -22,7 +22,13 @@ public readonly record struct VideoCodec
     public static VideoCodec H264Cuvid => new("h264_cuvid");
     public static VideoCodec Copy => new("copy");
 
-    public static VideoCodec Custom(string name) => new(name);
+    public static VideoCodec Custom(string name)
+    {
+        return new VideoCodec(name);
+    }
 
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

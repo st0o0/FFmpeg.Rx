@@ -1,4 +1,3 @@
-using FFmpeg.Rx.IO;
 using FFmpeg.Rx.Models;
 
 namespace FFmpeg.Rx.Builder;
@@ -6,7 +5,7 @@ namespace FFmpeg.Rx.Builder;
 public sealed class PipelineBuilder
 {
     private readonly string? _binaryPath;
-    private readonly List<FfmpegInput> _inputs = [];
+    private readonly List<InputSpec> _inputs = [];
     private readonly List<string> _globalOptions = [];
 
     internal PipelineBuilder(string? binaryPath)
@@ -14,34 +13,27 @@ public sealed class PipelineBuilder
         _binaryPath = binaryPath;
     }
 
-    internal PipelineBuilder AddInput(FfmpegInput input)
+    internal PipelineBuilder AddInput(InputSpec input)
     {
         _inputs.Add(input);
         return this;
     }
 
-    public PipelineBuilder Input(Uri url, Action<InputOptions>? configure = null)
+    public PipelineBuilder Input(Uri url)
     {
-        var options = new InputOptions();
-        configure?.Invoke(options);
-        _inputs.Add(new UrlInput(url, options.UserAgentValue, options.ProxyValue, options.Arguments));
+        _inputs.Add(new UrlInputSpec(url));
         return this;
     }
 
-    public PipelineBuilder Input(string filePath, Action<InputOptions>? configure = null)
+    public PipelineBuilder Input(string filePath)
     {
-        var options = new InputOptions();
-        configure?.Invoke(options);
-        _inputs.Add(new FileInput(filePath, options.Arguments));
+        _inputs.Add(new FileInputSpec(filePath));
         return this;
     }
 
-    public PipelineBuilder Input(IPipeSource source, Action<InputOptions>? configure = null)
+    public PipelineBuilder Input(Stream source, string format)
     {
-        var options = new InputOptions();
-        configure?.Invoke(options);
-        var pipeName = $"ffmpeg_rx_{Guid.NewGuid():N}";
-        _inputs.Add(new PipeInput(source, pipeName, options.Arguments));
+        _inputs.Add(new PipeInputSpec(source, format));
         return this;
     }
 
@@ -51,30 +43,37 @@ public sealed class PipelineBuilder
         return this;
     }
 
-    public IFfmpegSession Output(string path, Action<OutputOptions> configure)
+    public IFfmpegSession Output(string path, Action<OutputBuilder> configure)
     {
-        var options = new OutputOptions();
-        configure(options);
-        var output = new FfmpegOutput(
-            path, [.. options.Mappings], [.. options.Arguments], options.SuppressOverwrite,
-            options.VideoFilters, options.AudioFilters, options.FilterComplexString,
-            options.LabelMappings.Count > 0 ? [.. options.LabelMappings] : null);
-        var pipeline = new FfmpegPipeline([.. _inputs], output, [.. _globalOptions], _binaryPath);
-        return FfmpegSession.Create(pipeline);
+        var builder = new OutputBuilder(new FileDestination(path));
+        configure(builder);
+        return BuildSession([builder.Build()]);
     }
 
-    public IFfmpegSession OutputPipe(IPipeSink sink, Action<OutputOptions> configure)
+    public IFfmpegSession OutputPipe(Stream destination, Action<OutputBuilder> configure)
     {
-        var options = new OutputOptions();
-        configure(options);
-        var pipeName = $"ffmpeg_rx_{Guid.NewGuid():N}";
-        var pipeOutput = new PipeOutput(sink, pipeName);
-        var output = new FfmpegOutput(
-            GetPipePath(pipeName), [.. options.Mappings], [.. options.Arguments], options.SuppressOverwrite,
-            options.VideoFilters, options.AudioFilters, options.FilterComplexString,
-            options.LabelMappings.Count > 0 ? [.. options.LabelMappings] : null);
-        var pipeline = new FfmpegPipeline([.. _inputs], output, [.. _globalOptions], _binaryPath, pipeOutput);
-        return FfmpegSession.Create(pipeline);
+        var builder = new OutputBuilder(new PipeDestination(destination));
+        configure(builder);
+        return BuildSession([builder.Build()]);
+    }
+
+    public IFfmpegSession OutputNull(Action<OutputBuilder> configure)
+    {
+        var builder = new OutputBuilder(NullDestination.Instance);
+        configure(builder);
+        var output = builder.Build();
+        output = output with { Container = Codecs.ContainerFormat.Null };
+        return BuildSession([output]);
+    }
+
+    public IFfmpegSession OutputTee(Action<OutputBuilder> configureOutput, Action<TeeBuilder> configureTee)
+    {
+        var outputBuilder = new OutputBuilder(new FileDestination(""));
+        configureOutput(outputBuilder);
+        var teeBuilder = new TeeBuilder();
+        configureTee(teeBuilder);
+        var output = outputBuilder.Build() with { Tee = teeBuilder.Build() };
+        return BuildSession([output]);
     }
 
     public MultiOutputBuilder Outputs()
@@ -82,40 +81,13 @@ public sealed class PipelineBuilder
         return new MultiOutputBuilder(_inputs, _globalOptions, _binaryPath);
     }
 
-    public IFfmpegSession OutputTee(Action<OutputOptions> configureOutput, Action<TeeBuilder> configureTee)
+    private IFfmpegSession BuildSession(OutputSpec[] outputs)
     {
-        var options = new OutputOptions();
-        configureOutput(options);
-        var teeBuilder = new TeeBuilder();
-        configureTee(teeBuilder);
-        var output = new FfmpegOutput(
-            "", [.. options.Mappings], [.. options.Arguments], false,
-            options.VideoFilters, options.AudioFilters, options.FilterComplexString,
-            options.LabelMappings.Count > 0 ? [.. options.LabelMappings] : null);
-        var pipeline = new FfmpegPipeline(
-            [.. _inputs], [output], [.. _globalOptions], _binaryPath, null, teeBuilder.Build());
-        return FfmpegSession.Create(pipeline);
-    }
-
-    public IFfmpegSession OutputNull(Action<OutputOptions> configure)
-    {
-        var options = new OutputOptions();
-        configure(options);
-        options.ForceFormat("null");
-        var output = new FfmpegOutput(
-            "-", [.. options.Mappings], [.. options.Arguments], options.SuppressOverwrite,
-            options.VideoFilters, options.AudioFilters, options.FilterComplexString,
-            options.LabelMappings.Count > 0 ? [.. options.LabelMappings] : null);
-        var pipeline = new FfmpegPipeline([.. _inputs], output, [.. _globalOptions], _binaryPath);
-        return FfmpegSession.Create(pipeline);
-    }
-
-    private static string GetPipePath(string pipeName)
-    {
-        if (OperatingSystem.IsWindows())
-        {
-            return $@"\\.\pipe\{pipeName}";
-        }
-        return $"pipe:{pipeName}";
+        var spec = new PipelineSpec(
+            [.. _inputs],
+            outputs,
+            _globalOptions.Count > 0 ? [.. _globalOptions] : null,
+            _binaryPath);
+        return FfmpegSession.Create(spec);
     }
 }

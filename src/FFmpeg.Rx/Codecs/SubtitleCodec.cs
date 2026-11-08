@@ -12,7 +12,13 @@ public readonly record struct SubtitleCodec
     public static SubtitleCodec WebVtt => new("webvtt");
     public static SubtitleCodec Copy => new("copy");
 
-    public static SubtitleCodec Custom(string name) => new(name);
+    public static SubtitleCodec Custom(string name)
+    {
+        return new SubtitleCodec(name);
+    }
 
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

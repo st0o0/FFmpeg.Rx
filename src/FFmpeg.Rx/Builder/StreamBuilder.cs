@@ -60,11 +60,14 @@ public sealed class StreamBuilder
         return this;
     }
 
-    internal StreamSpec Build() => new(
-        _inputIndex,
-        _streamIndex,
-        _type,
-        _codec ?? new StreamCopy(),
-        _metadata,
-        _disposition);
+    internal StreamSpec Build()
+    {
+        return new StreamSpec(
+            _inputIndex,
+            _streamIndex,
+            _type,
+            _codec ?? new StreamCopy(),
+            _metadata,
+            _disposition);
+    }
 }

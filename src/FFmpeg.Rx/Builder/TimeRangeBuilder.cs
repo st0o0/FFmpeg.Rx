@@ -26,5 +26,8 @@ public sealed class TimeRangeBuilder
         return this;
     }
 
-    internal TimeRange Build() => new(_seek, _duration, _stopTime);
+    internal TimeRange Build()
+    {
+        return new TimeRange(_seek, _duration, _stopTime);
+    }
 }

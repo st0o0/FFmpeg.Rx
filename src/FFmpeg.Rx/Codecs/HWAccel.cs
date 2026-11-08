@@ -14,7 +14,13 @@ public readonly record struct HWAccel
     public static HWAccel VideoToolbox => new("videotoolbox");
     public static HWAccel Vaapi => new("vaapi");
 
-    public static HWAccel Custom(string name) => new(name);
+    public static HWAccel Custom(string name)
+    {
+        return new HWAccel(name);
+    }
 
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

@@ -16,7 +16,13 @@ public readonly record struct Preset
     public static Preset Slower => new("slower");
     public static Preset VerySlow => new("veryslow");
 
-    public static Preset Custom(string name) => new(name);
+    public static Preset Custom(string name)
+    {
+        return new Preset(name);
+    }
 
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

@@ -36,5 +36,8 @@ public sealed class MergeFilterBuilder
         return this;
     }
 
-    internal string Render() => _filter ?? throw new InvalidOperationException("No merge filter specified");
+    internal string Render()
+    {
+        return _filter ?? throw new InvalidOperationException("No merge filter specified");
+    }
 }

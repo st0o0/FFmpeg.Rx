@@ -13,7 +13,13 @@ public readonly record struct Tune
     public static Tune FastDecode => new("fastdecode");
     public static Tune ZeroLatency => new("zerolatency");
 
-    public static Tune Custom(string name) => new(name);
+    public static Tune Custom(string name)
+    {
+        return new Tune(name);
+    }
 
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

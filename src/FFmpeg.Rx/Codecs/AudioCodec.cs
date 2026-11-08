@@ -15,7 +15,13 @@ public readonly record struct AudioCodec
     public static AudioCodec Vorbis => new("libvorbis");
     public static AudioCodec Copy => new("copy");
 
-    public static AudioCodec Custom(string name) => new(name);
+    public static AudioCodec Custom(string name)
+    {
+        return new AudioCodec(name);
+    }
 
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

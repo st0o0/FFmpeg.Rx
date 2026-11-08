@@ -15,7 +15,13 @@ public readonly record struct PixelFormat
     public static PixelFormat Nv21 => new("nv21");
     public static PixelFormat P010Le => new("p010le");
 
-    public static PixelFormat Custom(string name) => new(name);
+    public static PixelFormat Custom(string name)
+    {
+        return new PixelFormat(name);
+    }
 
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

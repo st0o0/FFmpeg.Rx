@@ -5,19 +5,19 @@ namespace FFmpeg.Rx;
 
 public static class Ffmpeg
 {
-    public static PipelineBuilder Input(Uri url, Action<InputOptions>? configure = null)
+    public static PipelineBuilder Input(Uri url)
     {
-        var options = new InputOptions();
-        configure?.Invoke(options);
-        return new PipelineBuilder(null).AddInput(
-            new UrlInput(url, options.UserAgentValue, options.ProxyValue, options.Arguments));
+        return new PipelineBuilder(null).AddInput(new UrlInputSpec(url));
     }
 
-    public static PipelineBuilder Input(string filePath, Action<InputOptions>? configure = null)
+    public static PipelineBuilder Input(string filePath)
     {
-        var options = new InputOptions();
-        configure?.Invoke(options);
-        return new PipelineBuilder(null).AddInput(new FileInput(filePath, options.Arguments));
+        return new PipelineBuilder(null).AddInput(new FileInputSpec(filePath));
+    }
+
+    public static PipelineBuilder Input(Stream source, string format)
+    {
+        return new PipelineBuilder(null).AddInput(new PipeInputSpec(source, format));
     }
 
     public static PipelineBuilder At(string binaryPath)
