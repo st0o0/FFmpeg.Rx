@@ -1,0 +1,892 @@
+﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("FFmpeg.Rx.IntegrationTests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("FFmpeg.Rx.Tests")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+namespace FFmpeg.Rx.Builder
+{
+    public sealed class AudioEncodingBuilder
+    {
+        public AudioEncodingBuilder() { }
+        public FFmpeg.Rx.Builder.AudioEncodingBuilder Bitrate(FFmpeg.Rx.Codecs.Bitrate bitrate) { }
+        public FFmpeg.Rx.Builder.AudioEncodingBuilder Channels(int channels) { }
+        public FFmpeg.Rx.Builder.AudioEncodingBuilder SampleRate(int sampleRate) { }
+    }
+    public sealed class MetadataBuilder
+    {
+        public MetadataBuilder() { }
+        public FFmpeg.Rx.Builder.MetadataBuilder CopyFrom(int inputIndex) { }
+        public FFmpeg.Rx.Builder.MetadataBuilder Global(string key, string value) { }
+        public FFmpeg.Rx.Builder.MetadataBuilder StripAll() { }
+    }
+    public sealed class MultiOutputBuilder
+    {
+        public FFmpeg.Rx.IFfmpegSession Build() { }
+        public FFmpeg.Rx.Builder.MultiOutputBuilder Output(string path, System.Action<FFmpeg.Rx.Builder.OutputBuilder> configure) { }
+    }
+    public sealed class OutputBuilder
+    {
+        public FFmpeg.Rx.Builder.OutputBuilder AudioFilter(System.Action<FFmpeg.Rx.Filters.AudioFilterBuilder> configure) { }
+        public FFmpeg.Rx.Builder.OutputBuilder Container(FFmpeg.Rx.Codecs.ContainerFormat format) { }
+        public FFmpeg.Rx.Builder.OutputBuilder CustomArg(string arg) { }
+        public FFmpeg.Rx.Builder.OutputBuilder FastStart() { }
+        public FFmpeg.Rx.Builder.OutputBuilder FilterComplex(FFmpeg.Rx.FilterGraph.FilterGraph graph) { }
+        public FFmpeg.Rx.Builder.OutputBuilder MapLabel(string label) { }
+        public FFmpeg.Rx.Builder.OutputBuilder Metadata(System.Action<FFmpeg.Rx.Builder.MetadataBuilder> configure) { }
+        public FFmpeg.Rx.Builder.OutputBuilder MovFlags(params string[] flags) { }
+        public FFmpeg.Rx.Builder.OutputBuilder NoOverwrite() { }
+        public FFmpeg.Rx.Builder.OutputBuilder Stream(int inputIndex, FFmpeg.Rx.StreamType type, System.Action<FFmpeg.Rx.Builder.StreamBuilder> configure) { }
+        public FFmpeg.Rx.Builder.OutputBuilder Stream(int inputIndex, int streamIndex, FFmpeg.Rx.StreamType type, System.Action<FFmpeg.Rx.Builder.StreamBuilder> configure) { }
+        public FFmpeg.Rx.Builder.OutputBuilder TimeRange(System.Action<FFmpeg.Rx.Builder.TimeRangeBuilder> configure) { }
+        public FFmpeg.Rx.Builder.OutputBuilder VideoFilter(System.Action<FFmpeg.Rx.Filters.VideoFilterBuilder> configure) { }
+    }
+    public sealed class PipelineBuilder
+    {
+        public FFmpeg.Rx.Builder.PipelineBuilder Input(System.Uri url) { }
+        public FFmpeg.Rx.Builder.PipelineBuilder Input(string filePath) { }
+        public FFmpeg.Rx.Builder.PipelineBuilder Input(System.IO.Stream source, string format) { }
+        public FFmpeg.Rx.IFfmpegSession Output(string path, System.Action<FFmpeg.Rx.Builder.OutputBuilder> configure) { }
+        public FFmpeg.Rx.IFfmpegSession OutputNull(System.Action<FFmpeg.Rx.Builder.OutputBuilder> configure) { }
+        public FFmpeg.Rx.IFfmpegSession OutputPipe(System.IO.Stream destination, System.Action<FFmpeg.Rx.Builder.OutputBuilder> configure) { }
+        public FFmpeg.Rx.IFfmpegSession OutputTee(System.Action<FFmpeg.Rx.Builder.OutputBuilder> configureOutput, System.Action<FFmpeg.Rx.Builder.TeeBuilder> configureTee) { }
+        public FFmpeg.Rx.Builder.MultiOutputBuilder Outputs() { }
+        public FFmpeg.Rx.Builder.PipelineBuilder WithProgressReporting(System.TimeSpan? knownDuration = default) { }
+    }
+    public sealed class StreamBuilder
+    {
+        public FFmpeg.Rx.Builder.StreamBuilder Copy() { }
+        public FFmpeg.Rx.Builder.StreamBuilder Disposition(string flags) { }
+        public FFmpeg.Rx.Builder.StreamBuilder Encode(FFmpeg.Rx.Codecs.SubtitleCodec codec) { }
+        public FFmpeg.Rx.Builder.StreamBuilder Encode(FFmpeg.Rx.Codecs.AudioCodec codec, System.Action<FFmpeg.Rx.Builder.AudioEncodingBuilder>? configure = null) { }
+        public FFmpeg.Rx.Builder.StreamBuilder Encode(FFmpeg.Rx.Codecs.VideoCodec codec, System.Action<FFmpeg.Rx.Builder.VideoEncodingBuilder>? configure = null) { }
+        public FFmpeg.Rx.Builder.StreamBuilder Metadata(string key, string value) { }
+    }
+    public sealed class TeeBuilder
+    {
+        public TeeBuilder() { }
+        public FFmpeg.Rx.Builder.TeeBuilder Target(string path, System.Action<FFmpeg.Rx.Builder.TeeTargetOptions>? configure = null) { }
+    }
+    public sealed class TeeTargetOptions
+    {
+        public TeeTargetOptions() { }
+        public FFmpeg.Rx.Builder.TeeTargetOptions ForceFormat(string format) { }
+        public FFmpeg.Rx.Builder.TeeTargetOptions OnFailIgnore() { }
+        public FFmpeg.Rx.Builder.TeeTargetOptions WithBitstreamFilter(string bsf) { }
+        public FFmpeg.Rx.Builder.TeeTargetOptions WithMovFlags(string flags) { }
+        public FFmpeg.Rx.Builder.TeeTargetOptions WithSelect(string select) { }
+    }
+    public sealed class TimeRangeBuilder
+    {
+        public TimeRangeBuilder() { }
+        public FFmpeg.Rx.Builder.TimeRangeBuilder Duration(System.TimeSpan length) { }
+        public FFmpeg.Rx.Builder.TimeRangeBuilder Seek(System.TimeSpan position) { }
+        public FFmpeg.Rx.Builder.TimeRangeBuilder StopTime(System.TimeSpan position) { }
+    }
+    public sealed class VideoEncodingBuilder
+    {
+        public VideoEncodingBuilder() { }
+        public FFmpeg.Rx.Builder.VideoEncodingBuilder Framerate(FFmpeg.Rx.Codecs.Framerate framerate) { }
+        public FFmpeg.Rx.Builder.VideoEncodingBuilder PixelFormat(FFmpeg.Rx.Codecs.PixelFormat format) { }
+        public FFmpeg.Rx.Builder.VideoEncodingBuilder Preset(FFmpeg.Rx.Codecs.Preset preset) { }
+        public FFmpeg.Rx.Builder.VideoEncodingBuilder Profile(FFmpeg.Rx.Codecs.VideoProfile profile) { }
+        public FFmpeg.Rx.Builder.VideoEncodingBuilder Quality(FFmpeg.Rx.Codecs.QualitySpec quality) { }
+        public FFmpeg.Rx.Builder.VideoEncodingBuilder Tune(FFmpeg.Rx.Codecs.Tune tune) { }
+    }
+}
+namespace FFmpeg.Rx.Codecs
+{
+    public readonly struct AudioCodec : System.IEquatable<FFmpeg.Rx.Codecs.AudioCodec>
+    {
+        public string Name { get; }
+        public static FFmpeg.Rx.Codecs.AudioCodec Aac { get; }
+        public static FFmpeg.Rx.Codecs.AudioCodec Copy { get; }
+        public static FFmpeg.Rx.Codecs.AudioCodec Flac { get; }
+        public static FFmpeg.Rx.Codecs.AudioCodec Mp3 { get; }
+        public static FFmpeg.Rx.Codecs.AudioCodec Opus { get; }
+        public static FFmpeg.Rx.Codecs.AudioCodec Pcm16Le { get; }
+        public static FFmpeg.Rx.Codecs.AudioCodec Pcm24Le { get; }
+        public static FFmpeg.Rx.Codecs.AudioCodec Vorbis { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.AudioCodec Custom(string name) { }
+    }
+    public readonly struct Bitrate : System.IEquatable<FFmpeg.Rx.Codecs.Bitrate>
+    {
+        public long BitsPerSecond { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.Bitrate Kbps(int kilobits) { }
+        public static FFmpeg.Rx.Codecs.Bitrate Mbps(double megabits) { }
+        public static FFmpeg.Rx.Codecs.Bitrate Mbps(int megabits) { }
+    }
+    public sealed class ConstantBitrate : FFmpeg.Rx.Codecs.QualitySpec, System.IEquatable<FFmpeg.Rx.Codecs.ConstantBitrate>
+    {
+        public ConstantBitrate(FFmpeg.Rx.Codecs.Bitrate Rate) { }
+        public FFmpeg.Rx.Codecs.Bitrate Rate { get; init; }
+    }
+    public sealed class ConstantQuality : FFmpeg.Rx.Codecs.QualitySpec, System.IEquatable<FFmpeg.Rx.Codecs.ConstantQuality>
+    {
+        public ConstantQuality(int Crf) { }
+        public int Crf { get; init; }
+    }
+    public readonly struct ContainerFormat : System.IEquatable<FFmpeg.Rx.Codecs.ContainerFormat>
+    {
+        public string Name { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Avi { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Flac { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Flv { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Mkv { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Mov { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Mp3 { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Mp4 { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Null { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Ogg { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Ts { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Wav { get; }
+        public static FFmpeg.Rx.Codecs.ContainerFormat WebM { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.ContainerFormat Custom(string name) { }
+    }
+    public readonly struct Framerate : System.IEquatable<FFmpeg.Rx.Codecs.Framerate>
+    {
+        public int Denominator { get; }
+        public int Numerator { get; }
+        public static FFmpeg.Rx.Codecs.Framerate Ntsc24 { get; }
+        public static FFmpeg.Rx.Codecs.Framerate Ntsc30 { get; }
+        public static FFmpeg.Rx.Codecs.Framerate Ntsc60 { get; }
+        public double ToDouble() { }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.Framerate Fps(double fps) { }
+        public static FFmpeg.Rx.Codecs.Framerate Fps(int fps) { }
+        public static FFmpeg.Rx.Codecs.Framerate Rational(int numerator, int denominator) { }
+    }
+    public readonly struct HWAccel : System.IEquatable<FFmpeg.Rx.Codecs.HWAccel>
+    {
+        public string Name { get; }
+        public static FFmpeg.Rx.Codecs.HWAccel Auto { get; }
+        public static FFmpeg.Rx.Codecs.HWAccel Cuda { get; }
+        public static FFmpeg.Rx.Codecs.HWAccel D3d11va { get; }
+        public static FFmpeg.Rx.Codecs.HWAccel Dxva2 { get; }
+        public static FFmpeg.Rx.Codecs.HWAccel Qsv { get; }
+        public static FFmpeg.Rx.Codecs.HWAccel Vaapi { get; }
+        public static FFmpeg.Rx.Codecs.HWAccel VideoToolbox { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.HWAccel Custom(string name) { }
+    }
+    public readonly struct PixelFormat : System.IEquatable<FFmpeg.Rx.Codecs.PixelFormat>
+    {
+        public string Name { get; }
+        public static FFmpeg.Rx.Codecs.PixelFormat Nv12 { get; }
+        public static FFmpeg.Rx.Codecs.PixelFormat Nv21 { get; }
+        public static FFmpeg.Rx.Codecs.PixelFormat P010Le { get; }
+        public static FFmpeg.Rx.Codecs.PixelFormat Rgb24 { get; }
+        public static FFmpeg.Rx.Codecs.PixelFormat Rgba { get; }
+        public static FFmpeg.Rx.Codecs.PixelFormat Yuv420p { get; }
+        public static FFmpeg.Rx.Codecs.PixelFormat Yuv422p { get; }
+        public static FFmpeg.Rx.Codecs.PixelFormat Yuv444p { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.PixelFormat Custom(string name) { }
+    }
+    public readonly struct Preset : System.IEquatable<FFmpeg.Rx.Codecs.Preset>
+    {
+        public string Name { get; }
+        public static FFmpeg.Rx.Codecs.Preset Fast { get; }
+        public static FFmpeg.Rx.Codecs.Preset Faster { get; }
+        public static FFmpeg.Rx.Codecs.Preset Medium { get; }
+        public static FFmpeg.Rx.Codecs.Preset Slow { get; }
+        public static FFmpeg.Rx.Codecs.Preset Slower { get; }
+        public static FFmpeg.Rx.Codecs.Preset SuperFast { get; }
+        public static FFmpeg.Rx.Codecs.Preset UltraFast { get; }
+        public static FFmpeg.Rx.Codecs.Preset VeryFast { get; }
+        public static FFmpeg.Rx.Codecs.Preset VerySlow { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.Preset Custom(string name) { }
+    }
+    public static class Quality
+    {
+        public static FFmpeg.Rx.Codecs.QualitySpec Bitrate(FFmpeg.Rx.Codecs.Bitrate rate) { }
+        public static FFmpeg.Rx.Codecs.QualitySpec Crf(int value) { }
+    }
+    public abstract class QualitySpec : System.IEquatable<FFmpeg.Rx.Codecs.QualitySpec>
+    {
+        protected QualitySpec() { }
+    }
+    public readonly struct SubtitleCodec : System.IEquatable<FFmpeg.Rx.Codecs.SubtitleCodec>
+    {
+        public string Name { get; }
+        public static FFmpeg.Rx.Codecs.SubtitleCodec Ass { get; }
+        public static FFmpeg.Rx.Codecs.SubtitleCodec Copy { get; }
+        public static FFmpeg.Rx.Codecs.SubtitleCodec MovText { get; }
+        public static FFmpeg.Rx.Codecs.SubtitleCodec Srt { get; }
+        public static FFmpeg.Rx.Codecs.SubtitleCodec WebVtt { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.SubtitleCodec Custom(string name) { }
+    }
+    public readonly struct Tune : System.IEquatable<FFmpeg.Rx.Codecs.Tune>
+    {
+        public string Name { get; }
+        public static FFmpeg.Rx.Codecs.Tune Animation { get; }
+        public static FFmpeg.Rx.Codecs.Tune FastDecode { get; }
+        public static FFmpeg.Rx.Codecs.Tune Film { get; }
+        public static FFmpeg.Rx.Codecs.Tune Grain { get; }
+        public static FFmpeg.Rx.Codecs.Tune StillImage { get; }
+        public static FFmpeg.Rx.Codecs.Tune ZeroLatency { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.Tune Custom(string name) { }
+    }
+    public readonly struct VideoCodec : System.IEquatable<FFmpeg.Rx.Codecs.VideoCodec>
+    {
+        public string Name { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec Av1 { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec Copy { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec H264 { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec H264Amf { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec H264Cuvid { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec H264Nvenc { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec H264Qsv { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec H264VideoToolbox { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec Hevc { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec HevcAmf { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec HevcNvenc { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec HevcQsv { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec HevcVideoToolbox { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec SvtAv1 { get; }
+        public static FFmpeg.Rx.Codecs.VideoCodec Vp9 { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.VideoCodec Custom(string name) { }
+    }
+    public readonly struct VideoProfile : System.IEquatable<FFmpeg.Rx.Codecs.VideoProfile>
+    {
+        public string Name { get; }
+        public static FFmpeg.Rx.Codecs.VideoProfile Baseline { get; }
+        public static FFmpeg.Rx.Codecs.VideoProfile High { get; }
+        public static FFmpeg.Rx.Codecs.VideoProfile High10 { get; }
+        public static FFmpeg.Rx.Codecs.VideoProfile High422 { get; }
+        public static FFmpeg.Rx.Codecs.VideoProfile High444 { get; }
+        public static FFmpeg.Rx.Codecs.VideoProfile Main { get; }
+        public override string ToString() { }
+        public static FFmpeg.Rx.Codecs.VideoProfile Custom(string name) { }
+    }
+}
+namespace FFmpeg.Rx.Events
+{
+    public sealed class CompletedEvent : FFmpeg.Rx.Events.FfmpegEvent, System.IEquatable<FFmpeg.Rx.Events.CompletedEvent>
+    {
+        public CompletedEvent(int ExitCode, System.TimeSpan Duration) { }
+        public System.TimeSpan Duration { get; init; }
+        public int ExitCode { get; init; }
+    }
+    public sealed class FailedEvent : FFmpeg.Rx.Events.FfmpegEvent, System.IEquatable<FFmpeg.Rx.Events.FailedEvent>
+    {
+        public FailedEvent(int ExitCode, string Error, FFmpeg.Rx.FailureKind Kind) { }
+        public string Error { get; init; }
+        public int ExitCode { get; init; }
+        public FFmpeg.Rx.FailureKind Kind { get; init; }
+    }
+    public abstract class FfmpegEvent : System.IEquatable<FFmpeg.Rx.Events.FfmpegEvent>
+    {
+        protected FfmpegEvent() { }
+    }
+    public sealed class LogEvent : FFmpeg.Rx.Events.FfmpegEvent, System.IEquatable<FFmpeg.Rx.Events.LogEvent>
+    {
+        public LogEvent(string Line, FFmpeg.Rx.LogLevel Level) { }
+        public FFmpeg.Rx.LogLevel Level { get; init; }
+        public string Line { get; init; }
+    }
+    public sealed class PercentageProgressEvent : FFmpeg.Rx.Events.FfmpegEvent, System.IEquatable<FFmpeg.Rx.Events.PercentageProgressEvent>
+    {
+        public PercentageProgressEvent(double Percent, FFmpeg.Rx.Events.ProgressEvent Source) { }
+        public double Percent { get; init; }
+        public FFmpeg.Rx.Events.ProgressEvent Source { get; init; }
+    }
+    public sealed class ProgressEvent : FFmpeg.Rx.Events.FfmpegEvent, System.IEquatable<FFmpeg.Rx.Events.ProgressEvent>
+    {
+        public ProgressEvent(long BytesWritten, long TimeUs, double Speed) { }
+        public long BytesWritten { get; init; }
+        public double Speed { get; init; }
+        public long TimeUs { get; init; }
+    }
+    public sealed class StartedEvent : FFmpeg.Rx.Events.FfmpegEvent, System.IEquatable<FFmpeg.Rx.Events.StartedEvent>
+    {
+        public StartedEvent(int ProcessId, string Arguments) { }
+        public string Arguments { get; init; }
+        public int ProcessId { get; init; }
+    }
+}
+namespace FFmpeg.Rx
+{
+    public enum FailureKind
+    {
+        Unknown = 0,
+        Transient = 1,
+        Permanent = 2,
+    }
+    public static class Ffmpeg
+    {
+        public static FFmpeg.Rx.Builder.PipelineBuilder At(string binaryPath) { }
+        public static System.Threading.Tasks.Task<FFmpeg.Rx.Models.FfmpegResult> Concat(System.Collections.Generic.IEnumerable<string> inputPaths, string outputPath, System.Threading.CancellationToken ct = default) { }
+        public static FFmpeg.Rx.Builder.PipelineBuilder Input(System.Uri url) { }
+        public static FFmpeg.Rx.Builder.PipelineBuilder Input(string filePath) { }
+        public static FFmpeg.Rx.Builder.PipelineBuilder Input(System.IO.Stream source, string format) { }
+        public static System.Threading.Tasks.Task<FFmpeg.Rx.Probing.MediaInfo> Probe(string path, System.Threading.CancellationToken ct = default) { }
+        public static System.Threading.Tasks.Task<FFmpeg.Rx.Models.FfmpegResult> Snapshot(string inputPath, System.TimeSpan time, string outputPath, System.Threading.CancellationToken ct = default) { }
+    }
+    public sealed class FfmpegOptions : System.IEquatable<FFmpeg.Rx.FfmpegOptions>
+    {
+        public FfmpegOptions() { }
+        public string? BinaryPath { get; init; }
+        public string? FfprobeBinaryPath { get; init; }
+        public string? TempDirectory { get; init; }
+        public string? WorkingDirectory { get; init; }
+        public static FFmpeg.Rx.FfmpegOptions? Global { get; }
+        public static void Configure(FFmpeg.Rx.FfmpegOptions options) { }
+        public static void Reset() { }
+    }
+    public sealed class FfmpegSession : FFmpeg.Rx.IFfmpegSession, System.IAsyncDisposable
+    {
+        public R3.Observable<FFmpeg.Rx.Events.FfmpegEvent> Events { get; }
+        public R3.Observable<FFmpeg.Rx.Events.LogEvent> Log { get; }
+        public R3.Observable<FFmpeg.Rx.Events.ProgressEvent> Progress { get; }
+        public System.Threading.Tasks.ValueTask DisposeAsync() { }
+        public System.Threading.Tasks.Task<FFmpeg.Rx.Models.FfmpegResult> RunAsync(System.Threading.CancellationToken ct = default) { }
+        public static FFmpeg.Rx.IFfmpegSession Create(FFmpeg.Rx.Models.PipelineSpec spec) { }
+    }
+    public static class FfmpegSessionExtensions
+    {
+        public static R3.Observable<double> PercentageProgress(this FFmpeg.Rx.IFfmpegSession session, System.TimeSpan totalDuration) { }
+    }
+    public static class Ffprobe
+    {
+        public static System.Threading.Tasks.Task<FFmpeg.Rx.Probing.MediaInfo> AnalyseAsync(System.Uri url, System.Threading.CancellationToken ct = default) { }
+        public static System.Threading.Tasks.Task<FFmpeg.Rx.Probing.MediaInfo> AnalyseAsync(string path, System.Threading.CancellationToken ct = default) { }
+        public static System.Threading.Tasks.Task<FFmpeg.Rx.Probing.MediaInfo> AnalyseAsync(System.Uri url, FFmpeg.Rx.Probing.FfprobeOptions? options, System.Threading.CancellationToken ct = default) { }
+        public static System.Threading.Tasks.Task<FFmpeg.Rx.Probing.MediaInfo> AnalyseAsync(string path, FFmpeg.Rx.Probing.FfprobeOptions? options, System.Threading.CancellationToken ct = default) { }
+    }
+    public interface IFfmpegSession : System.IAsyncDisposable
+    {
+        R3.Observable<FFmpeg.Rx.Events.FfmpegEvent> Events { get; }
+        R3.Observable<FFmpeg.Rx.Events.LogEvent> Log { get; }
+        R3.Observable<FFmpeg.Rx.Events.ProgressEvent> Progress { get; }
+        System.Threading.Tasks.Task<FFmpeg.Rx.Models.FfmpegResult> RunAsync(System.Threading.CancellationToken ct = default);
+    }
+    public enum LogLevel
+    {
+        Unknown = 0,
+        Info = 1,
+        Warning = 2,
+        Error = 3,
+        Fatal = 4,
+    }
+    public static class ProgressExtensions
+    {
+        public static double AsPercentage(this FFmpeg.Rx.Events.ProgressEvent progress, System.TimeSpan totalDuration) { }
+        public static R3.Observable<FFmpeg.Rx.Events.PercentageProgressEvent> WithPercentage(this R3.Observable<FFmpeg.Rx.Events.ProgressEvent> source, System.TimeSpan totalDuration) { }
+    }
+    public enum StreamType
+    {
+        Unknown = 0,
+        Video = 1,
+        Audio = 2,
+        Subtitle = 3,
+    }
+}
+namespace FFmpeg.Rx.FilterGraph
+{
+    public sealed class ChainNode : FFmpeg.Rx.FilterGraph.GraphNode, System.IEquatable<FFmpeg.Rx.FilterGraph.ChainNode>
+    {
+        public ChainNode(string InputLabel, string FilterExpression, string OutputLabel) { }
+        public string FilterExpression { get; init; }
+        public string InputLabel { get; init; }
+        public string OutputLabel { get; init; }
+    }
+    public sealed class FilterChainBuilder
+    {
+        public FilterChainBuilder() { }
+        public FFmpeg.Rx.FilterGraph.FilterChainBuilder BurnSubtitles(string path) { }
+        public FFmpeg.Rx.FilterGraph.FilterChainBuilder Crop(int width, int height, int x, int y) { }
+        public FFmpeg.Rx.FilterGraph.FilterChainBuilder Custom(string name, string? args = null) { }
+        public FFmpeg.Rx.FilterGraph.FilterChainBuilder Fade(FFmpeg.Rx.Filters.FadeType type, int startFrame, int frames) { }
+        public FFmpeg.Rx.FilterGraph.FilterChainBuilder HorizontalFlip() { }
+        public FFmpeg.Rx.FilterGraph.FilterChainBuilder Scale(int value, FFmpeg.Rx.Filters.ScaleDimension dimension) { }
+        public FFmpeg.Rx.FilterGraph.FilterChainBuilder Scale(int width, int height) { }
+        public FFmpeg.Rx.FilterGraph.FilterChainBuilder VerticalFlip() { }
+        public FFmpeg.Rx.FilterGraph.FilterChainBuilder Yadif() { }
+    }
+    public sealed class FilterGraph : System.IEquatable<FFmpeg.Rx.FilterGraph.FilterGraph>
+    {
+        public FilterGraph(System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.FilterGraph.GraphInput> Inputs, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.FilterGraph.GraphNode> Nodes) { }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.FilterGraph.GraphInput> Inputs { get; init; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.FilterGraph.GraphNode> Nodes { get; init; }
+        public string Serialize() { }
+        public static FFmpeg.Rx.FilterGraph.FilterGraphBuilder Create() { }
+    }
+    public sealed class FilterGraphBuilder
+    {
+        public FilterGraphBuilder() { }
+        public FFmpeg.Rx.FilterGraph.FilterGraphBuilder ASplit(string inputLabel, string outputLabel1, string outputLabel2) { }
+        public FFmpeg.Rx.FilterGraph.FilterGraph Build() { }
+        public FFmpeg.Rx.FilterGraph.FilterGraphBuilder Chain(string inputLabel, System.Action<FFmpeg.Rx.FilterGraph.FilterChainBuilder> configure, string outputLabel) { }
+        public FFmpeg.Rx.FilterGraph.FilterGraphBuilder Input(int inputIndex, FFmpeg.Rx.StreamType type, string label) { }
+        public FFmpeg.Rx.FilterGraph.FilterGraphBuilder Merge(string label1, string label2, System.Action<FFmpeg.Rx.FilterGraph.MergeFilterBuilder> configure, string outputLabel) { }
+        public FFmpeg.Rx.FilterGraph.FilterGraphBuilder Split(string inputLabel, string outputLabel1, string outputLabel2) { }
+    }
+    public sealed class GraphInput : System.IEquatable<FFmpeg.Rx.FilterGraph.GraphInput>
+    {
+        public GraphInput(int InputIndex, FFmpeg.Rx.StreamType Type, string Label) { }
+        public int InputIndex { get; init; }
+        public string Label { get; init; }
+        public FFmpeg.Rx.StreamType Type { get; init; }
+    }
+    public abstract class GraphNode : System.IEquatable<FFmpeg.Rx.FilterGraph.GraphNode>
+    {
+        protected GraphNode() { }
+    }
+    public sealed class MergeFilterBuilder
+    {
+        public MergeFilterBuilder() { }
+        public FFmpeg.Rx.FilterGraph.MergeFilterBuilder AudioMix(int inputs = 2) { }
+        public FFmpeg.Rx.FilterGraph.MergeFilterBuilder Concat(int segments = 2, bool hasVideo = true, bool hasAudio = true) { }
+        public FFmpeg.Rx.FilterGraph.MergeFilterBuilder Custom(string expression) { }
+        public FFmpeg.Rx.FilterGraph.MergeFilterBuilder Overlay(int x, int y) { }
+        public FFmpeg.Rx.FilterGraph.MergeFilterBuilder Overlay(string xExpr, string yExpr) { }
+    }
+    public sealed class MergeNode : FFmpeg.Rx.FilterGraph.GraphNode, System.IEquatable<FFmpeg.Rx.FilterGraph.MergeNode>
+    {
+        public MergeNode(string InputLabel1, string InputLabel2, string FilterExpression, string OutputLabel) { }
+        public string FilterExpression { get; init; }
+        public string InputLabel1 { get; init; }
+        public string InputLabel2 { get; init; }
+        public string OutputLabel { get; init; }
+    }
+    public sealed class SplitNode : FFmpeg.Rx.FilterGraph.GraphNode, System.IEquatable<FFmpeg.Rx.FilterGraph.SplitNode>
+    {
+        public SplitNode(string InputLabel, string OutputLabel1, string OutputLabel2, bool IsAudio) { }
+        public string InputLabel { get; init; }
+        public bool IsAudio { get; init; }
+        public string OutputLabel1 { get; init; }
+        public string OutputLabel2 { get; init; }
+    }
+}
+namespace FFmpeg.Rx.Filters
+{
+    public sealed class AResampleFilter : FFmpeg.Rx.Filters.IAudioFilter, System.IEquatable<FFmpeg.Rx.Filters.AResampleFilter>
+    {
+        public AResampleFilter(int SampleRate) { }
+        public int SampleRate { get; init; }
+        public string Render() { }
+    }
+    public sealed class AudioFilterBuilder
+    {
+        public AudioFilterBuilder() { }
+        public FFmpeg.Rx.Filters.AudioFilterBuilder AResample(int sampleRate) { }
+        public FFmpeg.Rx.Filters.AudioFilterBuilder Custom(string name, string? args = null) { }
+        public FFmpeg.Rx.Filters.AudioFilterBuilder LoudNorm(double? i = default, double? tp = default, double? lra = default) { }
+        public FFmpeg.Rx.Filters.AudioFilterBuilder SilenceDetect(double noiseDb, double duration) { }
+        public FFmpeg.Rx.Filters.AudioFilterBuilder Volume(double factor) { }
+        public FFmpeg.Rx.Filters.AudioFilterBuilder Volume(string expression) { }
+    }
+    public sealed class CropExprFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.CropExprFilter>
+    {
+        public CropExprFilter(string Expression) { }
+        public string Expression { get; init; }
+        public string Render() { }
+    }
+    public sealed class CropFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.CropFilter>
+    {
+        public CropFilter(int Width, int Height, int X, int Y) { }
+        public int Height { get; init; }
+        public int Width { get; init; }
+        public int X { get; init; }
+        public int Y { get; init; }
+        public string Render() { }
+    }
+    public sealed class CustomFilter : FFmpeg.Rx.Filters.IAudioFilter, FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.CustomFilter>
+    {
+        public CustomFilter(string Name, string? Args = null) { }
+        public string? Args { get; init; }
+        public string Name { get; init; }
+        public string Render() { }
+    }
+    public sealed class FadeFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.FadeFilter>
+    {
+        public FadeFilter(FFmpeg.Rx.Filters.FadeType type, System.TimeSpan start, System.TimeSpan duration) { }
+        public FadeFilter(FFmpeg.Rx.Filters.FadeType type, int startFrame, int frames) { }
+        public System.TimeSpan? Duration { get; init; }
+        public int? Frames { get; init; }
+        public System.TimeSpan? Start { get; init; }
+        public int? StartFrame { get; init; }
+        public FFmpeg.Rx.Filters.FadeType Type { get; init; }
+        public string Render() { }
+    }
+    public enum FadeType
+    {
+        In = 0,
+        Out = 1,
+    }
+    public sealed class HFlipFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.HFlipFilter>
+    {
+        public HFlipFilter() { }
+        public string Render() { }
+    }
+    public interface IAudioFilter
+    {
+        string Render();
+    }
+    public interface IVideoFilter
+    {
+        string Render();
+    }
+    public sealed class LoudNormFilter : FFmpeg.Rx.Filters.IAudioFilter, System.IEquatable<FFmpeg.Rx.Filters.LoudNormFilter>
+    {
+        public LoudNormFilter(double? I = default, double? Tp = default, double? Lra = default) { }
+        public double? I { get; init; }
+        public double? Lra { get; init; }
+        public double? Tp { get; init; }
+        public string Render() { }
+    }
+    public sealed class PadFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.PadFilter>
+    {
+        public PadFilter(int Width, int Height, int X, int Y, string Color) { }
+        public string Color { get; init; }
+        public int Height { get; init; }
+        public int Width { get; init; }
+        public int X { get; init; }
+        public int Y { get; init; }
+        public string Render() { }
+    }
+    public enum ScaleDimension
+    {
+        Width = 0,
+        Height = 1,
+    }
+    public sealed class ScaleDimensionFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.ScaleDimensionFilter>
+    {
+        public ScaleDimensionFilter(int Value, FFmpeg.Rx.Filters.ScaleDimension Dimension) { }
+        public FFmpeg.Rx.Filters.ScaleDimension Dimension { get; init; }
+        public int Value { get; init; }
+        public string Render() { }
+    }
+    public sealed class ScaleFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.ScaleFilter>
+    {
+        public ScaleFilter(int Width, int Height) { }
+        public int Height { get; init; }
+        public int Width { get; init; }
+        public string Render() { }
+    }
+    public sealed class SilenceDetectFilter : FFmpeg.Rx.Filters.IAudioFilter, System.IEquatable<FFmpeg.Rx.Filters.SilenceDetectFilter>
+    {
+        public SilenceDetectFilter(double NoiseDb, double Duration) { }
+        public double Duration { get; init; }
+        public double NoiseDb { get; init; }
+        public string Render() { }
+    }
+    public sealed class TransposeFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.TransposeFilter>
+    {
+        public TransposeFilter(FFmpeg.Rx.Filters.TransposeMode Mode) { }
+        public FFmpeg.Rx.Filters.TransposeMode Mode { get; init; }
+        public string Render() { }
+    }
+    public enum TransposeMode
+    {
+        CounterClockFlip = 0,
+        Clock = 1,
+        CounterClock = 2,
+        ClockFlip = 3,
+    }
+    public sealed class VFlipFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.VFlipFilter>
+    {
+        public VFlipFilter() { }
+        public string Render() { }
+    }
+    public sealed class VideoFilterBuilder
+    {
+        public VideoFilterBuilder() { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Crop(string expression) { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Crop(int width, int height, int x, int y) { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Custom(string name, string? args = null) { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Fade(FFmpeg.Rx.Filters.FadeType type, System.TimeSpan start, System.TimeSpan duration) { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Fade(FFmpeg.Rx.Filters.FadeType type, int startFrame, int frames) { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder HorizontalFlip() { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Pad(int width, int height, int x, int y, string color) { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Scale(int value, FFmpeg.Rx.Filters.ScaleDimension dimension) { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Scale(int width, int height) { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Transpose(FFmpeg.Rx.Filters.TransposeMode mode) { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder VerticalFlip() { }
+        public FFmpeg.Rx.Filters.VideoFilterBuilder Yadif() { }
+    }
+    public sealed class VolumeExprFilter : FFmpeg.Rx.Filters.IAudioFilter, System.IEquatable<FFmpeg.Rx.Filters.VolumeExprFilter>
+    {
+        public VolumeExprFilter(string Expression) { }
+        public string Expression { get; init; }
+        public string Render() { }
+    }
+    public sealed class VolumeFilter : FFmpeg.Rx.Filters.IAudioFilter, System.IEquatable<FFmpeg.Rx.Filters.VolumeFilter>
+    {
+        public VolumeFilter(double Factor) { }
+        public double Factor { get; init; }
+        public string Render() { }
+    }
+    public sealed class YadifFilter : FFmpeg.Rx.Filters.IVideoFilter, System.IEquatable<FFmpeg.Rx.Filters.YadifFilter>
+    {
+        public YadifFilter() { }
+        public string Render() { }
+    }
+}
+namespace FFmpeg.Rx.Metadata
+{
+    public sealed class FFMetadataBuilder
+    {
+        public FFMetadataBuilder() { }
+        public string Build() { }
+        public FFmpeg.Rx.Metadata.FFMetadataBuilder WithChapter(string title, System.TimeSpan duration) { }
+        public FFmpeg.Rx.Metadata.FFMetadataBuilder WithChapter(string title, System.TimeSpan start, System.TimeSpan end) { }
+        public FFmpeg.Rx.Metadata.FFMetadataBuilder WithTitle(string title) { }
+    }
+}
+namespace FFmpeg.Rx.Models
+{
+    public sealed class AudioEncode : FFmpeg.Rx.Models.CodecSpec, System.IEquatable<FFmpeg.Rx.Models.AudioEncode>
+    {
+        public AudioEncode(FFmpeg.Rx.Codecs.AudioCodec Codec, FFmpeg.Rx.Models.AudioEncodingOptions Options) { }
+        public FFmpeg.Rx.Codecs.AudioCodec Codec { get; init; }
+        public FFmpeg.Rx.Models.AudioEncodingOptions Options { get; init; }
+    }
+    public sealed class AudioEncodingOptions : System.IEquatable<FFmpeg.Rx.Models.AudioEncodingOptions>
+    {
+        public AudioEncodingOptions(FFmpeg.Rx.Codecs.Bitrate? Bitrate = default, int? SampleRate = default, int? Channels = default) { }
+        public FFmpeg.Rx.Codecs.Bitrate? Bitrate { get; init; }
+        public int? Channels { get; init; }
+        public int? SampleRate { get; init; }
+    }
+    public abstract class CodecSpec : System.IEquatable<FFmpeg.Rx.Models.CodecSpec>
+    {
+        protected CodecSpec() { }
+    }
+    public sealed class ComplexFilterSpec : FFmpeg.Rx.Models.FilterSpec, System.IEquatable<FFmpeg.Rx.Models.ComplexFilterSpec>
+    {
+        public ComplexFilterSpec(FFmpeg.Rx.FilterGraph.FilterGraph Graph) { }
+        public FFmpeg.Rx.FilterGraph.FilterGraph Graph { get; init; }
+    }
+    public sealed class FfmpegResult : System.IEquatable<FFmpeg.Rx.Models.FfmpegResult>
+    {
+        public FfmpegResult(bool Success, int ExitCode, string? Error, System.TimeSpan Duration, FFmpeg.Rx.FailureKind? FailureKind = default) { }
+        public System.TimeSpan Duration { get; init; }
+        public string? Error { get; init; }
+        public int ExitCode { get; init; }
+        public FFmpeg.Rx.FailureKind? FailureKind { get; init; }
+        public bool Success { get; init; }
+    }
+    public sealed class FileDestination : FFmpeg.Rx.Models.OutputDestination, System.IEquatable<FFmpeg.Rx.Models.FileDestination>
+    {
+        public FileDestination(string Path) { }
+        public string Path { get; init; }
+    }
+    public sealed class FileInputSpec : FFmpeg.Rx.Models.InputSpec, System.IEquatable<FFmpeg.Rx.Models.FileInputSpec>
+    {
+        public FileInputSpec(string Path) { }
+        public string Path { get; init; }
+    }
+    public abstract class FilterSpec : System.IEquatable<FFmpeg.Rx.Models.FilterSpec>
+    {
+        protected FilterSpec() { }
+    }
+    public sealed class InputOptionSpec : System.IEquatable<FFmpeg.Rx.Models.InputOptionSpec>
+    {
+        public InputOptionSpec(System.TimeSpan? Seek = default, FFmpeg.Rx.Codecs.HWAccel? HWAccel = default, string? HWAccelDevice = null, string? HWAccelOutputFormat = null, FFmpeg.Rx.Codecs.VideoCodec? VideoDecoder = default, FFmpeg.Rx.Codecs.Framerate? Framerate = default, bool Loop = false, int? StreamLoop = default, System.Collections.Generic.IReadOnlyList<string>? CustomArgs = null) { }
+        public System.Collections.Generic.IReadOnlyList<string>? CustomArgs { get; init; }
+        public FFmpeg.Rx.Codecs.Framerate? Framerate { get; init; }
+        public FFmpeg.Rx.Codecs.HWAccel? HWAccel { get; init; }
+        public string? HWAccelDevice { get; init; }
+        public string? HWAccelOutputFormat { get; init; }
+        public bool Loop { get; init; }
+        public System.TimeSpan? Seek { get; init; }
+        public int? StreamLoop { get; init; }
+        public FFmpeg.Rx.Codecs.VideoCodec? VideoDecoder { get; init; }
+    }
+    public abstract class InputSpec : System.IEquatable<FFmpeg.Rx.Models.InputSpec>
+    {
+        protected InputSpec() { }
+        public FFmpeg.Rx.Models.InputOptionSpec? Options { get; init; }
+    }
+    public sealed class MetadataSpec : System.IEquatable<FFmpeg.Rx.Models.MetadataSpec>
+    {
+        public MetadataSpec(System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? GlobalEntries = null, bool StripAll = false, int? CopyFromInput = default) { }
+        public int? CopyFromInput { get; init; }
+        public System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? GlobalEntries { get; init; }
+        public bool StripAll { get; init; }
+    }
+    public sealed class NullDestination : FFmpeg.Rx.Models.OutputDestination, System.IEquatable<FFmpeg.Rx.Models.NullDestination>
+    {
+        public NullDestination() { }
+        public static FFmpeg.Rx.Models.NullDestination Instance { get; }
+    }
+    public abstract class OutputDestination : System.IEquatable<FFmpeg.Rx.Models.OutputDestination>
+    {
+        protected OutputDestination() { }
+    }
+    public sealed class OutputSpec : System.IEquatable<FFmpeg.Rx.Models.OutputSpec>
+    {
+        public OutputSpec(FFmpeg.Rx.Models.OutputDestination Destination, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.StreamSpec>? Streams = null, FFmpeg.Rx.Codecs.ContainerFormat? Container = default, FFmpeg.Rx.Models.FilterSpec? Filters = null, FFmpeg.Rx.Models.MetadataSpec? Metadata = null, FFmpeg.Rx.Models.TimeRange? TimeRange = null, bool Overwrite = true, bool FastStart = false, System.Collections.Generic.IReadOnlyList<string>? MovFlags = null, System.Collections.Generic.IReadOnlyList<string>? LabelMappings = null, FFmpeg.Rx.Models.TeeOutput? Tee = null, System.Collections.Generic.IReadOnlyList<string>? CustomArgs = null) { }
+        public FFmpeg.Rx.Codecs.ContainerFormat? Container { get; init; }
+        public System.Collections.Generic.IReadOnlyList<string>? CustomArgs { get; init; }
+        public FFmpeg.Rx.Models.OutputDestination Destination { get; init; }
+        public bool FastStart { get; init; }
+        public FFmpeg.Rx.Models.FilterSpec? Filters { get; init; }
+        public System.Collections.Generic.IReadOnlyList<string>? LabelMappings { get; init; }
+        public FFmpeg.Rx.Models.MetadataSpec? Metadata { get; init; }
+        public System.Collections.Generic.IReadOnlyList<string>? MovFlags { get; init; }
+        public bool Overwrite { get; init; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.StreamSpec>? Streams { get; init; }
+        public FFmpeg.Rx.Models.TeeOutput? Tee { get; init; }
+        public FFmpeg.Rx.Models.TimeRange? TimeRange { get; init; }
+    }
+    public sealed class PipeDestination : FFmpeg.Rx.Models.OutputDestination, System.IEquatable<FFmpeg.Rx.Models.PipeDestination>
+    {
+        public PipeDestination(System.IO.Stream Destination) { }
+        public System.IO.Stream Destination { get; init; }
+    }
+    public sealed class PipeInputSpec : FFmpeg.Rx.Models.InputSpec, System.IEquatable<FFmpeg.Rx.Models.PipeInputSpec>
+    {
+        public PipeInputSpec(System.IO.Stream Source, string Format) { }
+        public string Format { get; init; }
+        public System.IO.Stream Source { get; init; }
+    }
+    public sealed class PipelineSpec : System.IEquatable<FFmpeg.Rx.Models.PipelineSpec>
+    {
+        public PipelineSpec(System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.InputSpec> Inputs, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.OutputSpec> Outputs, System.Collections.Generic.IReadOnlyList<string>? GlobalOptions = null, string? BinaryPath = null, System.TimeSpan? TotalDuration = default) { }
+        public string? BinaryPath { get; init; }
+        public System.Collections.Generic.IReadOnlyList<string>? GlobalOptions { get; init; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.InputSpec> Inputs { get; init; }
+        public FFmpeg.Rx.Models.OutputSpec Output { get; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Models.OutputSpec> Outputs { get; init; }
+        public System.TimeSpan? TotalDuration { get; init; }
+    }
+    public sealed class SimpleFilterSpec : FFmpeg.Rx.Models.FilterSpec, System.IEquatable<FFmpeg.Rx.Models.SimpleFilterSpec>
+    {
+        public SimpleFilterSpec(System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IVideoFilter>? VideoFilters = null, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IAudioFilter>? AudioFilters = null) { }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IAudioFilter>? AudioFilters { get; init; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Filters.IVideoFilter>? VideoFilters { get; init; }
+    }
+    public sealed class StreamCopy : FFmpeg.Rx.Models.CodecSpec, System.IEquatable<FFmpeg.Rx.Models.StreamCopy>
+    {
+        public StreamCopy() { }
+    }
+    public sealed class StreamSpec : System.IEquatable<FFmpeg.Rx.Models.StreamSpec>
+    {
+        public StreamSpec(int InputIndex, int? StreamIndex, FFmpeg.Rx.StreamType Type, FFmpeg.Rx.Models.CodecSpec Codec, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? Metadata = null, string? Disposition = null) { }
+        public FFmpeg.Rx.Models.CodecSpec Codec { get; init; }
+        public string? Disposition { get; init; }
+        public int InputIndex { get; init; }
+        public System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? Metadata { get; init; }
+        public int? StreamIndex { get; init; }
+        public FFmpeg.Rx.StreamType Type { get; init; }
+    }
+    public sealed class SubtitleEncode : FFmpeg.Rx.Models.CodecSpec, System.IEquatable<FFmpeg.Rx.Models.SubtitleEncode>
+    {
+        public SubtitleEncode(FFmpeg.Rx.Codecs.SubtitleCodec Codec) { }
+        public FFmpeg.Rx.Codecs.SubtitleCodec Codec { get; init; }
+    }
+    public sealed class TeeOutput : System.IEquatable<FFmpeg.Rx.Models.TeeOutput>
+    {
+        public TeeOutput(FFmpeg.Rx.Models.TeeTarget[] Targets) { }
+        public FFmpeg.Rx.Models.TeeTarget[] Targets { get; init; }
+    }
+    public sealed class TeeTarget : System.IEquatable<FFmpeg.Rx.Models.TeeTarget>
+    {
+        public TeeTarget(string Path, string? Format = null, string? Select = null, string? BitstreamFilter = null, string? MovFlags = null, bool IgnoreFailure = false) { }
+        public string? BitstreamFilter { get; init; }
+        public string? Format { get; init; }
+        public bool IgnoreFailure { get; init; }
+        public string? MovFlags { get; init; }
+        public string Path { get; init; }
+        public string? Select { get; init; }
+    }
+    public sealed class TimeRange : System.IEquatable<FFmpeg.Rx.Models.TimeRange>
+    {
+        public TimeRange(System.TimeSpan? Seek = default, System.TimeSpan? Duration = default, System.TimeSpan? StopTime = default) { }
+        public System.TimeSpan? Duration { get; init; }
+        public System.TimeSpan? Seek { get; init; }
+        public System.TimeSpan? StopTime { get; init; }
+    }
+    public sealed class UrlInputSpec : FFmpeg.Rx.Models.InputSpec, System.IEquatable<FFmpeg.Rx.Models.UrlInputSpec>
+    {
+        public UrlInputSpec(System.Uri Url) { }
+        public System.Uri Url { get; init; }
+    }
+    public sealed class VideoEncode : FFmpeg.Rx.Models.CodecSpec, System.IEquatable<FFmpeg.Rx.Models.VideoEncode>
+    {
+        public VideoEncode(FFmpeg.Rx.Codecs.VideoCodec Codec, FFmpeg.Rx.Models.VideoEncodingOptions Options) { }
+        public FFmpeg.Rx.Codecs.VideoCodec Codec { get; init; }
+        public FFmpeg.Rx.Models.VideoEncodingOptions Options { get; init; }
+    }
+    public sealed class VideoEncodingOptions : System.IEquatable<FFmpeg.Rx.Models.VideoEncodingOptions>
+    {
+        public VideoEncodingOptions(FFmpeg.Rx.Codecs.QualitySpec? Quality = null, FFmpeg.Rx.Codecs.Preset? Preset = default, FFmpeg.Rx.Codecs.VideoProfile? Profile = default, FFmpeg.Rx.Codecs.Tune? Tune = default, FFmpeg.Rx.Codecs.PixelFormat? PixelFormat = default, FFmpeg.Rx.Codecs.Framerate? Framerate = default) { }
+        public FFmpeg.Rx.Codecs.Framerate? Framerate { get; init; }
+        public FFmpeg.Rx.Codecs.PixelFormat? PixelFormat { get; init; }
+        public FFmpeg.Rx.Codecs.Preset? Preset { get; init; }
+        public FFmpeg.Rx.Codecs.VideoProfile? Profile { get; init; }
+        public FFmpeg.Rx.Codecs.QualitySpec? Quality { get; init; }
+        public FFmpeg.Rx.Codecs.Tune? Tune { get; init; }
+    }
+}
+namespace FFmpeg.Rx.Probing
+{
+    public sealed class AudioStreamInfo : System.IEquatable<FFmpeg.Rx.Probing.AudioStreamInfo>
+    {
+        public AudioStreamInfo(int Index, string Codec, int SampleRate, int Channels, long Bitrate, System.TimeSpan Duration) { }
+        public long Bitrate { get; init; }
+        public int Channels { get; init; }
+        public string Codec { get; init; }
+        public System.TimeSpan Duration { get; init; }
+        public int Index { get; init; }
+        public int SampleRate { get; init; }
+    }
+    public sealed class ChapterInfo : System.IEquatable<FFmpeg.Rx.Probing.ChapterInfo>
+    {
+        public ChapterInfo(string? Title, System.TimeSpan Start, System.TimeSpan End) { }
+        public System.TimeSpan End { get; init; }
+        public System.TimeSpan Start { get; init; }
+        public string? Title { get; init; }
+    }
+    public sealed class FfprobeException : System.Exception
+    {
+        public FfprobeException(int exitCode, string standardError) { }
+        public int ExitCode { get; }
+        public string StandardError { get; }
+    }
+    public sealed class FfprobeOptions : System.IEquatable<FFmpeg.Rx.Probing.FfprobeOptions>
+    {
+        public FfprobeOptions() { }
+        public string? BinaryPath { get; init; }
+    }
+    public sealed class MediaInfo : System.IEquatable<FFmpeg.Rx.Probing.MediaInfo>
+    {
+        public MediaInfo(System.TimeSpan Duration, long Bitrate, string FormatName, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Probing.VideoStreamInfo> VideoStreams, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Probing.AudioStreamInfo> AudioStreams, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Probing.SubtitleStreamInfo> SubtitleStreams, System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Probing.ChapterInfo> Chapters, string RawJson) { }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Probing.AudioStreamInfo> AudioStreams { get; init; }
+        public long Bitrate { get; init; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Probing.ChapterInfo> Chapters { get; init; }
+        public System.TimeSpan Duration { get; init; }
+        public string FormatName { get; init; }
+        public FFmpeg.Rx.Probing.AudioStreamInfo? PrimaryAudio { get; }
+        public FFmpeg.Rx.Probing.VideoStreamInfo? PrimaryVideo { get; }
+        public string RawJson { get; init; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Probing.SubtitleStreamInfo> SubtitleStreams { get; init; }
+        public System.Collections.Generic.IReadOnlyList<FFmpeg.Rx.Probing.VideoStreamInfo> VideoStreams { get; init; }
+    }
+    public sealed class SubtitleStreamInfo : System.IEquatable<FFmpeg.Rx.Probing.SubtitleStreamInfo>
+    {
+        public SubtitleStreamInfo(int Index, string Codec, string? Language) { }
+        public string Codec { get; init; }
+        public int Index { get; init; }
+        public string? Language { get; init; }
+    }
+    public sealed class VideoStreamInfo : System.IEquatable<FFmpeg.Rx.Probing.VideoStreamInfo>
+    {
+        public VideoStreamInfo(int Index, string Codec, int Width, int Height, double Fps, long Bitrate, string? PixelFormat, System.TimeSpan Duration) { }
+        public long Bitrate { get; init; }
+        public string Codec { get; init; }
+        public System.TimeSpan Duration { get; init; }
+        public double Fps { get; init; }
+        public int Height { get; init; }
+        public int Index { get; init; }
+        public string? PixelFormat { get; init; }
+        public int Width { get; init; }
+    }
+}
