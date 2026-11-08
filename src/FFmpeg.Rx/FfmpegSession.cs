@@ -72,12 +72,26 @@ public sealed class FfmpegSession : IFfmpegSession
 
         if (pipeOutput is not null)
         {
+            var pipeProgressBlock = new Dictionary<string, string>();
             cmd = cmd
                 .WithStandardOutputPipe(PipeTarget.ToStream(pipeOutput.Destination))
                 .WithStandardErrorPipe(PipeTarget.ToDelegate(line =>
                 {
-                    stderrLines.Add(line);
-                    _subject.OnNext(new LogEvent(line.Trim(), ClassifyLogLevel(line)));
+                    var stderrProgress = ProgressParser.ParseLine(line, pipeProgressBlock);
+                    if (stderrProgress is not null)
+                    {
+                        _subject.OnNext(stderrProgress);
+                        if (totalDuration is { } dur && dur.TotalMicroseconds > 0)
+                        {
+                            var percent = Math.Min(100.0, stderrProgress.TimeUs / dur.TotalMicroseconds * 100.0);
+                            _subject.OnNext(new PercentageProgressEvent(percent, stderrProgress));
+                        }
+                    }
+                    else
+                    {
+                        stderrLines.Add(line);
+                        _subject.OnNext(new LogEvent(line.Trim(), ClassifyLogLevel(line)));
+                    }
                 }));
 
             return await ExecuteWithPipeOutput(cmd, sw, stderrLines, ct).ConfigureAwait(false);

@@ -13,9 +13,17 @@ internal static class ArgumentSerializer
 
         if (pipeline.GlobalOptions is { Count: > 0 })
         {
+            var hasPipeOutput = pipeline.Outputs.Any(o => o.Destination is PipeDestination);
             foreach (var opt in pipeline.GlobalOptions)
             {
-                sb.Append(opt).Append(' ');
+                if (hasPipeOutput && opt == "-progress pipe:1")
+                {
+                    sb.Append("-progress pipe:2 ");
+                }
+                else
+                {
+                    sb.Append(opt).Append(' ');
+                }
             }
         }
 
@@ -173,13 +181,13 @@ internal static class ArgumentSerializer
             switch (output.Destination)
             {
                 case FileDestination file:
-                    sb.Append(" \"").Append(file.Path).Append('"');
+                    sb.Append(" \"").Append(file.Path).Append("\" ");
                     break;
                 case NullDestination:
-                    sb.Append(" /dev/null");
+                    sb.Append(" /dev/null ");
                     break;
                 case PipeDestination:
-                    sb.Append(" pipe:1");
+                    sb.Append(" pipe:1 ");
                     break;
             }
         }
