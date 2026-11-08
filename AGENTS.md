@@ -17,7 +17,16 @@ src/
     Metadata/             # FFMetadata chapter builder
     Models/               # Pipeline records: PipelineSpec, InputSpec, OutputSpec, etc.
     Probing/              # ffprobe: MediaInfo, stream info records
-  FFmpeg.Rx.Tests/        # xUnit v3 on Microsoft.Testing.Platform
+  FFmpeg.Rx.Tests/        # xUnit v3 unit tests (no ffmpeg binary needed)
+  FFmpeg.Rx.IntegrationTests/ # xUnit v3 integration tests (requires ffmpeg)
+    Internal/             # FfmpegTestBase, FfmpegAssert, FfmpegFixture
+    Transcode/            # Real encoding, remuxing, format conversion
+    EventStream/          # Progress events, cancellation, error handling
+    Probing/              # ffprobe against known test files
+    Filters/              # Scale, crop verified by probing output
+    PipeIO/               # Named pipe input/output (Windows)
+    Advanced/             # Multi-output, containers, metadata
+testdata/                 # Synthetic test media (lavfi-generated, CC0)
 ```
 
 ## Architecture

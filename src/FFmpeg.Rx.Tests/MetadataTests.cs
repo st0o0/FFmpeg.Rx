@@ -19,7 +19,7 @@ public sealed class MetadataTests
     {
         var args = SerializeWithMetadata(new MetadataSpec(
             GlobalEntries: [new("title", "My Video")]));
-        Assert.Contains("-metadata title=My Video", args);
+        Assert.Contains("-metadata title=\"My Video\"", args);
     }
 
     [Fact]

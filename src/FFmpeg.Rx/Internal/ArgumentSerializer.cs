@@ -343,7 +343,7 @@ internal static class ArgumentSerializer
         {
             foreach (var entry in metadata.GlobalEntries)
             {
-                sb.Append("-metadata ").Append(entry.Key).Append('=').Append(entry.Value).Append(' ');
+                sb.Append("-metadata ").Append(entry.Key).Append("=\"").Append(entry.Value).Append("\" ");
             }
         }
     }
