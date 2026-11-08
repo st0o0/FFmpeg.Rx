@@ -37,178 +37,54 @@ public sealed class FfmpegSession : IFfmpegSession
                 "This session has already been run. Build a new session from the pipeline.");
         }
 
-        var totalDuration = _spec.TotalDuration;
-        if (totalDuration is null && _spec.Inputs is [FileInputSpec fileInput])
-        {
-            try
-            {
-                var info = await Ffprobe.AnalyseAsync(fileInput.Path, ct).ConfigureAwait(false);
-                totalDuration = info.Duration;
-            }
-            catch
-            {
-                // probe failure is not fatal
-            }
-        }
-
+        var totalDuration = await ResolveDuration(ct).ConfigureAwait(false);
+        var mode = DetectMode(_spec);
+        var state = new SessionState();
         var sw = Stopwatch.StartNew();
-        var stderrLines = new List<string>();
-        var progressBlock = new Dictionary<string, string>();
 
-        var cmd = Cli.Wrap(_binaryPath)
-            .WithArguments(_args)
-            .WithValidation(CommandResultValidation.None);
-
-        var pipeInput = _spec.Inputs.OfType<PipeInputSpec>().FirstOrDefault();
-        if (pipeInput is not null)
-        {
-            cmd = cmd.WithStandardInputPipe(PipeSource.FromStream(pipeInput.Source));
-        }
-
-        var pipeOutput = _spec.Outputs
-            .Select(o => o.Destination)
-            .OfType<PipeDestination>()
-            .FirstOrDefault();
-
-        if (pipeOutput is not null)
-        {
-            var pipeProgressBlock = new Dictionary<string, string>();
-            cmd = cmd
-                .WithStandardOutputPipe(PipeTarget.ToStream(pipeOutput.Destination))
-                .WithStandardErrorPipe(PipeTarget.ToDelegate(line =>
-                {
-                    var stderrProgress = ProgressParser.ParseLine(line, pipeProgressBlock);
-                    if (stderrProgress is not null)
-                    {
-                        _subject.OnNext(stderrProgress);
-                        if (totalDuration is { } dur && dur.TotalMicroseconds > 0)
-                        {
-                            var percent = Math.Min(100.0, stderrProgress.TimeUs / dur.TotalMicroseconds * 100.0);
-                            _subject.OnNext(new PercentageProgressEvent(percent, stderrProgress));
-                        }
-                    }
-                    else
-                    {
-                        stderrLines.Add(line);
-                        _subject.OnNext(new LogEvent(line.Trim(), ClassifyLogLevel(line)));
-                    }
-                }));
-
-            return await ExecuteWithPipeOutput(cmd, sw, stderrLines, ct).ConfigureAwait(false);
-        }
-
-        return await ExecuteWithEventStream(cmd, sw, stderrLines, progressBlock, totalDuration, ct).ConfigureAwait(false);
-    }
-
-    private async Task<FfmpegResult> ExecuteWithEventStream(
-        Command cmd,
-        Stopwatch sw,
-        List<string> stderrLines,
-        Dictionary<string, string> progressBlock,
-        TimeSpan? totalDuration,
-        CancellationToken ct)
-    {
-        var exitCode = 0;
+        var cmd = BuildCommand(mode, state, totalDuration);
 
         try
         {
-            await foreach (var cmdEvent in cmd.ListenAsync(ct).ConfigureAwait(false))
+            if (mode == ExecutionMode.PipeOutput)
             {
-                switch (cmdEvent)
+                _subject.OnNext(new StartedEvent(0, $"{_binaryPath} {_args}"));
+                var result = await cmd.ExecuteAsync(ct).ConfigureAwait(false);
+                state.ExitCode = result.ExitCode;
+            }
+            else
+            {
+                await foreach (var cmdEvent in cmd.ListenAsync(ct).ConfigureAwait(false))
                 {
-                    case StartedCommandEvent started:
-                        _subject.OnNext(new StartedEvent(started.ProcessId, $"{_binaryPath} {_args}"));
-                        break;
-                    case StandardOutputCommandEvent stdOut:
-                        var progress = ProgressParser.ParseLine(stdOut.Text, progressBlock);
-                        if (progress is not null)
-                        {
-                            _subject.OnNext(progress);
-                            if (totalDuration is { } dur && dur.TotalMicroseconds > 0)
-                            {
-                                var percent = Math.Min(100.0, progress.TimeUs / dur.TotalMicroseconds * 100.0);
-                                _subject.OnNext(new PercentageProgressEvent(percent, progress));
-                            }
-                        }
-
-                        break;
-                    case StandardErrorCommandEvent stdErr:
-                        stderrLines.Add(stdErr.Text);
-                        _subject.OnNext(new LogEvent(stdErr.Text.Trim(), ClassifyLogLevel(stdErr.Text)));
-                        break;
-                    case ExitedCommandEvent exited:
-                        exitCode = exited.ExitCode;
-                        break;
+                    switch (cmdEvent)
+                    {
+                        case StartedCommandEvent started:
+                            _subject.OnNext(new StartedEvent(started.ProcessId, $"{_binaryPath} {_args}"));
+                            break;
+                        case StandardOutputCommandEvent stdOut:
+                            HandleStdoutLine(stdOut.Text, state, totalDuration);
+                            break;
+                        case StandardErrorCommandEvent stdErr:
+                            HandleStderrLine(stdErr.Text, state, mode, totalDuration);
+                            break;
+                        case ExitedCommandEvent exited:
+                            state.ExitCode = exited.ExitCode;
+                            break;
+                    }
                 }
             }
 
             sw.Stop();
-            return BuildResult(exitCode, stderrLines, sw.Elapsed);
+            return BuildResult(state, sw.Elapsed);
         }
         catch (OperationCanceledException)
         {
-            sw.Stop();
-            _subject.OnNext(new FailedEvent(-1, "Cancelled", FailureKind.Unknown));
-            _subject.OnCompleted();
-            return new FfmpegResult(false, -1, "Cancelled", sw.Elapsed);
+            return HandleCancellation(sw);
         }
         catch (Exception ex) when (ex is not InvalidOperationException)
         {
-            sw.Stop();
-            var error = $"Failed to start FFmpeg: {ex.Message}";
-            _subject.OnNext(new FailedEvent(1, error, FailureKind.Permanent));
-            _subject.OnCompleted();
-            return new FfmpegResult(false, 1, error, sw.Elapsed, FailureKind.Permanent);
+            return HandleStartFailure(sw, ex);
         }
-    }
-
-    private async Task<FfmpegResult> ExecuteWithPipeOutput(
-        Command cmd,
-        Stopwatch sw,
-        List<string> stderrLines,
-        CancellationToken ct)
-    {
-        try
-        {
-            _subject.OnNext(new StartedEvent(0, $"{_binaryPath} {_args}"));
-
-            var result = await cmd.ExecuteAsync(ct).ConfigureAwait(false);
-            sw.Stop();
-
-            return BuildResult(result.ExitCode, stderrLines, sw.Elapsed);
-        }
-        catch (OperationCanceledException)
-        {
-            sw.Stop();
-            _subject.OnNext(new FailedEvent(-1, "Cancelled", FailureKind.Unknown));
-            _subject.OnCompleted();
-            return new FfmpegResult(false, -1, "Cancelled", sw.Elapsed);
-        }
-        catch (Exception ex) when (ex is not InvalidOperationException)
-        {
-            sw.Stop();
-            var error = $"Failed to start FFmpeg: {ex.Message}";
-            _subject.OnNext(new FailedEvent(1, error, FailureKind.Permanent));
-            _subject.OnCompleted();
-            return new FfmpegResult(false, 1, error, sw.Elapsed, FailureKind.Permanent);
-        }
-    }
-
-    private FfmpegResult BuildResult(int exitCode, List<string> stderrLines, TimeSpan elapsed)
-    {
-        if (exitCode == 0)
-        {
-            _subject.OnNext(new CompletedEvent(0, elapsed));
-            _subject.OnCompleted();
-            return new FfmpegResult(true, 0, null, elapsed);
-        }
-
-        var stderr = string.Join('\n', stderrLines);
-        var error = ErrorClassifier.ExtractError(stderr);
-        var kind = ErrorClassifier.Classify(error);
-        _subject.OnNext(new FailedEvent(exitCode, error, kind));
-        _subject.OnCompleted();
-        return new FfmpegResult(false, exitCode, error, elapsed, kind);
     }
 
     public static IFfmpegSession Create(PipelineSpec spec) => new FfmpegSession(spec);
@@ -219,7 +95,139 @@ public sealed class FfmpegSession : IFfmpegSession
         return ValueTask.CompletedTask;
     }
 
-    private static LogLevel ClassifyLogLevel(string line)
+    private async Task<TimeSpan?> ResolveDuration(CancellationToken ct)
+    {
+        if (_spec.TotalDuration is not null)
+        {
+            return _spec.TotalDuration;
+        }
+
+        if (_spec.Inputs is [FileInputSpec fileInput])
+        {
+            try
+            {
+                var info = await Ffprobe.AnalyseAsync(fileInput.Path, ct).ConfigureAwait(false);
+                return info.Duration;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    private Command BuildCommand(ExecutionMode mode, SessionState state, TimeSpan? totalDuration)
+    {
+        var cmd = Cli.Wrap(_binaryPath)
+            .WithArguments(_args)
+            .WithValidation(CommandResultValidation.None);
+
+        var pipeInput = _spec.Inputs.OfType<PipeInputSpec>().FirstOrDefault();
+        if (pipeInput is not null)
+        {
+            cmd = cmd.WithStandardInputPipe(PipeSource.FromStream(pipeInput.Source));
+        }
+
+        if (mode == ExecutionMode.PipeOutput)
+        {
+            var pipeOutput = _spec.Outputs
+                .Select(o => o.Destination)
+                .OfType<PipeDestination>()
+                .First();
+
+            cmd = cmd
+                .WithStandardOutputPipe(PipeTarget.ToStream(pipeOutput.Destination))
+                .WithStandardErrorPipe(PipeTarget.ToDelegate(line =>
+                    HandleStderrLine(line, state, mode, totalDuration)));
+        }
+
+        return cmd;
+    }
+
+    private void HandleStdoutLine(string line, SessionState state, TimeSpan? totalDuration)
+    {
+        var progress = ProgressParser.ParseLine(line, state.ProgressBlock);
+        if (progress is not null)
+        {
+            foreach (var evt in EmitProgress(progress, totalDuration))
+            {
+                _subject.OnNext(evt);
+            }
+        }
+    }
+
+    private void HandleStderrLine(string line, SessionState state, ExecutionMode mode, TimeSpan? totalDuration)
+    {
+        if (mode == ExecutionMode.PipeOutput)
+        {
+            var progress = ProgressParser.ParseLine(line, state.ProgressBlock);
+            if (progress is not null)
+            {
+                foreach (var evt in EmitProgress(progress, totalDuration))
+                {
+                    _subject.OnNext(evt);
+                }
+
+                return;
+            }
+        }
+
+        state.StderrLines.Add(line);
+        _subject.OnNext(new LogEvent(line.Trim(), ClassifyLogLevel(line)));
+    }
+
+    internal static IEnumerable<FfmpegEvent> EmitProgress(ProgressEvent progress, TimeSpan? totalDuration)
+    {
+        yield return progress;
+        if (totalDuration is { } dur && dur.TotalMicroseconds > 0)
+        {
+            var percent = Math.Min(100.0, progress.TimeUs / dur.TotalMicroseconds * 100.0);
+            yield return new PercentageProgressEvent(percent, progress);
+        }
+    }
+
+    private FfmpegResult BuildResult(SessionState state, TimeSpan elapsed)
+    {
+        if (state.ExitCode == 0)
+        {
+            _subject.OnNext(new CompletedEvent(0, elapsed));
+            _subject.OnCompleted();
+            return new FfmpegResult(true, 0, null, elapsed);
+        }
+
+        var stderr = string.Join('\n', state.StderrLines);
+        var error = ErrorClassifier.ExtractError(stderr);
+        var kind = ErrorClassifier.Classify(error);
+        _subject.OnNext(new FailedEvent(state.ExitCode, error, kind));
+        _subject.OnCompleted();
+        return new FfmpegResult(false, state.ExitCode, error, elapsed, kind);
+    }
+
+    private FfmpegResult HandleCancellation(Stopwatch sw)
+    {
+        sw.Stop();
+        _subject.OnNext(new FailedEvent(-1, "Cancelled", FailureKind.Unknown));
+        _subject.OnCompleted();
+        return new FfmpegResult(false, -1, "Cancelled", sw.Elapsed);
+    }
+
+    private FfmpegResult HandleStartFailure(Stopwatch sw, Exception ex)
+    {
+        sw.Stop();
+        var error = $"Failed to start FFmpeg: {ex.Message}";
+        _subject.OnNext(new FailedEvent(1, error, FailureKind.Permanent));
+        _subject.OnCompleted();
+        return new FfmpegResult(false, 1, error, sw.Elapsed, FailureKind.Permanent);
+    }
+
+    private static ExecutionMode DetectMode(PipelineSpec spec) =>
+        spec.Outputs.Any(o => o.Destination is PipeDestination)
+            ? ExecutionMode.PipeOutput
+            : ExecutionMode.EventStream;
+
+    internal static LogLevel ClassifyLogLevel(string line)
     {
         if (line.Contains("[error]", StringComparison.OrdinalIgnoreCase) ||
             line.Contains("Error", StringComparison.OrdinalIgnoreCase))
@@ -238,5 +246,14 @@ public sealed class FfmpegSession : IFfmpegSession
         }
 
         return LogLevel.Info;
+    }
+
+    private enum ExecutionMode { EventStream, PipeOutput }
+
+    private sealed class SessionState
+    {
+        public readonly List<string> StderrLines = [];
+        public readonly Dictionary<string, string> ProgressBlock = [];
+        public int ExitCode;
     }
 }
