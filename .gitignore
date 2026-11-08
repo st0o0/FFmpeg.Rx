@@ -341,3 +341,7 @@ Thumbs.db
 
 # Test results
 *.received.*
+
+# Coverage reports
+*.cobertura.xml
+CoverageReport/
