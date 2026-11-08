@@ -30,16 +30,17 @@ public sealed class MultiOutputTests
     [Fact]
     public void Tee_muxer_two_targets()
     {
-        var pipeline = new FfmpegPipeline(
-            [new FileInput("input.mp4")],
-            [new FfmpegOutput("", [new StreamMapping(0, 0, StreamType.Video, VideoCodec.H264.Name)], [])],
-            [],
-            TeeOutput: new TeeOutput([
-                new TeeTarget("out1.mp4", Format: "mp4"),
-                new TeeTarget("out2.mp4", Format: "mp4")
-            ]));
+        var spec = new PipelineSpec(
+            [new FileInputSpec("input.mp4")],
+            [new OutputSpec(
+                new FileDestination(""),
+                Streams: [new StreamSpec(0, 0, StreamType.Video,
+                    new VideoEncode(VideoCodec.H264, new VideoEncodingOptions()))],
+                Tee: new TeeOutput([
+                    new TeeTarget("out1.mp4", Format: "mp4"),
+                    new TeeTarget("out2.mp4", Format: "mp4")]))]);
 
-        var args = ArgumentBuilder.Build(pipeline);
+        var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-f tee", args);
         Assert.Contains("[f=mp4]out1.mp4|[f=mp4]out2.mp4", args);
     }
@@ -47,16 +48,15 @@ public sealed class MultiOutputTests
     [Fact]
     public void Tee_with_select_and_ignore()
     {
-        var pipeline = new FfmpegPipeline(
-            [new FileInput("input.mp4")],
-            [new FfmpegOutput("", [], [])],
-            [],
-            TeeOutput: new TeeOutput([
-                new TeeTarget("video.mp4", Format: "mp4", Select: "v"),
-                new TeeTarget("audio.mp4", Format: "mp4", Select: "a", IgnoreFailure: true)
-            ]));
+        var spec = new PipelineSpec(
+            [new FileInputSpec("input.mp4")],
+            [new OutputSpec(
+                new FileDestination(""),
+                Tee: new TeeOutput([
+                    new TeeTarget("video.mp4", Format: "mp4", Select: "v"),
+                    new TeeTarget("audio.mp4", Format: "mp4", Select: "a", IgnoreFailure: true)]))]);
 
-        var args = ArgumentBuilder.Build(pipeline);
+        var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("[f=mp4:select=v]video.mp4", args);
         Assert.Contains("[f=mp4:select=a:onfail=ignore]audio.mp4", args);
     }

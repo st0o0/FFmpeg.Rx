@@ -7,13 +7,13 @@ namespace FFmpeg.Rx.Tests;
 public sealed class PipelineBuilderTests
 {
     [Fact]
-    public void Basic_pipeline_builds_session_via_old_builder()
+    public void Basic_pipeline_builds_session_via_builder()
     {
         var session = Ffmpeg
             .Input(new Uri("https://example.com/video.mp4"))
             .Output("out.mkv", o => o
-                .Map(0, 0, StreamType.Video, VideoCodec.Copy.Name)
-                .Map(0, 0, StreamType.Audio, AudioCodec.Copy.Name));
+                .Stream(0, 0, StreamType.Video, s => s.Copy())
+                .Stream(0, 0, StreamType.Audio, s => s.Copy()));
 
         Assert.IsAssignableFrom<IFfmpegSession>(session);
     }
@@ -85,7 +85,7 @@ public sealed class PipelineBuilderTests
                 Preset: Preset.Slow,
                 Profile: VideoProfile.High,
                 Tune: Tune.Film,
-                PixelFormat: Codecs.PixelFormat.Yuv420p,
+                PixelFormat: PixelFormat.Yuv420p,
                 Framerate: Framerate.Fps(30)));
 
         Assert.Equal("libx264", encode.Codec.Name);

@@ -90,7 +90,7 @@ public sealed class EncodingOptionsTests
     {
         var args = SerializeOutput(new OutputSpec(new FileDestination("out.mp4"),
             Streams: [new StreamSpec(0, 0, StreamType.Video,
-                new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(PixelFormat: Codecs.PixelFormat.Yuv420p)))]));
+                new VideoEncode(VideoCodec.H264, new VideoEncodingOptions(PixelFormat: PixelFormat.Yuv420p)))]));
         Assert.Contains("-pix_fmt yuv420p", args);
     }
 
@@ -167,7 +167,7 @@ public sealed class EncodingOptionsTests
                         Quality: Quality.Crf(23),
                         Preset: Preset.Medium,
                         Profile: VideoProfile.High,
-                        PixelFormat: Codecs.PixelFormat.Yuv420p,
+                        PixelFormat: PixelFormat.Yuv420p,
                         Tune: Tune.Film))),
                 new StreamSpec(0, 0, StreamType.Audio,
                     new AudioEncode(AudioCodec.Aac, new AudioEncodingOptions(Bitrate: Bitrate.Kbps(192))))]));

@@ -118,50 +118,51 @@ public sealed class FilterTests
     [Fact]
     public void Video_filter_chain_serialization()
     {
-        var options = new Builder.OutputOptions();
-        options.VideoFilter(f => f.Scale(1920, 1080).HorizontalFlip());
-        var pipeline = new FfmpegPipeline(
-            [new FileInput("in.mp4")],
-            new FfmpegOutput("out.mp4", [], [], false, options.VideoFilters),
-            []);
-        var args = ArgumentBuilder.Build(pipeline);
+        var spec = new PipelineSpec(
+            [new FileInputSpec("in.mp4")],
+            [new OutputSpec(
+                new FileDestination("out.mp4"),
+                Filters: new SimpleFilterSpec(
+                    VideoFilters: [new ScaleFilter(1920, 1080), new HFlipFilter()]))]);
+        var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-vf \"scale=1920:1080,hflip\"", args);
     }
 
     [Fact]
     public void Audio_filter_chain_serialization()
     {
-        var options = new Builder.OutputOptions();
-        options.AudioFilter(f => f.LoudNorm().Volume(0.9));
-        var pipeline = new FfmpegPipeline(
-            [new FileInput("in.mp4")],
-            new FfmpegOutput("out.mp4", [], [], false, AudioFilters: options.AudioFilters),
-            []);
-        var args = ArgumentBuilder.Build(pipeline);
+        var spec = new PipelineSpec(
+            [new FileInputSpec("in.mp4")],
+            [new OutputSpec(
+                new FileDestination("out.mp4"),
+                Filters: new SimpleFilterSpec(
+                    AudioFilters: [new LoudNormFilter(), new VolumeFilter(0.9)]))]);
+        var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-af \"loudnorm,volume=0.9\"", args);
     }
 
     [Fact]
     public void Single_video_filter()
     {
-        var options = new Builder.OutputOptions();
-        options.VideoFilter(f => f.Scale(1920, 1080));
-        var pipeline = new FfmpegPipeline(
-            [new FileInput("in.mp4")],
-            new FfmpegOutput("out.mp4", [], [], false, options.VideoFilters),
-            []);
-        var args = ArgumentBuilder.Build(pipeline);
+        var spec = new PipelineSpec(
+            [new FileInputSpec("in.mp4")],
+            [new OutputSpec(
+                new FileDestination("out.mp4"),
+                Filters: new SimpleFilterSpec(
+                    VideoFilters: [new ScaleFilter(1920, 1080)]))]);
+        var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-vf \"scale=1920:1080\"", args);
     }
 
     [Fact]
     public void Label_mapping()
     {
-        var pipeline = new FfmpegPipeline(
-            [new FileInput("in.mp4")],
-            new FfmpegOutput("out.mp4", [], [], false, LabelMappings: ["out"]),
-            []);
-        var args = ArgumentBuilder.Build(pipeline);
+        var spec = new PipelineSpec(
+            [new FileInputSpec("in.mp4")],
+            [new OutputSpec(
+                new FileDestination("out.mp4"),
+                LabelMappings: ["out"])]);
+        var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-map \"[out]\"", args);
     }
 }

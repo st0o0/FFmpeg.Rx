@@ -17,7 +17,10 @@ public sealed class FfmpegFixture : IAsyncLifetime
         return ValueTask.CompletedTask;
     }
 
-    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+    public ValueTask DisposeAsync()
+    {
+        return ValueTask.CompletedTask;
+    }
 
     private static bool CheckFfmpeg()
     {

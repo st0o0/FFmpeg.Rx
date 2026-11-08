@@ -94,12 +94,14 @@ public sealed class FilterGraphTests
             .Chain("base", f => f.Scale(1920, 1080), "out")
             .Build();
 
-        var pipeline = new FfmpegPipeline(
-            [new FileInput("in.mp4")],
-            new FfmpegOutput("out.mp4", [], [], FilterComplexString: graph.Serialize(), LabelMappings: ["out"]),
-            []);
+        var spec = new PipelineSpec(
+            [new FileInputSpec("in.mp4")],
+            [new OutputSpec(
+                new FileDestination("out.mp4"),
+                Filters: new ComplexFilterSpec(graph),
+                LabelMappings: ["out"])]);
 
-        var args = ArgumentBuilder.Build(pipeline);
+        var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-filter_complex \"[0:v]scale=1920:1080[out]\"", args);
         Assert.Contains("-map \"[out]\"", args);
     }
