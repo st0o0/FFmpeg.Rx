@@ -78,6 +78,24 @@ public sealed class FluentApiTests
     }
 
     [Fact]
+    public void OutputTee_with_options_returns_IFfmpegSession()
+    {
+        var session = Ffmpeg.Input("video.mp4")
+            .OutputTee(
+                o => o.Stream(0, 0, StreamType.Video, s => s.Copy()),
+                t => t
+                    .Target("out1.mp4", opts => opts
+                        .ForceFormat("mp4")
+                        .WithSelect("v")
+                        .WithMovFlags("faststart"))
+                    .Target("out2.mp4", opts => opts
+                        .ForceFormat("mp4")
+                        .WithBitstreamFilter("aac_adtstoasc")
+                        .OnFailIgnore()));
+        Assert.IsAssignableFrom<IFfmpegSession>(session);
+    }
+
+    [Fact]
     public void Outputs_multi_build_returns_IFfmpegSession()
     {
         var session = Ffmpeg.Input("video.mp4")

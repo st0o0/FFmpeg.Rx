@@ -167,10 +167,16 @@ public sealed class ValueObjectTests
         Assert.Equal("libx265", VideoCodec.Hevc.Name);
         Assert.Equal("libvpx-vp9", VideoCodec.Vp9.Name);
         Assert.Equal("libaom-av1", VideoCodec.Av1.Name);
+        Assert.Equal("libsvtav1", VideoCodec.SvtAv1.Name);
         Assert.Equal("h264_nvenc", VideoCodec.H264Nvenc.Name);
         Assert.Equal("hevc_nvenc", VideoCodec.HevcNvenc.Name);
         Assert.Equal("h264_qsv", VideoCodec.H264Qsv.Name);
         Assert.Equal("hevc_qsv", VideoCodec.HevcQsv.Name);
+        Assert.Equal("h264_amf", VideoCodec.H264Amf.Name);
+        Assert.Equal("hevc_amf", VideoCodec.HevcAmf.Name);
+        Assert.Equal("h264_videotoolbox", VideoCodec.H264VideoToolbox.Name);
+        Assert.Equal("hevc_videotoolbox", VideoCodec.HevcVideoToolbox.Name);
+        Assert.Equal("h264_cuvid", VideoCodec.H264Cuvid.Name);
         Assert.Equal("copy", VideoCodec.Copy.Name);
     }
 
@@ -186,5 +192,107 @@ public sealed class ValueObjectTests
         Assert.Equal("slow", Preset.Slow.Name);
         Assert.Equal("slower", Preset.Slower.Name);
         Assert.Equal("veryslow", Preset.VerySlow.Name);
+    }
+
+    [Fact]
+    public void All_AudioCodec_constants()
+    {
+        Assert.Equal("aac", AudioCodec.Aac.Name);
+        Assert.Equal("libopus", AudioCodec.Opus.Name);
+        Assert.Equal("libmp3lame", AudioCodec.Mp3.Name);
+        Assert.Equal("flac", AudioCodec.Flac.Name);
+        Assert.Equal("pcm_s16le", AudioCodec.Pcm16Le.Name);
+        Assert.Equal("pcm_s24le", AudioCodec.Pcm24Le.Name);
+        Assert.Equal("libvorbis", AudioCodec.Vorbis.Name);
+        Assert.Equal("copy", AudioCodec.Copy.Name);
+    }
+
+    [Fact]
+    public void All_SubtitleCodec_constants()
+    {
+        Assert.Equal("mov_text", SubtitleCodec.MovText.Name);
+        Assert.Equal("srt", SubtitleCodec.Srt.Name);
+        Assert.Equal("ass", SubtitleCodec.Ass.Name);
+        Assert.Equal("webvtt", SubtitleCodec.WebVtt.Name);
+        Assert.Equal("copy", SubtitleCodec.Copy.Name);
+    }
+
+    [Fact]
+    public void All_PixelFormat_constants()
+    {
+        Assert.Equal("yuv420p", PixelFormat.Yuv420p.Name);
+        Assert.Equal("yuv422p", PixelFormat.Yuv422p.Name);
+        Assert.Equal("yuv444p", PixelFormat.Yuv444p.Name);
+        Assert.Equal("rgb24", PixelFormat.Rgb24.Name);
+        Assert.Equal("rgba", PixelFormat.Rgba.Name);
+        Assert.Equal("nv12", PixelFormat.Nv12.Name);
+        Assert.Equal("nv21", PixelFormat.Nv21.Name);
+        Assert.Equal("p010le", PixelFormat.P010Le.Name);
+    }
+
+    [Fact]
+    public void All_Tune_constants()
+    {
+        Assert.Equal("film", Tune.Film.Name);
+        Assert.Equal("animation", Tune.Animation.Name);
+        Assert.Equal("grain", Tune.Grain.Name);
+        Assert.Equal("stillimage", Tune.StillImage.Name);
+        Assert.Equal("fastdecode", Tune.FastDecode.Name);
+        Assert.Equal("zerolatency", Tune.ZeroLatency.Name);
+    }
+
+    [Fact]
+    public void All_VideoProfile_constants()
+    {
+        Assert.Equal("baseline", VideoProfile.Baseline.Name);
+        Assert.Equal("main", VideoProfile.Main.Name);
+        Assert.Equal("high", VideoProfile.High.Name);
+        Assert.Equal("high10", VideoProfile.High10.Name);
+        Assert.Equal("high422", VideoProfile.High422.Name);
+        Assert.Equal("high444", VideoProfile.High444.Name);
+    }
+
+    [Fact]
+    public void All_ContainerFormat_constants()
+    {
+        Assert.Equal("mp4", ContainerFormat.Mp4.Name);
+        Assert.Equal("matroska", ContainerFormat.Mkv.Name);
+        Assert.Equal("webm", ContainerFormat.WebM.Name);
+        Assert.Equal("mpegts", ContainerFormat.Ts.Name);
+        Assert.Equal("flv", ContainerFormat.Flv.Name);
+        Assert.Equal("avi", ContainerFormat.Avi.Name);
+        Assert.Equal("mov", ContainerFormat.Mov.Name);
+        Assert.Equal("ogg", ContainerFormat.Ogg.Name);
+        Assert.Equal("wav", ContainerFormat.Wav.Name);
+        Assert.Equal("mp3", ContainerFormat.Mp3.Name);
+        Assert.Equal("flac", ContainerFormat.Flac.Name);
+        Assert.Equal("null", ContainerFormat.Null.Name);
+    }
+
+    [Fact]
+    public void Framerate_Fps_double()
+    {
+        var fps = Framerate.Fps(29.97);
+        Assert.InRange(fps.ToDouble(), 29.96, 29.98);
+    }
+
+    [Fact]
+    public void Framerate_Ntsc24() => Assert.Equal(Framerate.Ntsc24, Framerate.Rational(24000, 1001));
+
+    [Fact]
+    public void Framerate_Ntsc60() => Assert.Equal(Framerate.Ntsc60, Framerate.Rational(60000, 1001));
+
+    [Fact]
+    public void Bitrate_Mbps_double()
+    {
+        var bitrate = Bitrate.Mbps(2.5);
+        Assert.Equal(2_500_000, bitrate.BitsPerSecond);
+    }
+
+    [Fact]
+    public void Bitrate_raw_bits_ffmpeg_string()
+    {
+        var bitrate = Bitrate.Kbps(1500);
+        Assert.Equal("1500k", bitrate.ToFfmpegString());
     }
 }
