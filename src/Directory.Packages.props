@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Library dependencies: minimum versions, so consumers are not forced to update. -->
+    <PackageVersion Include="CliWrap" Version="[3.10.5,4)" />
     <PackageVersion Include="R3" Version="[1.2.9,)" />
     <!-- Testing -->
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
