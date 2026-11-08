@@ -1,13 +1,21 @@
 namespace FFmpeg.Rx.Codecs;
 
-public static class AudioCodec
+public readonly record struct AudioCodec
 {
-    public const string Copy = "copy";
-    public const string Aac = "aac";
-    public const string LibOpus = "libopus";
-    public const string LibMp3Lame = "libmp3lame";
-    public const string Flac = "flac";
-    public const string Pcm16Le = "pcm_s16le";
-    public const string Pcm24Le = "pcm_s24le";
-    public const string LibVorbis = "libvorbis";
+    public string Name { get; }
+
+    private AudioCodec(string name) => Name = name;
+
+    public static AudioCodec Aac => new("aac");
+    public static AudioCodec Opus => new("libopus");
+    public static AudioCodec Mp3 => new("libmp3lame");
+    public static AudioCodec Flac => new("flac");
+    public static AudioCodec Pcm16Le => new("pcm_s16le");
+    public static AudioCodec Pcm24Le => new("pcm_s24le");
+    public static AudioCodec Vorbis => new("libvorbis");
+    public static AudioCodec Copy => new("copy");
+
+    public static AudioCodec Custom(string name) => new(name);
+
+    public override string ToString() => Name;
 }

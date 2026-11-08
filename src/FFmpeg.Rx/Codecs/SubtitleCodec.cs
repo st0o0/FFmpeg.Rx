@@ -1,10 +1,18 @@
 namespace FFmpeg.Rx.Codecs;
 
-public static class SubtitleCodec
+public readonly record struct SubtitleCodec
 {
-    public const string Copy = "copy";
-    public const string MovText = "mov_text";
-    public const string Srt = "srt";
-    public const string Ass = "ass";
-    public const string WebVtt = "webvtt";
+    public string Name { get; }
+
+    private SubtitleCodec(string name) => Name = name;
+
+    public static SubtitleCodec MovText => new("mov_text");
+    public static SubtitleCodec Srt => new("srt");
+    public static SubtitleCodec Ass => new("ass");
+    public static SubtitleCodec WebVtt => new("webvtt");
+    public static SubtitleCodec Copy => new("copy");
+
+    public static SubtitleCodec Custom(string name) => new(name);
+
+    public override string ToString() => Name;
 }

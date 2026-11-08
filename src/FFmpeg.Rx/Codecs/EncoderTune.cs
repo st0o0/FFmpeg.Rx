@@ -1,11 +1,19 @@
 namespace FFmpeg.Rx.Codecs;
 
-public static class EncoderTune
+public readonly record struct Tune
 {
-    public const string Film = "film";
-    public const string Animation = "animation";
-    public const string Grain = "grain";
-    public const string StillImage = "stillimage";
-    public const string FastDecode = "fastdecode";
-    public const string ZeroLatency = "zerolatency";
+    public string Name { get; }
+
+    private Tune(string name) => Name = name;
+
+    public static Tune Film => new("film");
+    public static Tune Animation => new("animation");
+    public static Tune Grain => new("grain");
+    public static Tune StillImage => new("stillimage");
+    public static Tune FastDecode => new("fastdecode");
+    public static Tune ZeroLatency => new("zerolatency");
+
+    public static Tune Custom(string name) => new(name);
+
+    public override string ToString() => Name;
 }
