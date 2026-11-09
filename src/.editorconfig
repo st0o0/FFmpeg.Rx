@@ -35,20 +35,23 @@ csharp_style_expression_bodied_methods = when_on_single_line:suggestion
 csharp_style_expression_bodied_constructors = false:suggestion
 csharp_style_expression_bodied_properties = true:suggestion
 csharp_style_expression_bodied_accessors = true:suggestion
+csharp_style_expression_bodied_lambdas = true:suggestion
 
 # Pattern matching
 csharp_style_pattern_matching_over_is_with_cast_check = true:warning
 csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
+csharp_style_prefer_pattern_matching = true:suggestion
 
 # Null checking
 csharp_style_throw_expression = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
+csharp_style_prefer_null_check_over_type_check = true:warning
 
 # Using directives
 csharp_using_directive_placement = outside_namespace:warning
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
-dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0005.severity = suggestion
 dotnet_diagnostic.IDE0055.severity = warning
 
 # Braces
@@ -72,16 +75,21 @@ csharp_space_after_keywords_in_control_flow_statements = true
 dotnet_style_qualification_for_field = false:warning
 dotnet_style_qualification_for_property = false:warning
 dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
 dotnet_style_predefined_type_for_locals_parameters_members = true:warning
 dotnet_style_predefined_type_for_member_access = true:warning
 
 # Modifiers
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
 dotnet_style_readonly_field = true:warning
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
 
 # Prefer modern syntax
 csharp_style_prefer_primary_constructors = false:none
 csharp_style_prefer_switch_expression = true:suggestion
+csharp_style_prefer_index_operator = true:suggestion
+csharp_style_prefer_range_operator = true:suggestion
+csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
 dotnet_style_prefer_collection_expression = true:warning
 dotnet_style_coalesce_expression = true:warning
 dotnet_style_null_propagation = true:warning
@@ -143,14 +151,6 @@ dotnet_diagnostic.CA1052.severity = warning
 dotnet_diagnostic.IDE0130.severity = warning
 dotnet_diagnostic.CA1510.severity = warning
 dotnet_diagnostic.CA2016.severity = warning
-dotnet_diagnostic.CA1848.severity = none
-dotnet_diagnostic.CA1704.severity = none
-
-[**.Tests/**.cs]
-dotnet_diagnostic.CA1707.severity = none
-dotnet_diagnostic.CA2263.severity = none
-dotnet_diagnostic.CA2007.severity = none
-dotnet_diagnostic.CS1591.severity = none
 
 [**.Example/**.cs]
 dotnet_diagnostic.CA2007.severity = none
