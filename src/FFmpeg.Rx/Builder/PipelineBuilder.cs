@@ -14,7 +14,7 @@ public sealed class PipelineBuilder
         _binaryPath = binaryPath;
     }
 
-    internal PipelineBuilder AddInput(InputConfig input)
+    public PipelineBuilder AddInput(InputConfig input)
     {
         _inputs.Add(input);
         return this;
@@ -26,15 +26,39 @@ public sealed class PipelineBuilder
         return this;
     }
 
+    public PipelineBuilder Input(Uri url, Action<InputOptionsBuilder> configure)
+    {
+        var builder = new InputOptionsBuilder();
+        configure(builder);
+        _inputs.Add(new UrlInputConfig(url) { Options = builder.Build() });
+        return this;
+    }
+
     public PipelineBuilder Input(string filePath)
     {
         _inputs.Add(new FileInputConfig(filePath));
         return this;
     }
 
+    public PipelineBuilder Input(string filePath, Action<InputOptionsBuilder> configure)
+    {
+        var builder = new InputOptionsBuilder();
+        configure(builder);
+        _inputs.Add(new FileInputConfig(filePath) { Options = builder.Build() });
+        return this;
+    }
+
     public PipelineBuilder Input(Stream source, string format)
     {
         _inputs.Add(new PipeInputConfig(source, format));
+        return this;
+    }
+
+    public PipelineBuilder Input(Stream source, string format, Action<InputOptionsBuilder> configure)
+    {
+        var builder = new InputOptionsBuilder();
+        configure(builder);
+        _inputs.Add(new PipeInputConfig(source, format) { Options = builder.Build() });
         return this;
     }
 

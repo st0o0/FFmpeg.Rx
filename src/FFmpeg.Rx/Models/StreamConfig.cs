@@ -6,4 +6,5 @@ public sealed record StreamConfig(
     StreamType Type,
     CodecConfig Codec,
     IReadOnlyList<KeyValuePair<string, string>>? Metadata = null,
-    string? Disposition = null);
+    string? Disposition = null,
+    string? BitstreamFilter = null);

@@ -190,4 +190,126 @@ public sealed class ArgumentSerializerTests
         var args = ArgumentSerializer.Serialize(spec);
         Assert.Contains("-progress pipe:1", args);
     }
+
+    [Fact]
+    public void User_agent_serialized_before_input()
+    {
+        var spec = new PipelineConfig(
+            [new UrlInputConfig(new Uri("https://example.com/v.mp4"))
+            {
+                Options = new InputOptionConfig(UserAgent: "Mozilla/5.0")
+            }],
+            [new OutputConfig(new FileDestination("out.mkv"))]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-user_agent \"Mozilla/5.0\"", args);
+        var uaIdx = args.IndexOf("-user_agent");
+        var inputIdx = args.IndexOf("-i https://");
+        Assert.True(uaIdx < inputIdx);
+    }
+
+    [Fact]
+    public void Http_proxy_serialized_before_input()
+    {
+        var spec = new PipelineConfig(
+            [new UrlInputConfig(new Uri("https://example.com/v.mp4"))
+            {
+                Options = new InputOptionConfig(HttpProxy: "http://proxy:8888")
+            }],
+            [new OutputConfig(new FileDestination("out.mkv"))]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-http_proxy http://proxy:8888", args);
+        var proxyIdx = args.IndexOf("-http_proxy");
+        var inputIdx = args.IndexOf("-i https://");
+        Assert.True(proxyIdx < inputIdx);
+    }
+
+    [Fact]
+    public void Headers_serialized_before_input()
+    {
+        var spec = new PipelineConfig(
+            [new UrlInputConfig(new Uri("https://example.com/v.mp4"))
+            {
+                Options = new InputOptionConfig(Headers: "Referer: https://example.com")
+            }],
+            [new OutputConfig(new FileDestination("out.mkv"))]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-headers \"Referer: https://example.com\"", args);
+    }
+
+    [Fact]
+    public void All_http_input_options_serialized()
+    {
+        var spec = new PipelineConfig(
+            [new UrlInputConfig(new Uri("https://example.com/v.mp4"))
+            {
+                Options = new InputOptionConfig(
+                    UserAgent: "Bot/1.0",
+                    HttpProxy: "http://proxy:8888",
+                    Headers: "X-Custom: value")
+            }],
+            [new OutputConfig(new FileDestination("out.mkv"))]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-user_agent \"Bot/1.0\"", args);
+        Assert.Contains("-http_proxy http://proxy:8888", args);
+        Assert.Contains("-headers \"X-Custom: value\"", args);
+    }
+
+    [Fact]
+    public void Audio_bitstream_filter_serialized()
+    {
+        var spec = new PipelineConfig(
+            [new UrlInputConfig(new Uri("https://example.com/v.mp4"))],
+            [new OutputConfig(new FileDestination("out.mp4"),
+                Streams: [
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy()),
+                    new StreamConfig(0, 0, StreamType.Audio, new StreamCopy(),
+                        BitstreamFilter: "aac_adtstoasc")])]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-bsf:a aac_adtstoasc", args);
+    }
+
+    [Fact]
+    public void Video_bitstream_filter_serialized()
+    {
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.ts")],
+            [new OutputConfig(new FileDestination("out.mp4"),
+                Streams: [
+                    new StreamConfig(0, 0, StreamType.Video, new StreamCopy(),
+                        BitstreamFilter: "h264_mp4toannexb")])]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-bsf:v h264_mp4toannexb", args);
+    }
+
+    [Fact]
+    public void Subtitle_bitstream_filter_serialized()
+    {
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mkv")],
+            [new OutputConfig(new FileDestination("out.mp4"),
+                Streams: [
+                    new StreamConfig(0, 0, StreamType.Subtitle, new SubtitleEncode(SubtitleCodec.MovText),
+                        BitstreamFilter: "mov2textsub")])]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.Contains("-bsf:s mov2textsub", args);
+    }
+
+    [Fact]
+    public void No_bsf_when_null()
+    {
+        var spec = new PipelineConfig(
+            [new FileInputConfig("input.mp4")],
+            [new OutputConfig(new FileDestination("out.mp4"),
+                Streams: [new StreamConfig(0, 0, StreamType.Audio, new StreamCopy())])]);
+
+        var args = ArgumentSerializer.Serialize(spec);
+        Assert.DoesNotContain("-bsf:", args);
+    }
 }

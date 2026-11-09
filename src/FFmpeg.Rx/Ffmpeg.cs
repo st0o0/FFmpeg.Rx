@@ -8,11 +8,32 @@ public static class Ffmpeg
 {
     public static PipelineBuilder Input(Uri url) => new PipelineBuilder(null).AddInput(new UrlInputConfig(url));
 
+    public static PipelineBuilder Input(Uri url, Action<InputOptionsBuilder> configure)
+    {
+        var builder = new InputOptionsBuilder();
+        configure(builder);
+        return new PipelineBuilder(null).AddInput(new UrlInputConfig(url) { Options = builder.Build() });
+    }
+
     public static PipelineBuilder Input(string filePath) =>
         new PipelineBuilder(null).AddInput(new FileInputConfig(filePath));
 
+    public static PipelineBuilder Input(string filePath, Action<InputOptionsBuilder> configure)
+    {
+        var builder = new InputOptionsBuilder();
+        configure(builder);
+        return new PipelineBuilder(null).AddInput(new FileInputConfig(filePath) { Options = builder.Build() });
+    }
+
     public static PipelineBuilder Input(Stream source, string format) =>
         new PipelineBuilder(null).AddInput(new PipeInputConfig(source, format));
+
+    public static PipelineBuilder Input(Stream source, string format, Action<InputOptionsBuilder> configure)
+    {
+        var builder = new InputOptionsBuilder();
+        configure(builder);
+        return new PipelineBuilder(null).AddInput(new PipeInputConfig(source, format) { Options = builder.Build() });
+    }
 
     public static PipelineBuilder At(string binaryPath) => new(binaryPath);
 

@@ -103,6 +103,21 @@ internal static class ArgumentSerializer
             sb.Append("-stream_loop ").Append(streamLoop).Append(' ');
         }
 
+        if (opts.UserAgent is { } userAgent)
+        {
+            sb.Append("-user_agent \"").Append(userAgent).Append("\" ");
+        }
+
+        if (opts.HttpProxy is { } httpProxy)
+        {
+            sb.Append("-http_proxy ").Append(httpProxy).Append(' ');
+        }
+
+        if (opts.Headers is { } headers)
+        {
+            sb.Append("-headers \"").Append(headers).Append("\" ");
+        }
+
         if (opts.Seek is { } seek)
         {
             sb.Append("-ss ").Append(FormatTime(seek)).Append(' ');
@@ -128,6 +143,7 @@ internal static class ArgumentSerializer
         {
             SerializeStreamMappings(sb, output.Streams);
             SerializeCodecs(sb, output.Streams);
+            SerializeBitstreamFilters(sb, output.Streams);
         }
 
         if (output.LabelMappings is { Count: > 0 })
@@ -430,6 +446,17 @@ internal static class ArgumentSerializer
         }
 
         sb.Append('"');
+    }
+
+    private static void SerializeBitstreamFilters(StringBuilder sb, IReadOnlyList<StreamConfig> streams)
+    {
+        foreach (var stream in streams)
+        {
+            if (stream.BitstreamFilter is { } bsf)
+            {
+                sb.Append("-bsf:").Append(StreamTypeChar(stream.Type)).Append(' ').Append(bsf).Append(' ');
+            }
+        }
     }
 
     private static string FormatTime(TimeSpan ts) => ts.ToString(@"hh\:mm\:ss\.fff", CultureInfo.InvariantCulture);

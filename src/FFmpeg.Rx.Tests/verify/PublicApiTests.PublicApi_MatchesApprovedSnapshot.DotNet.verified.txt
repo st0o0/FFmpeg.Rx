@@ -10,6 +10,22 @@ namespace FFmpeg.Rx.Builder
         public FFmpeg.Rx.Builder.AudioEncodingBuilder Channels(int channels) { }
         public FFmpeg.Rx.Builder.AudioEncodingBuilder SampleRate(int sampleRate) { }
     }
+    public sealed class InputOptionsBuilder
+    {
+        public InputOptionsBuilder() { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder CustomArg(string arg) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder Decoder(FFmpeg.Rx.Codecs.VideoCodec value) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder Framerate(FFmpeg.Rx.Codecs.Framerate value) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder HWAccel(FFmpeg.Rx.Codecs.HWAccel value) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder HWAccelDevice(string value) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder HWAccelOutputFormat(string value) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder Headers(string value) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder HttpProxy(string value) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder Loop() { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder Seek(System.TimeSpan value) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder StreamLoop(int count) { }
+        public FFmpeg.Rx.Builder.InputOptionsBuilder UserAgent(string value) { }
+    }
     public sealed class MetadataBuilder
     {
         public MetadataBuilder() { }
@@ -40,9 +56,13 @@ namespace FFmpeg.Rx.Builder
     }
     public sealed class PipelineBuilder
     {
+        public FFmpeg.Rx.Builder.PipelineBuilder AddInput(FFmpeg.Rx.Models.InputConfig input) { }
         public FFmpeg.Rx.Builder.PipelineBuilder Input(System.Uri url) { }
         public FFmpeg.Rx.Builder.PipelineBuilder Input(string filePath) { }
         public FFmpeg.Rx.Builder.PipelineBuilder Input(System.IO.Stream source, string format) { }
+        public FFmpeg.Rx.Builder.PipelineBuilder Input(System.Uri url, System.Action<FFmpeg.Rx.Builder.InputOptionsBuilder> configure) { }
+        public FFmpeg.Rx.Builder.PipelineBuilder Input(string filePath, System.Action<FFmpeg.Rx.Builder.InputOptionsBuilder> configure) { }
+        public FFmpeg.Rx.Builder.PipelineBuilder Input(System.IO.Stream source, string format, System.Action<FFmpeg.Rx.Builder.InputOptionsBuilder> configure) { }
         public FFmpeg.Rx.IFfmpegSession Output(string path, System.Action<FFmpeg.Rx.Builder.OutputBuilder> configure) { }
         public FFmpeg.Rx.IFfmpegSession OutputNull(System.Action<FFmpeg.Rx.Builder.OutputBuilder> configure) { }
         public FFmpeg.Rx.IFfmpegSession OutputPipe(System.IO.Stream destination, System.Action<FFmpeg.Rx.Builder.OutputBuilder> configure) { }
@@ -52,6 +72,7 @@ namespace FFmpeg.Rx.Builder
     }
     public sealed class StreamBuilder
     {
+        public FFmpeg.Rx.Builder.StreamBuilder BitstreamFilter(string filter) { }
         public FFmpeg.Rx.Builder.StreamBuilder Copy() { }
         public FFmpeg.Rx.Builder.StreamBuilder Disposition(string flags) { }
         public FFmpeg.Rx.Builder.StreamBuilder Encode(FFmpeg.Rx.Codecs.SubtitleCodec codec) { }
@@ -324,6 +345,9 @@ namespace FFmpeg.Rx
         public static FFmpeg.Rx.Builder.PipelineBuilder Input(System.Uri url) { }
         public static FFmpeg.Rx.Builder.PipelineBuilder Input(string filePath) { }
         public static FFmpeg.Rx.Builder.PipelineBuilder Input(System.IO.Stream source, string format) { }
+        public static FFmpeg.Rx.Builder.PipelineBuilder Input(System.Uri url, System.Action<FFmpeg.Rx.Builder.InputOptionsBuilder> configure) { }
+        public static FFmpeg.Rx.Builder.PipelineBuilder Input(string filePath, System.Action<FFmpeg.Rx.Builder.InputOptionsBuilder> configure) { }
+        public static FFmpeg.Rx.Builder.PipelineBuilder Input(System.IO.Stream source, string format, System.Action<FFmpeg.Rx.Builder.InputOptionsBuilder> configure) { }
         public static System.Threading.Tasks.Task<FFmpeg.Rx.Probing.MediaInfo> Probe(string path, System.Threading.CancellationToken ct = default) { }
         public static System.Threading.Tasks.Task<FFmpeg.Rx.Models.FfmpegResult> Snapshot(string inputPath, System.TimeSpan time, string outputPath, System.Threading.CancellationToken ct = default) { }
     }
@@ -693,15 +717,18 @@ namespace FFmpeg.Rx.Models
     }
     public sealed class InputOptionConfig : System.IEquatable<FFmpeg.Rx.Models.InputOptionConfig>
     {
-        public InputOptionConfig(System.TimeSpan? Seek = default, FFmpeg.Rx.Codecs.HWAccel? HWAccel = default, string? HWAccelDevice = null, string? HWAccelOutputFormat = null, FFmpeg.Rx.Codecs.VideoCodec? VideoDecoder = default, FFmpeg.Rx.Codecs.Framerate? Framerate = default, bool Loop = false, int? StreamLoop = default, System.Collections.Generic.IReadOnlyList<string>? CustomArgs = null) { }
+        public InputOptionConfig(System.TimeSpan? Seek = default, FFmpeg.Rx.Codecs.HWAccel? HWAccel = default, string? HWAccelDevice = null, string? HWAccelOutputFormat = null, FFmpeg.Rx.Codecs.VideoCodec? VideoDecoder = default, FFmpeg.Rx.Codecs.Framerate? Framerate = default, bool Loop = false, int? StreamLoop = default, string? UserAgent = null, string? HttpProxy = null, string? Headers = null, System.Collections.Generic.IReadOnlyList<string>? CustomArgs = null) { }
         public System.Collections.Generic.IReadOnlyList<string>? CustomArgs { get; init; }
         public FFmpeg.Rx.Codecs.Framerate? Framerate { get; init; }
         public FFmpeg.Rx.Codecs.HWAccel? HWAccel { get; init; }
         public string? HWAccelDevice { get; init; }
         public string? HWAccelOutputFormat { get; init; }
+        public string? Headers { get; init; }
+        public string? HttpProxy { get; init; }
         public bool Loop { get; init; }
         public System.TimeSpan? Seek { get; init; }
         public int? StreamLoop { get; init; }
+        public string? UserAgent { get; init; }
         public FFmpeg.Rx.Codecs.VideoCodec? VideoDecoder { get; init; }
     }
     public sealed class MetadataConfig : System.IEquatable<FFmpeg.Rx.Models.MetadataConfig>
@@ -765,7 +792,8 @@ namespace FFmpeg.Rx.Models
     }
     public sealed class StreamConfig : System.IEquatable<FFmpeg.Rx.Models.StreamConfig>
     {
-        public StreamConfig(int InputIndex, int? StreamIndex, FFmpeg.Rx.StreamType Type, FFmpeg.Rx.Models.CodecConfig Codec, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? Metadata = null, string? Disposition = null) { }
+        public StreamConfig(int InputIndex, int? StreamIndex, FFmpeg.Rx.StreamType Type, FFmpeg.Rx.Models.CodecConfig Codec, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.KeyValuePair<string, string>>? Metadata = null, string? Disposition = null, string? BitstreamFilter = null) { }
+        public string? BitstreamFilter { get; init; }
         public FFmpeg.Rx.Models.CodecConfig Codec { get; init; }
         public string? Disposition { get; init; }
         public int InputIndex { get; init; }

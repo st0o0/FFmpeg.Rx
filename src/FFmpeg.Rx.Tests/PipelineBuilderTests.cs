@@ -77,6 +77,68 @@ public sealed class PipelineBuilderTests
     }
 
     [Fact]
+    public void InputOptionConfig_http_properties()
+    {
+        var opts = new InputOptionConfig(
+            UserAgent: "Mozilla/5.0",
+            HttpProxy: "http://proxy:8888",
+            Headers: "Referer: https://example.com");
+
+        Assert.Equal("Mozilla/5.0", opts.UserAgent);
+        Assert.Equal("http://proxy:8888", opts.HttpProxy);
+        Assert.Equal("Referer: https://example.com", opts.Headers);
+    }
+
+    [Fact]
+    public void StreamConfig_with_bitstream_filter()
+    {
+        var stream = new StreamConfig(0, 0, StreamType.Audio, new StreamCopy(),
+            BitstreamFilter: "aac_adtstoasc");
+
+        Assert.Equal("aac_adtstoasc", stream.BitstreamFilter);
+    }
+
+    [Fact]
+    public void StreamConfig_bitstream_filter_null_by_default()
+    {
+        var stream = new StreamConfig(0, 0, StreamType.Video, new StreamCopy());
+
+        Assert.Null(stream.BitstreamFilter);
+    }
+
+    [Fact]
+    public void Builder_url_input_with_options()
+    {
+        var session = Ffmpeg
+            .Input(new Uri("https://example.com/video.mp4"), o => o.UserAgent("Mozilla/5.0"))
+            .Output("out.mkv", o => o.Stream(0, 0, StreamType.Video, s => s.Copy()));
+
+        Assert.IsAssignableFrom<IFfmpegSession>(session);
+    }
+
+    [Fact]
+    public void Builder_file_input_with_options()
+    {
+        var session = Ffmpeg
+            .Input("video.mp4", o => o.Seek(TimeSpan.FromSeconds(10)))
+            .Output("out.mkv", o => o.Stream(0, 0, StreamType.Video, s => s.Copy()));
+
+        Assert.IsAssignableFrom<IFfmpegSession>(session);
+    }
+
+    [Fact]
+    public void AddInput_is_public()
+    {
+        var builder = new FFmpeg.Rx.Builder.PipelineBuilder(null);
+        var input = new UrlInputConfig(new Uri("https://example.com/v.mp4"))
+        {
+            Options = new InputOptionConfig(UserAgent: "Bot")
+        };
+        var result = builder.AddInput(input);
+        Assert.Same(builder, result);
+    }
+
+    [Fact]
     public void VideoEncode_record_carries_all_options()
     {
         var encode = new VideoEncode(VideoCodec.H264,

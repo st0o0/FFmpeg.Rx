@@ -11,6 +11,7 @@ public sealed class StreamBuilder
     private CodecConfig? _codec;
     private List<KeyValuePair<string, string>>? _metadata;
     private string? _disposition;
+    private string? _bitstreamFilter;
 
     internal StreamBuilder(int inputIndex, int? streamIndex, StreamType type)
     {
@@ -60,6 +61,12 @@ public sealed class StreamBuilder
         return this;
     }
 
+    public StreamBuilder BitstreamFilter(string filter)
+    {
+        _bitstreamFilter = filter;
+        return this;
+    }
+
     internal StreamConfig Build()
     {
         return new StreamConfig(
@@ -68,6 +75,7 @@ public sealed class StreamBuilder
             _type,
             _codec ?? new StreamCopy(),
             _metadata,
-            _disposition);
+            _disposition,
+            _bitstreamFilter);
     }
 }

@@ -109,4 +109,22 @@ public sealed class StreamBuilderTests
         var ae = Assert.IsType<AudioEncode>(spec.Codec);
         Assert.Null(ae.Options.Bitrate);
     }
+
+    [Fact]
+    public void BitstreamFilter_sets_value()
+    {
+        var builder = new StreamBuilder(0, 0, StreamType.Audio);
+        builder.Copy().BitstreamFilter("aac_adtstoasc");
+        var spec = builder.Build();
+        Assert.Equal("aac_adtstoasc", spec.BitstreamFilter);
+    }
+
+    [Fact]
+    public void BitstreamFilter_null_by_default()
+    {
+        var builder = new StreamBuilder(0, 0, StreamType.Video);
+        builder.Copy();
+        var spec = builder.Build();
+        Assert.Null(spec.BitstreamFilter);
+    }
 }

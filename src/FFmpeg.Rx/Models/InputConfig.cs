@@ -22,4 +22,7 @@ public sealed record InputOptionConfig(
     Framerate? Framerate = null,
     bool Loop = false,
     int? StreamLoop = null,
+    string? UserAgent = null,
+    string? HttpProxy = null,
+    string? Headers = null,
     IReadOnlyList<string>? CustomArgs = null);
