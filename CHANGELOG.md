@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/st0o0/FFmpeg.Rx/compare/v0.1.0...v0.1.1) (2026-11-09)
+
+
+### Features
+
+* add input options builder and bitstream filter support ([e097434](https://github.com/st0o0/FFmpeg.Rx/commit/e0974342eceef8e43120c10b7a96b1f53286449c))
+
 ## [0.1.0](https://github.com/st0o0/FFmpeg.Rx/compare/v0.1.0...v0.1.0) (2026-11-08)
 
 
