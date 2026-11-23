@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/st0o0/FFmpeg.Rx/compare/v0.1.1...v0.1.2) (2026-11-23)
+
+
+### Bug Fixes
+
+* **ci:** remove obsolete trivy-config input from security workflow ([ec1b69d](https://github.com/st0o0/FFmpeg.Rx/commit/ec1b69d5064fed4a7f65f415b290390da59d773b))
+
 ## [0.1.1](https://github.com/st0o0/FFmpeg.Rx/compare/v0.1.0...v0.1.1) (2026-11-09)
 
 
